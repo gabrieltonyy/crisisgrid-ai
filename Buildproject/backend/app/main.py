@@ -117,6 +117,7 @@ async def root():
         "environment": settings.APP_ENV,
         "docs": "/docs",
         "health": "/health",
+        "api_health": "/api/v1/health",
     }
 
 
@@ -154,6 +155,7 @@ async def global_exception_handler(request, exc):
 
 
 # Include routers
+app.include_router(health.router, tags=["health"])
 app.include_router(health.router, prefix="/api/v1", tags=["health"])
 
 

@@ -5,7 +5,6 @@ Provides common fields and utilities for all database models.
 
 from sqlalchemy import Column, DateTime, func
 from sqlalchemy.ext.declarative import declared_attr
-from datetime import datetime
 
 from app.db.session import Base
 

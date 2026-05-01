@@ -56,7 +56,9 @@ class UserRole(str, Enum):
 class ConfirmationType(str, Enum):
     """Types of confirmations users can provide."""
     CONFIRM = "CONFIRM"
+    CONFIRMED = "CONFIRMED"  # Alias for CONFIRM
     DISPUTE = "DISPUTE"
+    DISPUTED = "DISPUTED"  # Alias for DISPUTE
     UPDATE_LOCATION = "UPDATE_LOCATION"
     RESOLVED = "RESOLVED"
 
@@ -66,6 +68,10 @@ class DispatchStatus(str, Enum):
     PENDING = "PENDING"
     SIMULATED_SENT = "SIMULATED_SENT"
     SENT = "SENT"
+    ACKNOWLEDGED = "ACKNOWLEDGED"
+    ARRIVED = "ARRIVED"
+    COMPLETED = "COMPLETED"
+    CANCELLED = "CANCELLED"
     FAILED = "FAILED"
 
 
@@ -79,6 +85,7 @@ class AlertStatus(str, Enum):
 class AuthorityType(str, Enum):
     """Types of authorities that can be dispatched."""
     FIRE_SERVICE = "FIRE_SERVICE"
+    FIRE_DEPARTMENT = "FIRE_DEPARTMENT"  # Alias for FIRE_SERVICE
     DISASTER_MANAGEMENT = "DISASTER_MANAGEMENT"
     WILDLIFE_AUTHORITY = "WILDLIFE_AUTHORITY"
     POLICE = "POLICE"
@@ -100,7 +107,9 @@ class AgentName(str, Enum):
 
 class AgentRunStatus(str, Enum):
     """Status of agent execution."""
+    PENDING = "PENDING"
     SUCCESS = "SUCCESS"
+    COMPLETED = "COMPLETED"  # Alias for SUCCESS
     FAILED = "FAILED"
     SKIPPED = "SKIPPED"
 
@@ -255,16 +264,19 @@ def get_severity_from_confidence(confidence_score: float) -> SeverityLevel:
     Determine severity level from confidence score.
     
     Args:
-        confidence_score: Confidence score (0.0 to 1.0)
+        confidence_score: Confidence score (0.0 to 100.0). Values from
+        0.0 to 1.0 are accepted for backwards compatibility.
         
     Returns:
         Severity level
     """
-    if confidence_score >= 0.85:
+    normalized_score = confidence_score * 100 if confidence_score <= 1 else confidence_score
+
+    if normalized_score >= 85:
         return SeverityLevel.CRITICAL
-    elif confidence_score >= 0.70:
+    elif normalized_score >= 70:
         return SeverityLevel.HIGH
-    elif confidence_score >= 0.50:
+    elif normalized_score >= 50:
         return SeverityLevel.MEDIUM
     else:
         return SeverityLevel.LOW

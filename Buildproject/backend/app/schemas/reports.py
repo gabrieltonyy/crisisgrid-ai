@@ -4,16 +4,13 @@ Defines Pydantic models for crisis report submission and responses.
 """
 
 from typing import Optional
-from pydantic import BaseModel, Field, HttpUrl
+from pydantic import BaseModel, Field
 from datetime import datetime
 from uuid import UUID
 
 from app.schemas.common import (
     CrisisType,
     IncidentStatus,
-    SeverityLevel,
-    LocationSchema,
-    TimestampMixin
 )
 
 
@@ -72,7 +69,7 @@ class ReportResponse(BaseModel):
     """Response schema for a crisis report."""
     
     id: UUID = Field(..., description="Unique report identifier")
-    incident_id: Optional[UUID] = Field(None, description="Associated incident ID if clustered")
+    incident_id: Optional[str] = Field(None, description="Associated incident ID if clustered")
     user_id: Optional[UUID] = Field(None, description="Reporter user ID")
     crisis_type: CrisisType = Field(..., description="Type of crisis")
     description: str = Field(..., description="Report description")
@@ -82,8 +79,8 @@ class ReportResponse(BaseModel):
     longitude: float = Field(..., description="Longitude")
     location_text: Optional[str] = Field(None, description="Location text")
     status: IncidentStatus = Field(..., description="Current status")
-    confidence_score: float = Field(..., ge=0, le=1, description="Confidence score (0-1)")
-    severity_score: float = Field(..., ge=0, le=1, description="Severity score (0-1)")
+    confidence_score: float = Field(..., ge=0, le=100, description="Confidence score (0-100)")
+    severity_score: float = Field(..., ge=0, le=100, description="Severity score (0-100)")
     source: str = Field(default="CITIZEN_APP", description="Report source")
     is_anonymous: bool = Field(..., description="Whether anonymous")
     created_at: datetime = Field(..., description="Creation timestamp")
@@ -94,15 +91,15 @@ class ReportResponse(BaseModel):
         json_schema_extra = {
             "example": {
                 "id": "550e8400-e29b-41d4-a716-446655440000",
-                "incident_id": "660e8400-e29b-41d4-a716-446655440001",
+                "incident_id": "incident_fire_001",
                 "crisis_type": "FIRE",
                 "description": "Large fire visible with smoke",
                 "latitude": -1.2921,
                 "longitude": 36.8219,
                 "location_text": "Nairobi CBD",
                 "status": "PROVISIONAL_CRITICAL",
-                "confidence_score": 0.72,
-                "severity_score": 0.85,
+                "confidence_score": 72.0,
+                "severity_score": 85.0,
                 "source": "CITIZEN_APP",
                 "is_anonymous": False,
                 "created_at": "2026-05-01T10:30:00Z"

@@ -4,7 +4,10 @@ Confirmation SQLAlchemy Model
 Represents confirmations or disputes of crisis reports by other users.
 """
 
+from typing import Optional
+
 from sqlalchemy import Column, String, Float, DateTime, Text, ForeignKey, Enum as SQLEnum
+from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
 from datetime import datetime
 
@@ -22,8 +25,8 @@ class Confirmation(BaseModel):
 
     # Core identification
     confirmation_id = Column(String(50), primary_key=True, unique=True, nullable=False, index=True)
-    report_id = Column(String(50), ForeignKey("reports.report_id"), nullable=False, index=True)
-    user_id = Column(String(50), ForeignKey("users.user_id"), nullable=False, index=True)
+    report_id = Column(UUID(as_uuid=True), ForeignKey("reports.id"), nullable=False, index=True)
+    user_id = Column(UUID(as_uuid=True), ForeignKey("users.id"), nullable=False, index=True)
     
     # Confirmation details
     confirmation_type = Column(SQLEnum(ConfirmationType), nullable=False, index=True)
@@ -48,13 +51,13 @@ class Confirmation(BaseModel):
     
     def is_confirmation(self) -> bool:
         """Check if this is a confirmation (not a dispute)."""
-        return self.confirmation_type == ConfirmationType.CONFIRMED
+        return self.confirmation_type in {ConfirmationType.CONFIRM, ConfirmationType.CONFIRMED}
     
     def is_dispute(self) -> bool:
         """Check if this is a dispute."""
-        return self.confirmation_type == ConfirmationType.DISPUTED
+        return self.confirmation_type in {ConfirmationType.DISPUTE, ConfirmationType.DISPUTED}
     
-    def calculate_distance_from_report(self, report_lat: float, report_lon: float) -> float:
+    def calculate_distance_from_report(self, report_lat: float, report_lon: float) -> Optional[float]:
         """
         Calculate distance from report location using Haversine formula.
         
@@ -63,9 +66,9 @@ class Confirmation(BaseModel):
             report_lon: Report longitude
             
         Returns:
-            float: Distance in meters
+            float: Distance in meters, or None if this confirmation has no coordinates
         """
-        if not self.latitude or not self.longitude:
+        if self.latitude is None or self.longitude is None:
             return None
         
         from math import radians, sin, cos, sqrt, atan2

@@ -4,7 +4,9 @@ DispatchLog SQLAlchemy Model
 Represents emergency service dispatch records for incidents.
 """
 
-from sqlalchemy import Column, String, Float, DateTime, Text, ForeignKey, Enum as SQLEnum, JSON
+from typing import Optional
+
+from sqlalchemy import Column, String, Float, DateTime, Text, ForeignKey, Enum as SQLEnum, JSON, Boolean
 from sqlalchemy.orm import relationship
 from datetime import datetime
 
@@ -22,7 +24,7 @@ class DispatchLog(BaseModel):
 
     # Core identification
     dispatch_id = Column(String(50), primary_key=True, unique=True, nullable=False, index=True)
-    incident_id = Column(String(50), ForeignKey("incidents.incident_id"), nullable=False, index=True)
+    incident_id = Column(String(50), ForeignKey("incidents.id"), nullable=False, index=True)
     
     # Dispatch details
     crisis_type = Column(SQLEnum(CrisisType), nullable=False, index=True)
@@ -55,11 +57,32 @@ class DispatchLog(BaseModel):
     resources_deployed = Column(JSON, nullable=True)  # List of resources
     
     # Metadata
-    simulated = Column(String, nullable=False, default=True)  # True for demo/testing
+    simulated = Column(Boolean, nullable=False, default=True)  # True for demo/testing
     tags = Column(JSON, nullable=True)  # List of tags
     
     # Relationships
     incident = relationship("Incident", back_populates="dispatch_logs")
+
+    @property
+    def id(self) -> str:
+        """Expose dispatch_id under the generic API response ID name."""
+        return self.dispatch_id
+
+    @property
+    def message(self) -> str:
+        """Expose message_sent under the public API response field name."""
+        return self.message_sent
+
+    @property
+    def location_text(self) -> str:
+        """Expose location_description under the public API response field name."""
+        return self.location_description
+
+    @property
+    def response_time_seconds(self) -> Optional[int]:
+        """Return response time in seconds when the dispatch has arrived."""
+        minutes = self.get_response_time_minutes()
+        return int(minutes * 60) if minutes is not None else None
     
     def acknowledge(self) -> None:
         """Mark dispatch as acknowledged by authority."""
@@ -71,20 +94,20 @@ class DispatchLog(BaseModel):
         self.status = DispatchStatus.ARRIVED
         self.arrived_at = datetime.utcnow()
     
-    def complete(self, notes: str = None) -> None:
+    def complete(self, notes: Optional[str] = None) -> None:
         """Mark dispatch as completed."""
         self.status = DispatchStatus.COMPLETED
         self.completed_at = datetime.utcnow()
         if notes:
             self.response_notes = notes
     
-    def cancel(self, reason: str = None) -> None:
+    def cancel(self, reason: Optional[str] = None) -> None:
         """Cancel the dispatch."""
         self.status = DispatchStatus.CANCELLED
         if reason:
             self.response_notes = f"Cancelled: {reason}"
     
-    def get_response_time_minutes(self) -> float:
+    def get_response_time_minutes(self) -> Optional[float]:
         """
         Calculate response time from dispatch to arrival.
         

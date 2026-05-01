@@ -10,15 +10,7 @@ from sqlalchemy.exc import SQLAlchemyError
 
 from app.db.session import engine, get_db_info
 from app.models.base import BaseModel
-from app.models import (
-    User,
-    Report,
-    Incident,
-    Alert,
-    DispatchLog,
-    AgentRun,
-    Confirmation,
-)
+import app.models  # noqa: F401 - register model metadata before create_all/drop_all
 
 logger = logging.getLogger(__name__)
 
@@ -32,9 +24,6 @@ def create_tables() -> bool:
     """
     try:
         logger.info("Creating database tables...")
-        
-        # Import all models to ensure they're registered
-        # (already imported above)
         
         # Create all tables
         BaseModel.metadata.create_all(bind=engine)

@@ -32,44 +32,36 @@ def create_demo_users(db: Session) -> dict:
     
     users = {
         "citizen1": User(
-            user_id="user_citizen_001",
-            username="john_doe",
+            name="John Doe",
             email="john@example.com",
             phone_number="+254712345678",
             role=UserRole.CITIZEN,
             trust_score=85.0,
-            reports_submitted=5,
-            confirmations_made=3,
+            status="ACTIVE",
         ),
         "citizen2": User(
-            user_id="user_citizen_002",
-            username="jane_smith",
+            name="Jane Smith",
             email="jane@example.com",
             phone_number="+254723456789",
             role=UserRole.CITIZEN,
             trust_score=92.0,
-            reports_submitted=8,
-            confirmations_made=6,
+            status="ACTIVE",
         ),
         "authority": User(
-            user_id="user_authority_001",
-            username="fire_dept_nairobi",
+            name="Fire Department Nairobi",
             email="fire@nairobi.gov.ke",
             phone_number="+254700000001",
             role=UserRole.AUTHORITY,
             trust_score=100.0,
-            reports_submitted=0,
-            confirmations_made=0,
+            status="ACTIVE",
         ),
         "admin": User(
-            user_id="user_admin_001",
-            username="admin",
+            name="Admin User",
             email="admin@crisisgrid.ai",
             phone_number="+254700000000",
             role=UserRole.ADMIN,
             trust_score=100.0,
-            reports_submitted=0,
-            confirmations_made=0,
+            status="ACTIVE",
         ),
     }
     
@@ -84,47 +76,45 @@ def create_demo_users(db: Session) -> dict:
 def create_demo_reports(db: Session, users: dict) -> dict:
     """Create demo reports."""
     logger.info("Creating demo reports...")
-    
-    now = datetime.utcnow()
-    
+
     reports = {
         "fire1": Report(
-            report_id="report_fire_001",
-            user_id=users["citizen1"].user_id,
+            user_id=users["citizen1"].id,
             crisis_type=CrisisType.FIRE,
             latitude=-1.2921,
             longitude=36.8219,
             description="Large fire at Westlands shopping center. Heavy smoke visible.",
-            severity=SeverityLevel.HIGH,
             confidence_score=75.0,
-            has_media=True,
-            media_urls=["https://example.com/fire1.jpg"],
-            created_at=now - timedelta(minutes=15),
+            severity_score=85.0,
+            status=IncidentStatus.PENDING_VERIFICATION,
+            source="CITIZEN_APP",
+            is_anonymous=False,
+            image_url="https://example.com/fire1.jpg",
         ),
         "fire2": Report(
-            report_id="report_fire_002",
-            user_id=users["citizen2"].user_id,
+            user_id=users["citizen2"].id,
             crisis_type=CrisisType.FIRE,
             latitude=-1.2925,
             longitude=36.8215,
             description="Confirming fire at Westlands. Multiple floors affected.",
-            severity=SeverityLevel.CRITICAL,
             confidence_score=85.0,
-            has_media=True,
-            media_urls=["https://example.com/fire2.jpg"],
-            created_at=now - timedelta(minutes=10),
+            severity_score=95.0,
+            status=IncidentStatus.VERIFIED,
+            source="CITIZEN_APP",
+            is_anonymous=False,
+            image_url="https://example.com/fire2.jpg",
         ),
         "flood1": Report(
-            report_id="report_flood_001",
-            user_id=users["citizen1"].user_id,
+            user_id=users["citizen1"].id,
             crisis_type=CrisisType.FLOOD,
             latitude=-1.3167,
             longitude=36.8833,
             description="Heavy flooding on Thika Road. Water level rising rapidly.",
-            severity=SeverityLevel.MEDIUM,
             confidence_score=65.0,
-            has_media=False,
-            created_at=now - timedelta(hours=1),
+            severity_score=70.0,
+            status=IncidentStatus.PENDING_VERIFICATION,
+            source="CITIZEN_APP",
+            is_anonymous=False,
         ),
     }
     
@@ -144,7 +134,7 @@ def create_demo_incidents(db: Session, reports: dict) -> dict:
     
     incidents = {
         "fire_westlands": Incident(
-            incident_id="incident_fire_001",
+            id="incident_fire_001",
             crisis_type=CrisisType.FIRE,
             status=IncidentStatus.VERIFIED,
             severity=SeverityLevel.CRITICAL,
@@ -164,7 +154,7 @@ def create_demo_incidents(db: Session, reports: dict) -> dict:
             tags=["commercial", "high-density", "urgent"],
         ),
         "flood_thika": Incident(
-            incident_id="incident_flood_001",
+            id="incident_flood_001",
             crisis_type=CrisisType.FLOOD,
             status=IncidentStatus.PENDING_VERIFICATION,
             severity=SeverityLevel.MEDIUM,
@@ -186,9 +176,9 @@ def create_demo_incidents(db: Session, reports: dict) -> dict:
     }
     
     # Link reports to incidents
-    reports["fire1"].incident_id = incidents["fire_westlands"].incident_id
-    reports["fire2"].incident_id = incidents["fire_westlands"].incident_id
-    reports["flood1"].incident_id = incidents["flood_thika"].incident_id
+    reports["fire1"].incident_id = incidents["fire_westlands"].id
+    reports["fire2"].incident_id = incidents["fire_westlands"].id
+    reports["flood1"].incident_id = incidents["flood_thika"].id
     
     for incident in incidents.values():
         db.add(incident)
@@ -207,7 +197,7 @@ def create_demo_alerts(db: Session, incidents: dict) -> dict:
     alerts = {
         "fire_alert": Alert(
             alert_id="alert_fire_001",
-            incident_id=incidents["fire_westlands"].incident_id,
+            incident_id=incidents["fire_westlands"].id,
             crisis_type=CrisisType.FIRE,
             severity=SeverityLevel.CRITICAL,
             status=AlertStatus.ACTIVE,
@@ -250,9 +240,9 @@ def create_demo_dispatch_logs(db: Session, incidents: dict) -> dict:
     dispatch_logs = {
         "fire_dispatch": DispatchLog(
             dispatch_id="dispatch_fire_001",
-            incident_id=incidents["fire_westlands"].incident_id,
+            incident_id=incidents["fire_westlands"].id,
             crisis_type=CrisisType.FIRE,
-            authority_type=AuthorityType.FIRE_DEPARTMENT,
+            authority_type=AuthorityType.FIRE_SERVICE,
             status=DispatchStatus.ARRIVED,
             latitude=-1.2923,
             longitude=36.8217,
@@ -290,13 +280,13 @@ def create_demo_agent_runs(db: Session, reports: dict, incidents: dict) -> dict:
         "verification1": AgentRun(
             run_id="run_verification_001",
             agent_name=AgentName.VERIFICATION_AGENT,
-            status=AgentRunStatus.COMPLETED,
-            report_id=reports["fire1"].report_id,
-            incident_id=incidents["fire_westlands"].incident_id,
+            status=AgentRunStatus.SUCCESS,
+            report_id=reports["fire1"].id,
+            incident_id=incidents["fire_westlands"].id,
             started_at=now - timedelta(minutes=14),
             completed_at=now - timedelta(minutes=14, seconds=3),
             duration_seconds=3.2,
-            input_data={"report_id": reports["fire1"].report_id},
+            input_data={"report_id": str(reports["fire1"].id)},
             output_data={"confidence": 75.0, "verified": True},
             confidence_score=75.0,
             decision="VERIFIED",
@@ -305,12 +295,12 @@ def create_demo_agent_runs(db: Session, reports: dict, incidents: dict) -> dict:
         "georisk1": AgentRun(
             run_id="run_georisk_001",
             agent_name=AgentName.GEORISK_AGENT,
-            status=AgentRunStatus.COMPLETED,
-            incident_id=incidents["fire_westlands"].incident_id,
+            status=AgentRunStatus.SUCCESS,
+            incident_id=incidents["fire_westlands"].id,
             started_at=now - timedelta(minutes=13),
             completed_at=now - timedelta(minutes=13, seconds=2),
             duration_seconds=2.1,
-            input_data={"incident_id": incidents["fire_westlands"].incident_id},
+            input_data={"incident_id": incidents["fire_westlands"].id},
             output_data={"risk_level": "HIGH", "affected_radius": 500},
             risk_level="HIGH",
             decision="HIGH_RISK",
@@ -335,9 +325,9 @@ def create_demo_confirmations(db: Session, reports: dict, users: dict) -> dict:
     confirmations = {
         "confirm1": Confirmation(
             confirmation_id="confirm_001",
-            report_id=reports["fire1"].report_id,
-            user_id=users["citizen2"].user_id,
-            confirmation_type=ConfirmationType.CONFIRMED,
+            report_id=reports["fire1"].id,
+            user_id=users["citizen2"].id,
+            confirmation_type=ConfirmationType.CONFIRM,
             latitude=-1.2925,
             longitude=36.8215,
             distance_from_report_meters=45.0,

@@ -11,7 +11,7 @@ from datetime import datetime
 from typing import Dict, Any
 
 from app.models.base import BaseModel
-from app.schemas.common import CrisisType, IncidentStatus, SeverityLevel
+from app.schemas.common import CrisisType, IncidentStatus, SeverityLevel, get_risk_radius_meters
 
 
 class Incident(BaseModel):
@@ -23,7 +23,7 @@ class Incident(BaseModel):
     __tablename__ = "incidents"
 
     # Core identification
-    incident_id = Column(String(50), primary_key=True, unique=True, nullable=False, index=True)
+    id = Column(String(50), primary_key=True, unique=True, nullable=False, index=True)
     crisis_type = Column(SQLEnum(CrisisType), nullable=False, index=True)
     status = Column(SQLEnum(IncidentStatus), nullable=False, default=IncidentStatus.PENDING_VERIFICATION, index=True)
     severity = Column(SQLEnum(SeverityLevel), nullable=False, default=SeverityLevel.LOW)
@@ -67,6 +67,39 @@ class Incident(BaseModel):
     reports = relationship("Report", back_populates="incident", cascade="all, delete-orphan")
     alerts = relationship("Alert", back_populates="incident", cascade="all, delete-orphan")
     dispatch_logs = relationship("DispatchLog", back_populates="incident", cascade="all, delete-orphan")
+
+    @property
+    def primary_report_id(self):
+        """Return the first related report ID when reports are loaded."""
+        return self.reports[0].id if self.reports else None
+
+    @property
+    def title(self) -> str:
+        """Return a compact display title for API responses."""
+        crisis_type = self.crisis_type.value if self.crisis_type else "CRISIS"
+        location = self.location_description or f"{self.latitude}, {self.longitude}"
+        return f"{crisis_type.title()} Incident - {location}"
+
+    @property
+    def location_text(self) -> str:
+        """Expose location_description under the response schema's location_text name."""
+        return self.location_description
+
+    @property
+    def risk_radius_meters(self) -> int:
+        """Return the default alert radius for this incident's crisis type."""
+        return get_risk_radius_meters(self.crisis_type)
+
+    @property
+    def severity_score(self) -> float:
+        """Map severity enum to a 0-100 numeric score for API responses."""
+        scores = {
+            SeverityLevel.LOW: 25.0,
+            SeverityLevel.MEDIUM: 50.0,
+            SeverityLevel.HIGH: 75.0,
+            SeverityLevel.CRITICAL: 100.0,
+        }
+        return scores.get(self.severity, 0.0)
     
     def update_confidence_score(self) -> float:
         """
@@ -163,6 +196,6 @@ class Incident(BaseModel):
         return self.confidence_score >= threshold
     
     def __repr__(self) -> str:
-        return f"<Incident {self.incident_id} {self.crisis_type.value} confidence={self.confidence_score:.1f}%>"
+        return f"<Incident {self.id} {self.crisis_type.value} confidence={self.confidence_score:.1f}%>"
 
 # Made with Bob

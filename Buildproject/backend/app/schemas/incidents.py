@@ -11,8 +11,6 @@ from uuid import UUID
 from app.schemas.common import (
     CrisisType,
     IncidentStatus,
-    SeverityLevel,
-    LocationSchema
 )
 
 
@@ -23,8 +21,8 @@ from app.schemas.common import (
 class IncidentResponse(BaseModel):
     """Response schema for an incident."""
     
-    id: UUID = Field(..., description="Unique incident identifier")
-    primary_report_id: UUID = Field(..., description="ID of the first report")
+    id: str = Field(..., description="Unique incident identifier")
+    primary_report_id: Optional[UUID] = Field(None, description="ID of the first report")
     crisis_type: CrisisType = Field(..., description="Type of crisis")
     title: str = Field(..., description="Incident title")
     description: Optional[str] = Field(None, description="Incident description")
@@ -32,8 +30,8 @@ class IncidentResponse(BaseModel):
     longitude: float = Field(..., description="Incident longitude")
     location_text: Optional[str] = Field(None, description="Location text")
     status: IncidentStatus = Field(..., description="Current status")
-    confidence_score: float = Field(..., ge=0, le=1, description="Confidence score")
-    severity_score: float = Field(..., ge=0, le=1, description="Severity score")
+    confidence_score: float = Field(..., ge=0, le=100, description="Confidence score")
+    severity_score: float = Field(..., ge=0, le=100, description="Severity score")
     risk_radius_meters: int = Field(..., description="Risk radius in meters")
     report_count: int = Field(..., description="Number of associated reports")
     confirmation_count: int = Field(0, description="Number of confirmations")
@@ -46,7 +44,7 @@ class IncidentResponse(BaseModel):
         from_attributes = True
         json_schema_extra = {
             "example": {
-                "id": "660e8400-e29b-41d4-a716-446655440001",
+                "id": "incident_fire_001",
                 "primary_report_id": "550e8400-e29b-41d4-a716-446655440000",
                 "crisis_type": "FIRE",
                 "title": "Fire Incident - Nairobi CBD",
@@ -54,8 +52,8 @@ class IncidentResponse(BaseModel):
                 "longitude": 36.8219,
                 "location_text": "Nairobi CBD",
                 "status": "VERIFIED",
-                "confidence_score": 0.85,
-                "severity_score": 0.90,
+                "confidence_score": 85.0,
+                "severity_score": 90.0,
                 "risk_radius_meters": 500,
                 "report_count": 3,
                 "confirmation_count": 5,
@@ -68,11 +66,11 @@ class IncidentResponse(BaseModel):
 class IncidentDetailResponse(IncidentResponse):
     """Detailed incident response with scoring breakdown."""
     
-    external_signal_score: float = Field(0.0, ge=0, le=1, description="External signal score")
-    cross_report_score: float = Field(0.0, ge=0, le=1, description="Cross-report score")
-    reporter_trust_score: float = Field(0.0, ge=0, le=1, description="Reporter trust score")
-    media_evidence_score: float = Field(0.0, ge=0, le=1, description="Media evidence score")
-    geo_time_consistency_score: float = Field(0.0, ge=0, le=1, description="Geo-time consistency score")
+    external_signal_score: float = Field(0.0, ge=0, le=100, description="External signal score")
+    cross_report_score: float = Field(0.0, ge=0, le=100, description="Cross-report score")
+    reporter_trust_score: float = Field(0.0, ge=0, le=100, description="Reporter trust score")
+    media_evidence_score: float = Field(0.0, ge=0, le=100, description="Media evidence score")
+    geo_time_consistency_score: float = Field(0.0, ge=0, le=100, description="Geo-time consistency score")
     
     class Config:
         from_attributes = True
@@ -113,8 +111,8 @@ class IncidentFilterRequest(BaseModel):
     
     crisis_type: Optional[CrisisType] = Field(None, description="Filter by crisis type")
     status: Optional[IncidentStatus] = Field(None, description="Filter by status")
-    min_confidence: Optional[float] = Field(None, ge=0, le=1, description="Minimum confidence")
-    min_severity: Optional[float] = Field(None, ge=0, le=1, description="Minimum severity")
+    min_confidence: Optional[float] = Field(None, ge=0, le=100, description="Minimum confidence")
+    min_severity: Optional[float] = Field(None, ge=0, le=100, description="Minimum severity")
     latitude: Optional[float] = Field(None, ge=-90, le=90, description="Center latitude for radius search")
     longitude: Optional[float] = Field(None, ge=-180, le=180, description="Center longitude for radius search")
     radius_meters: Optional[int] = Field(None, ge=100, le=50000, description="Search radius")
@@ -128,7 +126,7 @@ class IncidentFilterRequest(BaseModel):
             "example": {
                 "crisis_type": "FIRE",
                 "status": "VERIFIED",
-                "min_confidence": 0.7,
+                "min_confidence": 70.0,
                 "page": 1,
                 "page_size": 20
             }

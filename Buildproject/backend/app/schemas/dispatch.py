@@ -6,7 +6,6 @@ Defines Pydantic models for authority dispatch and notifications.
 from typing import Optional
 from pydantic import BaseModel, Field
 from datetime import datetime
-from uuid import UUID
 
 from app.schemas.common import (
     CrisisType,
@@ -22,11 +21,11 @@ from app.schemas.common import (
 class DispatchLogResponse(BaseModel):
     """Response schema for a dispatch log."""
     
-    id: UUID = Field(..., description="Unique dispatch log identifier")
-    incident_id: UUID = Field(..., description="Associated incident ID")
+    id: str = Field(..., description="Unique dispatch log identifier")
+    incident_id: str = Field(..., description="Associated incident ID")
     authority_type: AuthorityType = Field(..., description="Type of authority")
     crisis_type: CrisisType = Field(..., description="Crisis type")
-    message: str = Field(..., description="Dispatch message")
+    message: Optional[str] = Field(None, description="Dispatch message")
     priority: str = Field(..., description="Priority level: LOW, MEDIUM, HIGH, CRITICAL")
     status: DispatchStatus = Field(..., description="Dispatch status")
     latitude: float = Field(..., description="Incident latitude")
@@ -41,8 +40,8 @@ class DispatchLogResponse(BaseModel):
         from_attributes = True
         json_schema_extra = {
             "example": {
-                "id": "990e8400-e29b-41d4-a716-446655440004",
-                "incident_id": "660e8400-e29b-41d4-a716-446655440001",
+                "id": "dispatch_fire_001",
+                "incident_id": "incident_fire_001",
                 "authority_type": "FIRE_SERVICE",
                 "crisis_type": "FIRE",
                 "message": "High-confidence fire incident reported near Nairobi CBD. Immediate response required.",

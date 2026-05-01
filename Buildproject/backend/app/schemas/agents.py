@@ -184,8 +184,8 @@ class AdvisoryAgentOutput(BaseModel):
 class AgentRunResponse(BaseModel):
     """Response schema for agent run log."""
     
-    id: UUID = Field(..., description="Agent run ID")
-    report_id: UUID = Field(..., description="Associated report ID")
+    id: str = Field(..., description="Agent run ID")
+    report_id: Optional[UUID] = Field(None, description="Associated report ID")
     agent_name: AgentName = Field(..., description="Agent name")
     input_summary: str = Field(..., description="Input summary")
     output_summary: str = Field(..., description="Output summary")
@@ -198,7 +198,7 @@ class AgentRunResponse(BaseModel):
         from_attributes = True
         json_schema_extra = {
             "example": {
-                "id": "880e8400-e29b-41d4-a716-446655440003",
+                "id": "run_verification_001",
                 "report_id": "550e8400-e29b-41d4-a716-446655440000",
                 "agent_name": "verification_agent",
                 "input_summary": "Fire report with image and GPS",

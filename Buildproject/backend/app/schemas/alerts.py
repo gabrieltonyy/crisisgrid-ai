@@ -6,7 +6,6 @@ Defines Pydantic models for crisis alerts and notifications.
 from typing import Optional
 from pydantic import BaseModel, Field
 from datetime import datetime
-from uuid import UUID
 
 from app.schemas.common import (
     CrisisType,
@@ -22,13 +21,13 @@ from app.schemas.common import (
 class AlertResponse(BaseModel):
     """Response schema for an alert."""
     
-    id: UUID = Field(..., description="Unique alert identifier")
-    incident_id: UUID = Field(..., description="Associated incident ID")
+    id: str = Field(..., description="Unique alert identifier")
+    incident_id: str = Field(..., description="Associated incident ID")
     crisis_type: CrisisType = Field(..., description="Type of crisis")
     alert_title: str = Field(..., max_length=180, description="Alert title")
     alert_message: str = Field(..., description="Alert message")
     severity: SeverityLevel = Field(..., description="Alert severity")
-    target_radius_meters: int = Field(..., description="Target radius for alert")
+    target_radius_meters: float = Field(..., description="Target radius for alert")
     latitude: float = Field(..., description="Alert center latitude")
     longitude: float = Field(..., description="Alert center longitude")
     location_text: Optional[str] = Field(None, description="Location text")
@@ -40,8 +39,8 @@ class AlertResponse(BaseModel):
         from_attributes = True
         json_schema_extra = {
             "example": {
-                "id": "770e8400-e29b-41d4-a716-446655440002",
-                "incident_id": "660e8400-e29b-41d4-a716-446655440001",
+                "id": "alert_fire_001",
+                "incident_id": "incident_fire_001",
                 "crisis_type": "FIRE",
                 "alert_title": "FIRE ALERT",
                 "alert_message": "Fire reported nearby. Avoid the area and follow official instructions.",

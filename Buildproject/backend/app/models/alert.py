@@ -22,7 +22,7 @@ class Alert(BaseModel):
 
     # Core identification
     alert_id = Column(String(50), primary_key=True, unique=True, nullable=False, index=True)
-    incident_id = Column(String(50), ForeignKey("incidents.incident_id"), nullable=False, index=True)
+    incident_id = Column(String(50), ForeignKey("incidents.id"), nullable=False, index=True)
     
     # Alert details
     crisis_type = Column(SQLEnum(CrisisType), nullable=False, index=True)
@@ -57,6 +57,31 @@ class Alert(BaseModel):
     
     # Relationships
     incident = relationship("Incident", back_populates="alerts")
+
+    @property
+    def id(self) -> str:
+        """Expose alert_id under the generic API response ID name."""
+        return self.alert_id
+
+    @property
+    def alert_title(self) -> str:
+        """Expose title under the public API response field name."""
+        return self.title
+
+    @property
+    def alert_message(self) -> str:
+        """Expose message under the public API response field name."""
+        return self.message
+
+    @property
+    def target_radius_meters(self) -> float:
+        """Expose affected_radius_meters under the public API response field name."""
+        return self.affected_radius_meters
+
+    @property
+    def location_text(self) -> str:
+        """Expose related incident location text when available."""
+        return self.incident.location_description if self.incident else None
     
     def is_active(self) -> bool:
         """Check if alert is currently active."""

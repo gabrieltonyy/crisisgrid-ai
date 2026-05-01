@@ -3,7 +3,7 @@ Report model for CrisisGrid AI.
 Stores individual crisis reports submitted by citizens.
 """
 
-from sqlalchemy import Column, String, Text, Numeric, Boolean, ForeignKey, Integer, Enum as SQLEnum
+from sqlalchemy import Column, String, Text, Numeric, Boolean, ForeignKey, Enum as SQLEnum
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
 import uuid
@@ -18,7 +18,7 @@ class Report(BaseModel):
     __tablename__ = "reports"
     
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    incident_id = Column(UUID(as_uuid=True), ForeignKey("incidents.id"), nullable=True)
+    incident_id = Column(String(50), ForeignKey("incidents.id"), nullable=True)
     user_id = Column(UUID(as_uuid=True), ForeignKey("users.id"), nullable=True)
     
     crisis_type = Column(
@@ -48,6 +48,7 @@ class Report(BaseModel):
     incident = relationship("Incident", back_populates="reports", foreign_keys=[incident_id])
     user = relationship("User", foreign_keys=[user_id])
     agent_runs = relationship("AgentRun", back_populates="report", cascade="all, delete-orphan")
+    confirmations = relationship("Confirmation", back_populates="report")
     
     def __repr__(self):
         return f"<Report {self.id} - {self.crisis_type} at ({self.latitude}, {self.longitude})>"

@@ -5,6 +5,7 @@ Represents execution logs for AI agents processing reports and incidents.
 """
 
 from sqlalchemy import Column, String, Float, DateTime, Text, ForeignKey, Enum as SQLEnum, JSON
+from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
 from datetime import datetime
 
@@ -26,8 +27,8 @@ class AgentRun(BaseModel):
     status = Column(SQLEnum(AgentRunStatus), nullable=False, default=AgentRunStatus.PENDING, index=True)
     
     # Context
-    report_id = Column(String(50), ForeignKey("reports.report_id"), nullable=True, index=True)
-    incident_id = Column(String(50), ForeignKey("incidents.incident_id"), nullable=True, index=True)
+    report_id = Column(UUID(as_uuid=True), ForeignKey("reports.id"), nullable=True, index=True)
+    incident_id = Column(String(50), ForeignKey("incidents.id"), nullable=True, index=True)
     
     # Execution details
     started_at = Column(DateTime, nullable=False, default=datetime.utcnow, index=True)
@@ -59,6 +60,26 @@ class AgentRun(BaseModel):
     # Relationships
     report = relationship("Report", back_populates="agent_runs")
     incident = relationship("Incident", backref="agent_runs")
+
+    @property
+    def id(self) -> str:
+        """Expose run_id under the generic API response ID name."""
+        return self.run_id
+
+    @property
+    def input_summary(self) -> str:
+        """Return a compact representation of the agent input."""
+        return str(self.input_data or {})
+
+    @property
+    def output_summary(self) -> str:
+        """Return a compact representation of the agent output."""
+        return str(self.output_data or {})
+
+    @property
+    def duration_ms(self) -> int:
+        """Expose duration_seconds as integer milliseconds."""
+        return int((self.duration_seconds or 0) * 1000)
     
     def complete(self, output_data: dict, confidence_score: float = None) -> None:
         """
