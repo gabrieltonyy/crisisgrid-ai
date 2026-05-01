@@ -1,0 +1,212 @@
+# CrisisGrid AI - Git Ignore File
+
+# Environment Variables (CRITICAL - Never commit!)
+.env
+.env.*
+!.env.example
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+*.manifest
+*.spec
+pip-log.txt
+pip-delete-this-directory.txt
+.venv/
+venv/
+ENV/
+env/
+
+# Node.js / Frontend
+node_modules/
+.next/
+out/
+.nuxt/
+dist/
+.cache/
+.parcel-cache/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+lerna-debug.log*
+
+# IDEs and Editors
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+*.sublime-project
+*.sublime-workspace
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+*.db-journal
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+.pnpm-debug.log*
+
+# Testing
+.coverage
+.pytest_cache/
+.tox/
+htmlcov/
+coverage/
+*.cover
+*.py,cover
+.hypothesis/
+.cache
+nosetests.xml
+coverage.xml
+*.coveragerc
+
+# Uploads and Media
+uploads/
+media/
+static/media/
+*.jpg
+*.jpeg
+*.png
+*.gif
+*.pdf
+*.mp4
+*.mov
+!docs/**/*.png
+!docs/**/*.jpg
+
+# Secrets and Credentials (CRITICAL)
+*.pem
+*.key
+*.p12
+*.pfx
+*.crt
+*.cer
+*.der
+service-account.json
+credentials.json
+secrets.json
+config.json
+!.env.example
+
+# IBM Cloud
+ibmcloud-config.json
+.bluemix/
+
+# Temporary Files
+tmp/
+temp/
+*.tmp
+*.bak
+*.swp
+*~
+
+# OS Files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# Jupyter Notebooks
+.ipynb_checkpoints/
+*.ipynb
+
+# Documentation Build
+docs/_build/
+docs/.doctrees/
+site/
+
+# Backup Files
+*.backup
+*.old
+*.orig
+
+# Compiled Files
+*.com
+*.class
+*.dll
+*.exe
+*.o
+*.so
+
+# Package Files
+*.7z
+*.dmg
+*.gz
+*.iso
+*.jar
+*.rar
+*.tar
+*.zip
+
+# Virtual Environments
+.venv/
+venv/
+ENV/
+env/
+.virtualenv/
+
+# MyPy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Pyre
+.pyre/
+
+# pytype
+.pytype/
+
+# Cython
+cython_debug/
+
+# Docker
+.dockerignore
+
+# Terraform
+*.tfstate
+*.tfstate.*
+.terraform/
+.terraform.lock.hcl
+
+# Keep Important Files
+!.gitignore
+!.env.example
+!README.md
+!LICENSE
+!bob_sessions/README.md
+
+# Made with Bob
