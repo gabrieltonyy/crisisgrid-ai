@@ -32,14 +32,14 @@
 - [x] Add sample data seed script
 - [x] Test schema validation (pending package installation)
 
-## Phase 3: Report Submission API
-- [ ] Create POST /reports endpoint
-- [ ] Implement report validation
-- [ ] Create report repository
-- [ ] Add image upload handling
-- [ ] Generate unique report IDs
-- [ ] Store reports with PENDING_VERIFICATION status
-- [ ] Test report submission
+## Phase 3: Report Submission API ✅ COMPLETE
+- [x] Create POST /reports endpoint
+- [x] Implement report validation
+- [x] Create report repository
+- [x] Add image upload handling
+- [x] Generate unique report IDs
+- [x] Store reports with PENDING_VERIFICATION status
+- [x] Test report submission
 
 ## Phase 4: Verification and Decision Engine
 - [ ] Create Verification Agent
@@ -147,8 +147,65 @@
 
 ### Files Created in Phase 2: 16 files, ~2,600 lines
 
-### Next Phase: Phase 3 - Report Submission API
+---
+
+## Current Phase: Phase 3 - Report Submission API
+**Status:** ✅ COMPLETE
+**Started:** 2026-05-02
+**Completed:** 2026-05-02
+
+### Phase 3 Accomplishments
+- [x] Fixed IBM Cloudant package dependency (cloudant → ibmcloudant)
+- [x] Created utility functions for IDs and timestamps
+  - ids.py: generate_report_id(), generate_incident_id(), generate_agent_run_id()
+  - time.py: utc_now(), format_iso8601()
+- [x] Implemented ReportRepository for database operations
+  - create_report(): Store reports in PostgreSQL
+  - get_report_by_id(): Retrieve reports by UUID
+- [x] Created CloudantService for NoSQL audit trail
+  - store_raw_report(): Store raw payloads in Cloudant
+  - store_agent_log(): Log agent executions
+  - store_audit_event(): Track all system events
+- [x] Implemented UploadService for file handling
+  - save_upload(): Handle image/video uploads
+  - Validate file types and sizes
+  - Generate secure filenames
+- [x] Created POST /api/v1/reports endpoint
+  - Accept crisis reports with validation
+  - Store in PostgreSQL with PENDING_VERIFICATION status
+  - Store raw payload in Cloudant for audit
+  - Handle file uploads
+  - Return report with processing status
+- [x] Created GET /api/v1/reports/{id} endpoint
+  - Retrieve reports by UUID
+  - Return 404 for non-existent reports
+- [x] Integrated Cloudant for raw payload storage
+  - Automatic database creation
+  - Document versioning
+  - Audit trail logging
+- [x] Added comprehensive error handling and logging
+  - Structured logging throughout
+  - Graceful degradation when Cloudant unavailable
+  - Detailed error messages
+
+### Files Created in Phase 3: 6 files, ~800 lines
+- app/utils/ids.py (45 lines)
+- app/utils/time.py (35 lines)
+- app/repositories/report_repository.py (85 lines)
+- app/services/cloudant_service.py (244 lines)
+- app/services/upload_service.py (145 lines)
+- app/api/routes/reports.py (246 lines)
+
+### Files Modified in Phase 3:
+- requirements-ibm.txt: Fixed package names
+- app/services/cloudant_service.py: Fixed settings attribute names
+
+### API Endpoints Tested:
+- ✅ POST /api/v1/reports - Creates new crisis reports
+- ✅ GET /api/v1/reports/{id} - Retrieves report by ID
+
+### Next Phase: Phase 4 - Verification and Decision Engine
 
 ---
 
-Last Updated: 2026-05-01T20:39:00Z
+Last Updated: 2026-05-02T00:17:00Z

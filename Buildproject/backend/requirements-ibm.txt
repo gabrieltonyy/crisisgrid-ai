@@ -1,12 +1,9 @@
-# IBM Services - Optional Dependencies
-# Install these separately if you want to use IBM Watson and Cloudant
-# Note: These may have compatibility issues with Python 3.13+
+# IBM Cloud Services
+# ===================
 
-# IBM watsonx.ai SDK
+# IBM WatsonX.ai
 ibm-watsonx-ai>=1.3.0
 
-# IBM Cloudant SDK
-cloudant>=2.15.0
-
-# Installation:
-# pip install -r requirements-ibm.txt
+# IBM Cloudant NoSQL Database
+ibmcloudant>=0.9.0
+ibm-cloud-sdk-core>=3.20.0
