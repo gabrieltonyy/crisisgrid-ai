@@ -65,12 +65,12 @@
 - [x] Create alert and dispatch repositories
 - [x] Test alert/dispatch flow
 
-## Phase 7: Safety Advisory Logic
-- [ ] Create Advisory Agent
-- [ ] Define safety playbooks
-- [ ] Implement playbook selection logic
-- [ ] Add API endpoint for safety advice
-- [ ] Test advisory responses
+## Phase 7: Safety Advisory Logic ✅ COMPLETE
+- [x] Create Advisory Agent
+- [x] Define safety playbooks
+- [x] Implement playbook selection logic
+- [x] Add API endpoint for safety advice
+- [x] Test advisory responses
 
 ## Phase 8: Frontend Report Flow
 - [ ] Initialize Next.js application
@@ -490,8 +490,103 @@
 - ✅ All endpoints registered correctly
 - ✅ No breaking changes to existing functionality
 
-### Next Phase: Phase 7 - Safety Advisory Logic
+## Current Phase: Phase 7 - Safety Advisory Logic
+**Status:** ✅ COMPLETE
+**Started:** 2026-05-02
+**Completed:** 2026-05-02
+
+### Phase 7 Accomplishments
+- [x] Created advisory schemas
+  - AdvisoryRequest: Request schema with incident ID and optional user location/context
+  - AdvisoryResponse: Comprehensive response with safety advice, actions, and resources
+  - SafetyAction: Priority-ordered action recommendations
+  - AdvisoryStatistics: Advisory generation metrics
+
+- [x] Implemented AdvisoryService with comprehensive safety playbooks
+  - 8 crisis-specific playbooks (FIRE, FLOOD, WILDLIFE, ACCIDENT, SECURITY, HEALTH, LANDSLIDE, HAZARDOUS_SPILL)
+  - Each playbook includes:
+    * 3 priority-ordered immediate actions with rationale
+    * 6+ "what to do" guidelines
+    * 5+ "what NOT to do" warnings
+    * Evacuation advice templates
+    * Emergency contact information
+  - Risk level determination (IMMEDIATE, HIGH, MODERATE, LOW)
+  - Distance-based risk assessment with crisis-specific multipliers
+  - Primary advice generation based on risk level and distance
+  - AI enhancement integration with watsonx for personalized advice
+  - Complete Cloudant audit logging
+
+- [x] Created advisory API routes
+  - GET /api/v1/advisory/{incident_id} - Get advisory with query parameters
+  - POST /api/v1/advisory/ - Get advisory with request body
+  - Both endpoints support optional user location and context
+  - Comprehensive error handling and validation
+
+- [x] Registered advisory routes in main application
+  - Updated app/main.py with advisory router
+  - Updated imports in app/api/routes/__init__.py
+
+- [x] Created comprehensive test suite (31 tests, all passing)
+  - TestPlaybooks: 9 tests for all crisis type playbooks
+  - TestRiskLevels: 7 tests for risk level determination
+  - TestPrimaryAdvice: 4 tests for advice generation
+  - TestAdvisoryGeneration: 5 tests for full advisory flow
+  - TestAIEnhancement: 3 tests for watsonx integration
+  - TestEdgeCases: 3 tests for boundary conditions
+  - 100% test coverage for business logic
+
+### Files Created in Phase 7: 4 files, ~1,500 lines
+- app/schemas/advisory.py (149 lines) - Advisory request/response schemas
+- app/services/advisory_service.py (682 lines) - Advisory service with playbooks
+- app/api/routes/advisory.py (153 lines) - Advisory API endpoints
+- tests/test_advisory.py (545 lines) - Comprehensive test suite
+
+### Files Modified in Phase 7:
+- app/main.py: Added advisory router import and registration
+
+### API Endpoints Implemented:
+- ✅ GET /api/v1/advisory/{incident_id} - Get safety advisory with query params
+- ✅ POST /api/v1/advisory/ - Get safety advisory with request body
+
+### Key Features:
+- **Crisis-Specific Playbooks**: Tailored safety guidance for each crisis type
+- **Priority-Ordered Actions**: Immediate actions ranked by importance with rationale
+- **Distance-Based Risk Assessment**: IMMEDIATE/HIGH/MODERATE/LOW based on user location
+- **Crisis-Type Multipliers**: Adjusted risk zones (e.g., flood 1.5x, accident 0.5x)
+- **AI Enhancement**: Optional watsonx integration for personalized advice
+- **Graceful Fallback**: System works without AI when unavailable
+- **Complete Audit Trail**: All advisory requests logged to Cloudant
+- **Comprehensive Testing**: 31 tests covering all functionality
+- **No Breaking Changes**: Integrates seamlessly with existing system
+
+### Business Logic Implemented:
+1. **Playbook Selection**: Automatic selection based on incident crisis type
+2. **Risk Assessment**:
+   - IMMEDIATE: Within 500m (adjusted by crisis type)
+   - HIGH: Within 1km
+   - MODERATE: Within 2km
+   - LOW: Beyond 2km
+3. **AI Enhancement**: Context-aware advice when watsonx available
+4. **Evacuation Guidance**: Distance-based evacuation recommendations
+5. **Emergency Contacts**: Crisis-appropriate emergency service numbers
+
+### Integration Points:
+- Uses existing Incident model from Phase 2
+- Integrates with watsonx_service from Phase 4 for AI enhancement
+- Integrates with CloudantService from Phase 3 for audit logging
+- Uses geo utilities from Phase 5 for distance calculations
+- Extends existing API structure from previous phases
+
+### Test Results:
+- ✅ 31 tests passed
+- ✅ 0 tests failed
+- ✅ All playbooks validated
+- ✅ All risk levels tested
+- ✅ AI enhancement tested
+- ✅ Edge cases covered
+
+### Next Phase: Phase 8 - Frontend Report Flow
 
 ---
 
-Last Updated: 2026-05-02T09:54:00Z
+Last Updated: 2026-05-02T10:46:00Z
