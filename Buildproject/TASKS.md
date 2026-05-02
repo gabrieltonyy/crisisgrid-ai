@@ -50,12 +50,12 @@
 - [x] Implement agent run logging
 - [x] Test verification scenarios
 
-## Phase 5: GeoRisk and Clustering Logic
-- [ ] Create GeoRisk Agent
-- [ ] Implement crisis-specific radius rules
-- [ ] Add distance calculation utility
-- [ ] Implement clustering algorithm
-- [ ] Test clustering scenarios
+## Phase 5: GeoRisk and Clustering Logic ✅ COMPLETE
+- [x] Create GeoRisk Agent
+- [x] Implement crisis-specific radius rules
+- [x] Add distance calculation utility
+- [x] Implement clustering algorithm
+- [x] Test clustering scenarios
 
 ## Phase 6: Alert and Dispatch Simulation
 - [ ] Create Alert Agent
@@ -279,12 +279,81 @@
 - Extends ReportRepository from Phase 3
 - No modifications to existing API contracts
 
-### Next Phase: Phase 5 - GeoRisk and Clustering Logic
+## Current Phase: Phase 5 - GeoRisk and Clustering Logic
+**Status:** ✅ COMPLETE
+**Started:** 2026-05-02
+**Completed:** 2026-05-02
+
+### Phase 5 Accomplishments
+- [x] Created geographic utility functions
+  - haversine_distance(): Calculate great circle distance between coordinates
+  - is_within_radius(): Check if points are within specified radius
+  - calculate_centroid(): Calculate geographic center of multiple points
+  - get_bounding_box(): Generate bounding box for spatial queries
+  - format_distance(): Human-readable distance formatting
+- [x] Implemented crisis-specific radius configuration
+  - CRISIS_RADIUS_CONFIG: Comprehensive radius rules for all crisis types
+  - get_clustering_radius(): Get clustering radius by crisis type
+  - get_alert_radius(): Get alert radius by crisis type
+  - get_evacuation_radius(): Get evacuation radius by crisis type
+  - Fire: 500m clustering, 1000m alert, 2000m evacuation
+  - Flood: 1000m clustering, 2000m alert, 3000m evacuation
+  - Wildlife: 1500m clustering, 2500m alert, 1000m evacuation
+  - Accident: 300m clustering, 500m alert, 200m evacuation
+  - And more for all crisis types
+- [x] Created GeoRisk Agent service
+  - GeoRiskService: Geographic risk assessment and spatial analysis
+  - assess_geographic_risk(): Comprehensive risk assessment for locations
+  - Crisis-specific risk zones (immediate danger, alert, evacuation)
+  - Nearby incident detection within time windows
+  - Risk score calculation (0-100) based on severity and clustering
+  - Recommended actions based on risk level and crisis type
+  - Integration with Cloudant for audit logging
+- [x] Implemented clustering algorithm
+  - ClusteringService: DBSCAN-like clustering for crisis reports
+  - cluster_reports(): Cluster unassigned reports into incidents
+  - find_matching_incident(): Find existing incident for new report
+  - add_report_to_incident(): Add report to incident and update properties
+  - Crisis-type-specific clustering with appropriate radii
+  - Automatic centroid calculation for multi-report incidents
+  - Confidence score updates based on report clustering
+  - Time-window-based clustering (default 24 hours)
+- [x] Created comprehensive test suite
+  - 50+ test cases covering all functionality
+  - TestHaversineDistance: Distance calculation tests
+  - TestIsWithinRadius: Radius checking tests
+  - TestCalculateCentroid: Centroid calculation tests
+  - TestGetBoundingBox: Bounding box tests
+  - TestFormatDistance: Distance formatting tests
+  - TestCrisisRadiusConfig: Radius configuration validation
+  - TestClusteringScenarios: Clustering logic tests
+  - TestGeoRiskScenarios: Risk assessment tests
+  - TestEdgeCases: Edge case and boundary condition tests
+
+### Files Created in Phase 5: 3 files, ~1,000 lines
+- app/utils/geo.py (177 lines) - Geographic utility functions
+- app/services/georisk_service.py (437 lines) - GeoRisk agent implementation
+- app/services/clustering_service.py (452 lines) - Clustering algorithm
+- tests/test_clustering.py (368 lines) - Comprehensive test suite
+
+### Key Features:
+- **Haversine Distance Calculation**: Accurate great circle distance between coordinates
+- **Crisis-Specific Radii**: Tailored clustering, alert, and evacuation zones per crisis type
+- **Geographic Risk Assessment**: Multi-factor risk scoring with recommended actions
+- **Intelligent Clustering**: Groups nearby reports into incidents using spatial algorithms
+- **Centroid Calculation**: Accurate geographic center for multi-report incidents
+- **Bounding Box Queries**: Efficient spatial database queries
+- **Time-Window Clustering**: Configurable time windows for incident grouping
+- **Comprehensive Testing**: 50+ test cases with edge case coverage
+
+### Integration Points:
+- Uses existing Report and Incident models from Phase 2
+- Integrates with CloudantService from Phase 3 for audit logging
+- Extends common schemas with geographic utilities
+- Ready for integration with Alert and Dispatch agents in Phase 6
+
+### Next Phase: Phase 6 - Alert and Dispatch Simulation
 
 ---
 
-### Next Phase: Phase 4 - Verification and Decision Engine
-
----
-
-Last Updated: 2026-05-02T00:59:00Z
+Last Updated: 2026-05-02T09:20:00Z
