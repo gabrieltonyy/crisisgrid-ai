@@ -41,4 +41,38 @@ def generate_agent_run_id(agent_type: str) -> str:
     timestamp = int(time.time() * 1000)
     return f"run_{agent_type}_{timestamp}"
 
+
+def generate_alert_id(crisis_type: str, sequence: Optional[int] = None) -> str:
+    """
+    Generate alert ID in format: alert_{type}_{sequence}
+    Example: alert_fire_001
+    
+    Args:
+        crisis_type: Type of crisis (e.g., 'fire', 'flood')
+        sequence: Optional sequence number, if None generates timestamp-based
+    
+    Returns:
+        Formatted alert ID string
+    """
+    if sequence is None:
+        sequence = int(time.time() * 1000) % 100000
+    return f"alert_{crisis_type.lower()}_{sequence:05d}"
+
+
+def generate_dispatch_id(crisis_type: str, sequence: Optional[int] = None) -> str:
+    """
+    Generate dispatch ID in format: dispatch_{type}_{sequence}
+    Example: dispatch_fire_001
+    
+    Args:
+        crisis_type: Type of crisis (e.g., 'fire', 'flood')
+        sequence: Optional sequence number, if None generates timestamp-based
+    
+    Returns:
+        Formatted dispatch ID string
+    """
+    if sequence is None:
+        sequence = int(time.time() * 1000) % 100000
+    return f"dispatch_{crisis_type.lower()}_{sequence:05d}"
+
 # Made with Bob
