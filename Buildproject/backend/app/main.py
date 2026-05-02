@@ -10,7 +10,7 @@ import logging
 import sys
 
 from app.core.config import settings
-from app.api.routes import health, reports
+from app.api.routes import health, reports, verification
 from app.db.session import check_db_connection
 
 # Configure logging
@@ -158,6 +158,7 @@ async def global_exception_handler(request, exc):
 app.include_router(health.router, tags=["health"])
 app.include_router(health.router, prefix="/api/v1", tags=["health"])
 app.include_router(reports.router, prefix="/api/v1")
+app.include_router(verification.router, prefix="/api/v1")
 
 
 if __name__ == "__main__":

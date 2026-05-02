@@ -26,4 +26,19 @@ def generate_incident_id(crisis_type: str, sequence: Optional[int] = None) -> st
         sequence = int(time.time() * 1000) % 100000
     return f"incident_{crisis_type.lower()}_{sequence:05d}"
 
+
+def generate_agent_run_id(agent_type: str) -> str:
+    """
+    Generate agent run ID in format: run_{agent_type}_{timestamp}
+    Example: run_verification_1714567890123
+    
+    Args:
+        agent_type: Type of agent (e.g., 'verification', 'dispatch')
+    
+    Returns:
+        Formatted agent run ID string
+    """
+    timestamp = int(time.time() * 1000)
+    return f"run_{agent_type}_{timestamp}"
+
 # Made with Bob
