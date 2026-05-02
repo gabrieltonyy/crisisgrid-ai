@@ -10,7 +10,7 @@ import logging
 import sys
 
 from app.core.config import settings
-from app.api.routes import health, reports, verification, alerts, dispatch
+from app.api.routes import health, reports, verification, alerts, dispatch, advisory
 from app.db.session import check_db_connection
 
 # Configure logging
@@ -161,6 +161,7 @@ app.include_router(reports.router, prefix="/api/v1")
 app.include_router(verification.router, prefix="/api/v1")
 app.include_router(alerts.router, prefix="/api/v1")
 app.include_router(dispatch.router, prefix="/api/v1")
+app.include_router(advisory.router, prefix="/api/v1")
 
 
 if __name__ == "__main__":
