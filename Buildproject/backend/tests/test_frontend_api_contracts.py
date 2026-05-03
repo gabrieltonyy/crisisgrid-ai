@@ -16,6 +16,7 @@ from app.schemas.common import (
     DispatchStatus,
     IncidentStatus,
     SeverityLevel,
+    UserRole,
 )
 
 
@@ -32,6 +33,11 @@ def test_reports_list_matches_frontend_contract(client, monkeypatch):
     import app.api.routes.reports as reports_routes
 
     report_id = uuid4()
+    admin_user = SimpleNamespace(
+        id=uuid4(),
+        role=UserRole.ADMIN,
+        is_active=True,
+    )
 
     class FakeReportRepository:
         def __init__(self, db):
@@ -61,6 +67,7 @@ def test_reports_list_matches_frontend_contract(client, monkeypatch):
             ]
 
     monkeypatch.setattr(reports_routes, "ReportRepository", FakeReportRepository)
+    app.dependency_overrides[reports_routes.get_current_active_user] = lambda: admin_user
 
     response = client.get("/api/v1/reports")
 
@@ -70,6 +77,59 @@ def test_reports_list_matches_frontend_contract(client, monkeypatch):
     assert body[0]["id"] == str(report_id)
     assert body[0]["crisis_type"] == "FIRE"
     assert body[0]["status"] == "PENDING_VERIFICATION"
+
+
+def test_anonymous_report_submission_does_not_require_auth(client, monkeypatch):
+    import app.api.routes.reports as reports_routes
+
+    report_id = uuid4()
+
+    class FakeReportRepository:
+        def __init__(self, db):
+            self.db = db
+
+        def create(self, report_data, user_id=None):
+            return SimpleNamespace(
+                id=report_id,
+                incident_id=None,
+                user_id=user_id,
+                crisis_type=report_data.crisis_type,
+                description=report_data.description,
+                image_url=None,
+                video_url=None,
+                latitude=report_data.latitude,
+                longitude=report_data.longitude,
+                location_text=report_data.location_text,
+                status=IncidentStatus.PENDING_VERIFICATION,
+                confidence_score=0.0,
+                severity_score=0.0,
+                source="CITIZEN_APP",
+                is_anonymous=report_data.is_anonymous,
+                created_at=datetime(2026, 5, 2, 12, 0, 0),
+                updated_at=datetime(2026, 5, 2, 12, 0, 0),
+            )
+
+    monkeypatch.setattr(reports_routes, "ReportRepository", FakeReportRepository)
+    monkeypatch.setattr(reports_routes.cloudant_service, "enabled", False)
+
+    response = client.post(
+        "/api/v1/reports",
+        json={
+            "crisis_type": "FIRE",
+            "description": "Smoke visible near the market warehouse",
+            "latitude": 51.5074,
+            "longitude": -0.1278,
+            "location_text": "Central market",
+            "is_anonymous": True,
+        },
+    )
+
+    assert response.status_code == 201
+    body = response.json()
+    assert body["report"]["id"] == str(report_id)
+    assert body["report"]["user_id"] is None
+    assert body["report"]["is_anonymous"] is True
+    assert body["processing_status"] == "QUEUED_FOR_VERIFICATION"
 
 
 def test_alerts_list_matches_frontend_contract(client, monkeypatch):

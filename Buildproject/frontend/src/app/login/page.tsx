@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Alert, Form, Input, Button, Card, message, Typography } from 'antd';
+import { Alert, Form, Input, Button, Card, Typography } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import Link from 'next/link';
 import { useAuth } from '@/hooks/useAuth';
@@ -14,6 +14,7 @@ export default function LoginPage() {
   const { login } = useAuth();
   const [loading, setLoading] = useState(false);
   const [notice, setNotice] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     if (new URLSearchParams(window.location.search).get('registered') === '1') {
@@ -23,11 +24,11 @@ export default function LoginPage() {
 
   const onFinish = async (values: { email: string; password: string }) => {
     setLoading(true);
+    setError(null);
     const result = await login(values.email, values.password);
     setLoading(false);
 
     if (result.success) {
-      message.success('Login successful!');
       // Redirect based on role
       if (result.user?.role === 'ADMIN' || result.user?.role === 'AUTHORITY') {
         router.replace('/admin/dashboard');
@@ -35,7 +36,7 @@ export default function LoginPage() {
         router.replace('/citizen');
       }
     } else {
-      message.error(result.error || 'Login failed');
+      setError(result.error || 'Login failed');
     }
   };
 
@@ -52,6 +53,15 @@ export default function LoginPage() {
             type="success"
             showIcon
             message={notice}
+            className="mb-4"
+          />
+        )}
+
+        {error && (
+          <Alert
+            type="error"
+            showIcon
+            message={error}
             className="mb-4"
           />
         )}

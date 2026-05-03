@@ -24,6 +24,7 @@ import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
 import { ErrorAlert } from '@/components/ui/ErrorAlert';
 import { StatusBadge } from '@/components/ui/StatusBadge';
 import { SeverityBadge } from '@/components/ui/SeverityBadge';
+import apiClient from '@/lib/api/client';
 import type {
   ReportResponse,
   AlertResponse,
@@ -36,36 +37,29 @@ import { formatDistanceToNow } from 'date-fns';
 
 const { Title, Text } = Typography;
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || '/api/v1';
-
 const fetchReports = async (): Promise<ReportResponse[]> => {
-  const response = await fetch(`${API_BASE_URL}/reports`);
-  if (!response.ok) throw new Error('Failed to fetch reports');
-  return response.json();
+  const response = await apiClient.get<ReportResponse[]>('/reports');
+  return response.data;
 };
 
 const fetchAlerts = async (): Promise<AlertResponse[]> => {
-  const response = await fetch(`${API_BASE_URL}/alerts`);
-  if (!response.ok) throw new Error('Failed to fetch alerts');
-  return response.json();
+  const response = await apiClient.get<AlertResponse[]>('/alerts');
+  return response.data;
 };
 
 const fetchVerificationStats = async (): Promise<VerificationStats> => {
-  const response = await fetch(`${API_BASE_URL}/verification/stats`);
-  if (!response.ok) throw new Error('Failed to fetch verification stats');
-  return response.json();
+  const response = await apiClient.get<VerificationStats>('/verification/stats');
+  return response.data;
 };
 
 const fetchHealth = async (): Promise<HealthResponse> => {
-  const response = await fetch(`${API_BASE_URL}/health`);
-  if (!response.ok) throw new Error('Failed to fetch health status');
-  return response.json();
+  const response = await apiClient.get<HealthResponse>('/health');
+  return response.data;
 };
 
 const fetchDispatchLogs = async (): Promise<DispatchResponse[]> => {
-  const response = await fetch(`${API_BASE_URL}/dispatch/logs`);
-  if (!response.ok) throw new Error('Failed to fetch dispatch logs');
-  return response.json();
+  const response = await apiClient.get<DispatchResponse[]>('/dispatch/logs');
+  return response.data;
 };
 
 export default function AdminDashboardPage() {

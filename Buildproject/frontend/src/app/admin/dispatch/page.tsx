@@ -15,16 +15,14 @@ import { ErrorAlert } from '@/components/ui/ErrorAlert';
 import type { DispatchResponse, AuthorityType, DispatchStatus } from '@/types/api';
 import { formatDistanceToNow } from 'date-fns';
 import type { ColumnsType } from 'antd/es/table';
+import apiClient from '@/lib/api/client';
 
 const { Title, Text } = Typography;
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || '/api/v1';
-
 // Fetch dispatch logs
 const fetchDispatchLogs = async (): Promise<DispatchResponse[]> => {
-  const response = await fetch(`${API_BASE_URL}/dispatch/logs`);
-  if (!response.ok) throw new Error('Failed to fetch dispatch logs');
-  return response.json();
+  const response = await apiClient.get<DispatchResponse[]>('/dispatch/logs');
+  return response.data;
 };
 
 // Status badge component

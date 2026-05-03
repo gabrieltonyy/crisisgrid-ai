@@ -18,16 +18,14 @@ import { getCrisisLabel } from '@/components/ui/CrisisIcon';
 import type { AlertResponse, CrisisType, SeverityLevel, AlertStatus } from '@/types/api';
 import { formatDistanceToNow } from 'date-fns';
 import type { ColumnsType } from 'antd/es/table';
+import apiClient from '@/lib/api/client';
 
 const { Title, Text } = Typography;
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || '/api/v1';
-
 // Fetch alerts
 const fetchAlerts = async (): Promise<AlertResponse[]> => {
-  const response = await fetch(`${API_BASE_URL}/alerts`);
-  if (!response.ok) throw new Error('Failed to fetch alerts');
-  return response.json();
+  const response = await apiClient.get<AlertResponse[]>('/alerts');
+  return response.data;
 };
 
 // Status badge component

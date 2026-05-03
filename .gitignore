@@ -1,3 +1,21 @@
 # Local UI review artifacts
 /*.png
 /UI_BEHAVIOR_DOCUMENTATION.md
+/.playwright-mcp/
+/playwright_imagescreenshoots/
+/playwright-report/
+/test-results/
+/PLAYWRIGHT_TEST_REPORT.md
+/p[0-9]-*.md
+/*-snapshot.md
+/*-console-*.md
+
+# Local post-submission review artifacts
+/PROJECT_COMPLETION_AUDIT.md
+/LOCAL_TEST_REPORT.md
+/SECURITY_REVIEW.md
+/DEMO_GUIDE.md
+
+# Local editor and generated status artifacts
+/.vscode/
+/project_status_report/

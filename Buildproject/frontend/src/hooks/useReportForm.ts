@@ -153,27 +153,6 @@ export function useReportForm() {
       newErrors.location = 'Location is required';
     }
 
-    // Validate contact info if not anonymous
-    if (!formData.is_anonymous) {
-      const nameError = validateField('contact_name');
-      if (nameError) newErrors.contact_name = nameError;
-
-      if (formData.contact_phone) {
-        const phoneError = validateField('contact_phone');
-        if (phoneError) newErrors.contact_phone = phoneError;
-      }
-
-      if (formData.contact_email) {
-        const emailError = validateField('contact_email');
-        if (emailError) newErrors.contact_email = emailError;
-      }
-
-      // At least one contact method required
-      if (!formData.contact_phone && !formData.contact_email) {
-        newErrors.contact_phone = 'Please provide at least one contact method';
-      }
-    }
-
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   }, [formData, validateField]);

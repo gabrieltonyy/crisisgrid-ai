@@ -34,7 +34,9 @@ export function useAuth(requireAuth: boolean = false) {
 
       localStorage.setItem('auth_token', storedToken);
 
-      if (storedToken && !user) {
+      if (storedToken && user) {
+        setAuth(storedToken, user);
+      } else if (storedToken) {
         try {
           const userData = await authApi.getCurrentUser();
           setAuth(storedToken, userData);

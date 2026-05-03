@@ -18,6 +18,10 @@ from app.services.auth_service import decode_access_token
 
 # OAuth2 scheme for token extraction from Authorization header
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/v1/auth/login")
+optional_oauth2_scheme = OAuth2PasswordBearer(
+    tokenUrl="/api/v1/auth/login",
+    auto_error=False
+)
 
 
 async def get_current_user(
@@ -144,7 +148,7 @@ def require_admin():
 
 
 async def get_optional_user(
-    token: Optional[str] = Depends(oauth2_scheme),
+    token: Optional[str] = Depends(optional_oauth2_scheme),
     db: Session = Depends(get_db)
 ) -> Optional[User]:
     """

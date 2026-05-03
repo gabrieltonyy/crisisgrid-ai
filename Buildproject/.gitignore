@@ -82,6 +82,9 @@ lerna-debug.log*
 .tox/
 htmlcov/
 coverage/
+playwright-report/
+test-results/
+.playwright-mcp/
 *.cover
 *.py,cover
 .hypothesis/
@@ -148,6 +151,14 @@ desktop.ini
 docs/_build/
 docs/.doctrees/
 site/
+
+# Local review documentation
+PROJECT_COMPLETION_AUDIT.md
+LOCAL_TEST_REPORT.md
+SECURITY_REVIEW.md
+DEMO_GUIDE.md
+PLAYWRIGHT_TEST_REPORT.md
+UI_BEHAVIOR_DOCUMENTATION.md
 
 # Backup Files
 *.backup
