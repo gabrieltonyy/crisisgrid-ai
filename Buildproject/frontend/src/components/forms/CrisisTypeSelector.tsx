@@ -20,20 +20,24 @@ interface CrisisTypeSelectorProps {
 const CRISIS_DESCRIPTIONS: Record<CrisisType, string> = {
   FIRE: 'Building fire, wildfire, or smoke',
   FLOOD: 'Flooding, water damage, or heavy rain',
-  EARTHQUAKE: 'Ground shaking, structural damage',
   WILDLIFE: 'Dangerous animal encounter or wildlife threat',
   ACCIDENT: 'Vehicle accident, collision, or crash',
-  MEDICAL: 'Medical emergency requiring immediate attention',
+  SECURITY: 'Security threat or public safety issue',
+  HEALTH: 'Medical or public health emergency',
+  LANDSLIDE: 'Landslide, debris flow, or slope collapse',
+  HAZARDOUS_SPILL: 'Chemical, fuel, or hazardous material spill',
   OTHER: 'Other emergency situation',
 };
 
 const CRISIS_OPTIONS: CrisisType[] = [
   'FIRE',
   'FLOOD',
-  'EARTHQUAKE',
   'WILDLIFE',
   'ACCIDENT',
-  'MEDICAL',
+  'SECURITY',
+  'HEALTH',
+  'LANDSLIDE',
+  'HAZARDOUS_SPILL',
   'OTHER',
 ];
 

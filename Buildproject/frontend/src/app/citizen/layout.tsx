@@ -1,19 +1,23 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Layout, Menu, Button, Breadcrumb, Drawer } from 'antd';
-import { 
-  HomeOutlined, 
-  AlertOutlined, 
-  FileTextOutlined, 
-  SafetyOutlined, 
-  EnvironmentOutlined, 
+import { Layout, Menu, Button, Breadcrumb, Drawer, Dropdown, Tag } from 'antd';
+import {
+  HomeOutlined,
+  AlertOutlined,
+  FileTextOutlined,
+  SafetyOutlined,
+  EnvironmentOutlined,
   PhoneOutlined,
-  MenuOutlined
+  MenuOutlined,
+  UserOutlined,
+  LogoutOutlined
 } from '@ant-design/icons';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import type { MenuProps } from 'antd';
+import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
+import { useAuth } from '@/hooks/useAuth';
 
 const { Header, Content, Footer } = Layout;
 
@@ -89,6 +93,35 @@ export default function CitizenLayout({
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const selectedMenuKey = getSelectedMenuKey(pathname);
+  const { user, logout } = useAuth();
+
+  const userMenuItems: MenuProps['items'] = [
+    {
+      key: 'profile',
+      icon: <UserOutlined />,
+      label: user?.name || user?.email || 'Profile',
+      disabled: true,
+    },
+    {
+      key: 'email',
+      label: user?.email || 'No email',
+      disabled: true,
+    },
+    {
+      key: 'role',
+      label: `Role: ${user?.role}`,
+      disabled: true,
+    },
+    {
+      type: 'divider',
+    },
+    {
+      key: 'logout',
+      icon: <LogoutOutlined />,
+      label: 'Logout',
+      onClick: logout,
+    },
+  ];
 
   // Generate breadcrumb items
   const pathSnippets = pathname.split('/').filter((i) => i);
@@ -102,6 +135,7 @@ export default function CitizenLayout({
   });
 
   return (
+    <ProtectedRoute allowedRoles={['CITIZEN', 'AUTHORITY', 'ADMIN']}>
     <Layout className="min-h-screen">
       {/* Header */}
       <Header 
@@ -129,19 +163,32 @@ export default function CitizenLayout({
           />
         </div>
 
-        {/* Emergency Button - Desktop */}
-        <Link href="/citizen/contacts" className="hidden md:block">
-          <Button
-            type="primary"
-            danger
-            size="large"
-            icon={<PhoneOutlined />}
-            className="bg-red-500 hover:bg-red-600 font-semibold"
-            aria-label="Emergency Contacts"
-          >
-            Emergency
-          </Button>
-        </Link>
+        {/* Right side buttons - Desktop */}
+        <div className="hidden md:flex items-center gap-3">
+          <Link href="/citizen/contacts">
+            <Button
+              type="primary"
+              danger
+              size="large"
+              icon={<PhoneOutlined />}
+              className="bg-red-500 hover:bg-red-600 font-semibold"
+              aria-label="Emergency Contacts"
+            >
+              Emergency
+            </Button>
+          </Link>
+          <Dropdown menu={{ items: userMenuItems }} placement="bottomRight">
+            <Button
+              type="text"
+              icon={<UserOutlined />}
+              size="large"
+              className="flex items-center"
+            >
+              <span className="hidden lg:inline">{user?.name || user?.email}</span>
+              {user?.role && <Tag color="blue" className="ml-2 mr-0">{user.role}</Tag>}
+            </Button>
+          </Dropdown>
+        </div>
 
         {/* Mobile Menu Button */}
         <Button
@@ -169,6 +216,11 @@ export default function CitizenLayout({
           className="border-0"
         />
         <div className="mt-4 px-4">
+          <div className="mb-4 rounded-md border border-slate-200 p-3">
+            <div className="font-medium text-slate-900">{user?.name || user?.email}</div>
+            <div className="text-xs text-slate-500">{user?.email}</div>
+            {user?.role && <Tag color="blue" className="mt-2">{user.role}</Tag>}
+          </div>
           <Link href="/citizen/contacts" onClick={() => setMobileMenuOpen(false)}>
             <Button
               type="primary"
@@ -181,6 +233,17 @@ export default function CitizenLayout({
               Emergency Contacts
             </Button>
           </Link>
+          <Button
+            icon={<LogoutOutlined />}
+            block
+            className="mt-3"
+            onClick={() => {
+              setMobileMenuOpen(false);
+              logout();
+            }}
+          >
+            Logout
+          </Button>
         </div>
       </Drawer>
 
@@ -303,6 +366,7 @@ export default function CitizenLayout({
         </Link>
       </div>
     </Layout>
+    </ProtectedRoute>
   );
 }
 

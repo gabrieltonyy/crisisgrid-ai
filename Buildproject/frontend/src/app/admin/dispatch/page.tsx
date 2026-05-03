@@ -52,7 +52,9 @@ const AuthorityBadge = ({ type }: { type: AuthorityType }) => {
     DISASTER_MANAGEMENT: { color: 'orange', label: 'Disaster Mgmt' },
     WILDLIFE_AUTHORITY: { color: 'green', label: 'Wildlife' },
     POLICE: { color: 'blue', label: 'Police' },
-    MEDICAL: { color: 'purple', label: 'Medical' },
+    AMBULANCE: { color: 'purple', label: 'Ambulance' },
+    PUBLIC_HEALTH: { color: 'magenta', label: 'Public Health' },
+    FIRE_DEPARTMENT: { color: 'red', label: 'Fire Department' },
   };
 
   const { color, label } = config[type] || { color: 'default', label: type };
@@ -75,7 +77,8 @@ const filterConfigs: FilterConfig[] = [
       { label: 'Disaster Management', value: 'DISASTER_MANAGEMENT' },
       { label: 'Wildlife Authority', value: 'WILDLIFE_AUTHORITY' },
       { label: 'Police', value: 'POLICE' },
-      { label: 'Medical', value: 'MEDICAL' },
+      { label: 'Ambulance', value: 'AMBULANCE' },
+      { label: 'Public Health', value: 'PUBLIC_HEALTH' },
     ],
   },
   {

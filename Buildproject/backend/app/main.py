@@ -10,7 +10,7 @@ import logging
 import sys
 
 from app.core.config import settings
-from app.api.routes import health, reports, verification, alerts, dispatch, advisory
+from app.api.routes import health, reports, verification, alerts, dispatch, advisory, auth
 from app.db.session import check_db_connection
 
 # Configure logging
@@ -37,12 +37,7 @@ app = FastAPI(
 # Configure CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:3000",  # Next.js frontend
-        "http://localhost:8000",  # Backend itself
-        "http://127.0.0.1:3000",
-        "http://127.0.0.1:8000",
-    ],
+    allow_origins=settings.frontend_origins_list,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -157,6 +152,7 @@ async def global_exception_handler(request, exc):
 # Include routers
 app.include_router(health.router, tags=["health"])
 app.include_router(health.router, prefix="/api/v1", tags=["health"])
+app.include_router(auth.router, prefix="/api/v1/auth", tags=["authentication"])
 app.include_router(reports.router, prefix="/api/v1")
 app.include_router(verification.router, prefix="/api/v1")
 app.include_router(alerts.router, prefix="/api/v1")

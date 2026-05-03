@@ -13,7 +13,7 @@ import { ReportCard } from '@/components/cards/ReportCard';
 import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
 import { ErrorAlert } from '@/components/ui/ErrorAlert';
 import { EmptyState } from '@/components/ui/EmptyState';
-import { useReports } from '@/lib/api';
+import { useMyReports } from '@/lib/api';
 import type { IncidentStatus } from '@/types/api';
 
 const { Title } = Typography;
@@ -26,8 +26,8 @@ export default function ReportsPage() {
   const [filterStatus, setFilterStatus] = useState<FilterStatus>('all');
   const [sortBy, setSortBy] = useState<SortOption>('newest');
 
-  // Fetch reports
-  const { data: reports, isLoading, error, refetch } = useReports();
+  // Fetch user's reports using /reports/me endpoint
+  const { data: reports, isLoading, error, refetch } = useMyReports();
 
   // Filter and sort reports
   const filteredAndSortedReports = useMemo(() => {
@@ -129,8 +129,10 @@ export default function ReportsPage() {
               options={[
                 { label: 'All Reports', value: 'all' },
                 { label: 'Pending Verification', value: 'PENDING_VERIFICATION' },
+                { label: 'Needs Confirmation', value: 'NEEDS_CONFIRMATION' },
                 { label: 'Verified', value: 'VERIFIED' },
                 { label: 'Provisional Critical', value: 'PROVISIONAL_CRITICAL' },
+                { label: 'Dispatched', value: 'DISPATCHED' },
                 { label: 'False Report', value: 'FALSE_REPORT' },
                 { label: 'Resolved', value: 'RESOLVED' },
               ]}

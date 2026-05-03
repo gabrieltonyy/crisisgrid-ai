@@ -20,6 +20,7 @@ Ensure your `.env` file is configured in the `Buildproject/` directory with:
 ```bash
 DATABASE_URL=postgresql://crisisgrid:crisisgrid_password@localhost:5432/crisisgrid
 JWT_SECRET=your_secure_secret_here
+FRONTEND_ORIGINS=http://localhost:3000,http://127.0.0.1:3000,https://crisisgrid-ai.vercel.app
 WATSONX_ENABLED=true
 WATSONX_API_KEY=your_key_here
 WATSONX_PROJECT_ID=your_project_id_here
@@ -73,6 +74,25 @@ Once the server is running, visit:
 - **ReDoc:** http://localhost:8000/redoc
 - **OpenAPI JSON:** http://localhost:8000/openapi.json
 
+## Demo Seed Data
+
+Create 50 demo users and 300 Nairobi/Kenya crisis reports:
+
+```bash
+cd Buildproject/backend
+python scripts/seed_data.py
+```
+
+All seeded users use password `Password123!`.
+
+Demo accounts:
+
+| Role | Email |
+| --- | --- |
+| Citizen | `citizen.demo01@demo.crisisgrid.ai` |
+| Authority | `authority.demo01@demo.crisisgrid.ai` |
+| Admin | `admin.demo01@demo.crisisgrid.ai` |
+
 ## Project Structure
 
 ```
@@ -100,6 +120,7 @@ backend/
 ### Required
 - `DATABASE_URL` - PostgreSQL connection string
 - `JWT_SECRET` - Secret key for JWT tokens
+- `FRONTEND_ORIGINS` - Comma-separated CORS allowlist
 
 ### Optional (IBM Services)
 - `CLOUDANT_ENABLED` - Enable IBM Cloudant (default: false)

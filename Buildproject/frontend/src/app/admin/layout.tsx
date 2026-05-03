@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Layout, Menu, Button, Drawer, Tag } from 'antd';
+import { Layout, Menu, Button, Drawer, Tag, Dropdown } from 'antd';
 import type { MenuProps } from 'antd';
 import {
   AlertOutlined,
@@ -15,7 +15,10 @@ import {
   MenuOutlined,
   SendOutlined,
   UserOutlined,
+  LogoutOutlined,
 } from '@ant-design/icons';
+import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
+import { useAuth } from '@/hooks/useAuth';
 
 const { Header, Sider, Content } = Layout;
 
@@ -57,6 +60,35 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const pathname = usePathname();
   const selectedKey = getSelectedKey(pathname);
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const { user, logout } = useAuth();
+
+  const userMenuItems: MenuProps['items'] = [
+    {
+      key: 'profile',
+      icon: <UserOutlined />,
+      label: user?.name || user?.email || 'Profile',
+      disabled: true,
+    },
+    {
+      key: 'email',
+      label: user?.email || 'No email',
+      disabled: true,
+    },
+    {
+      key: 'role',
+      label: `Role: ${user?.role}`,
+      disabled: true,
+    },
+    {
+      type: 'divider',
+    },
+    {
+      key: 'logout',
+      icon: <LogoutOutlined />,
+      label: 'Logout',
+      onClick: logout,
+    },
+  ];
 
   const desktopMenu = (
     <Menu
@@ -80,6 +112,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   );
 
   return (
+    <ProtectedRoute allowedRoles={['AUTHORITY', 'ADMIN']}>
     <Layout className="min-h-screen">
       <Sider
         width={280}
@@ -143,6 +176,16 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             <Link href="/citizen">
               <Button icon={<UserOutlined />}>Citizen Portal</Button>
             </Link>
+            <Dropdown menu={{ items: userMenuItems }} placement="bottomRight">
+              <Button
+                type="text"
+                icon={<UserOutlined />}
+                className="flex items-center"
+              >
+                <span className="hidden sm:inline">{user?.name || user?.email}</span>
+                {user?.role && <Tag color="blue" className="ml-2 mr-0">{user.role}</Tag>}
+              </Button>
+            </Dropdown>
           </div>
         </Header>
 
@@ -159,8 +202,25 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         width={300}
       >
         {drawerMenu}
+        <div className="mt-6 rounded-md border border-slate-200 p-3">
+          <div className="font-medium text-slate-900">{user?.name || user?.email}</div>
+          <div className="text-xs text-slate-500">{user?.email}</div>
+          {user?.role && <Tag color="blue" className="mt-2">{user.role}</Tag>}
+          <Button
+            icon={<LogoutOutlined />}
+            block
+            className="mt-3"
+            onClick={() => {
+              setDrawerOpen(false);
+              logout();
+            }}
+          >
+            Logout
+          </Button>
+        </div>
       </Drawer>
     </Layout>
+    </ProtectedRoute>
   );
 }
 

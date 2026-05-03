@@ -48,6 +48,19 @@ export async function getReports(): Promise<ReportResponse[]> {
 }
 
 /**
+ * Get reports submitted by the authenticated user
+ */
+export async function getMyReports(): Promise<ReportResponse[]> {
+  try {
+    const response = await apiClient.get<ReportResponse[]>('/reports/me');
+    return response.data;
+  } catch (error) {
+    const message = handleApiError(error);
+    throw new Error(message);
+  }
+}
+
+/**
  * Get a report by ID
  */
 export async function getReport(reportId: string): Promise<ReportResponse> {
@@ -148,6 +161,25 @@ export function useReports(
     enabled: options?.enabled !== false,
     refetchInterval: options?.refetchInterval,
     staleTime: 30000, // Consider data fresh for 30 seconds
+    retry: 2,
+  });
+}
+
+/**
+ * Hook to fetch authenticated user's reports.
+ */
+export function useMyReports(
+  options?: {
+    enabled?: boolean;
+    refetchInterval?: number;
+  }
+) {
+  return useQuery({
+    queryKey: ['my-reports'],
+    queryFn: getMyReports,
+    enabled: options?.enabled !== false,
+    refetchInterval: options?.refetchInterval,
+    staleTime: 30000,
     retry: 2,
   });
 }

@@ -6,7 +6,7 @@
 'use client';
 
 import { Card } from 'antd';
-import { ClockCircleOutlined, EnvironmentOutlined, CheckCircleOutlined, PictureOutlined } from '@ant-design/icons';
+import { AlertOutlined, ClockCircleOutlined, EnvironmentOutlined, CheckCircleOutlined, PictureOutlined } from '@ant-design/icons';
 import { CrisisIcon, getCrisisLabel } from '../ui/CrisisIcon';
 import { StatusBadge } from '../ui/StatusBadge';
 import type { ReportResponse } from '@/types/api';
@@ -78,6 +78,10 @@ export function ReportCard({ report, onClick, className = '' }: ReportCardProps)
                 <span>Confidence: {formatPercentScore(report.confidence_score)}</span>
               </div>
             )}
+          </div>
+          <div className="flex items-center gap-1">
+            <AlertOutlined className="flex-shrink-0" />
+            <span>Severity: {formatPercentScore(report.severity_score)}</span>
           </div>
         </div>
 

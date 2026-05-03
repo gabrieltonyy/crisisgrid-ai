@@ -28,6 +28,9 @@ export * from './advisory';
 // Export Health API
 export * from './health';
 
+// Export Auth API
+export * from './auth';
+
 // Re-export commonly used types for convenience
 export type {
   CreateReportRequest,

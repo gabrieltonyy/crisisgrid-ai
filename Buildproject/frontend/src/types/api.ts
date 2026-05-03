@@ -12,12 +12,12 @@ export interface Location extends Coordinates {
 }
 
 // Crisis and Status types (matching backend)
-export type CrisisType = 'FIRE' | 'FLOOD' | 'EARTHQUAKE' | 'WILDLIFE' | 'ACCIDENT' | 'MEDICAL' | 'OTHER';
-export type IncidentStatus = 'PENDING_VERIFICATION' | 'VERIFIED' | 'PROVISIONAL_CRITICAL' | 'FALSE_REPORT' | 'RESOLVED';
+export type CrisisType = 'FIRE' | 'FLOOD' | 'WILDLIFE' | 'ACCIDENT' | 'SECURITY' | 'HEALTH' | 'LANDSLIDE' | 'HAZARDOUS_SPILL' | 'OTHER';
+export type IncidentStatus = 'PENDING_VERIFICATION' | 'NEEDS_CONFIRMATION' | 'PROVISIONAL_CRITICAL' | 'VERIFIED' | 'DISPATCHED' | 'RESOLVED' | 'FALSE_REPORT';
 export type SeverityLevel = 'CRITICAL' | 'HIGH' | 'MEDIUM' | 'LOW';
 export type AlertStatus = 'ACTIVE' | 'EXPIRED' | 'CANCELLED';
 export type DispatchStatus = 'PENDING' | 'SIMULATED_SENT' | 'SENT' | 'ACKNOWLEDGED' | 'ARRIVED' | 'COMPLETED' | 'CANCELLED' | 'FAILED';
-export type AuthorityType = 'FIRE_SERVICE' | 'DISASTER_MANAGEMENT' | 'WILDLIFE_AUTHORITY' | 'POLICE' | 'MEDICAL';
+export type AuthorityType = 'FIRE_SERVICE' | 'FIRE_DEPARTMENT' | 'DISASTER_MANAGEMENT' | 'WILDLIFE_AUTHORITY' | 'POLICE' | 'AMBULANCE' | 'PUBLIC_HEALTH';
 export type AgentName = 'verification_agent' | 'clustering_agent' | 'alert_agent' | 'dispatch_agent' | 'advisory_agent';
 export type AgentRunStatus = 'PENDING' | 'RUNNING' | 'COMPLETED' | 'FAILED';
 

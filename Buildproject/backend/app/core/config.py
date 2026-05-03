@@ -20,6 +20,13 @@ class Settings(BaseSettings):
     API_HOST: str = "0.0.0.0"
     API_PORT: int = 8000
     API_BASE_URL: str = "http://localhost:8000/api/v1"
+    FRONTEND_ORIGINS: str = (
+        "http://localhost:3000,"
+        "http://127.0.0.1:3000,"
+        "http://localhost:8000,"
+        "http://127.0.0.1:8000,"
+        "https://crisisgrid-ai.vercel.app"
+    )
     
     # Database - PostgreSQL
     DATABASE_URL: str = Field(..., description="PostgreSQL connection string")
@@ -128,6 +135,15 @@ class Settings(BaseSettings):
     def is_demo(self) -> bool:
         """Check if running in demo mode."""
         return self.APP_ENV == "demo"
+
+    @property
+    def frontend_origins_list(self) -> list[str]:
+        """Parse comma-separated CORS origins from FRONTEND_ORIGINS."""
+        return [
+            origin.strip()
+            for origin in self.FRONTEND_ORIGINS.split(",")
+            if origin.strip()
+        ]
 
 
 # Global settings instance

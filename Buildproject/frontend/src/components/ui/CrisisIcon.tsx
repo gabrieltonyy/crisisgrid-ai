@@ -10,6 +10,8 @@ import {
   MedicineBoxOutlined,
   CarOutlined,
   WarningOutlined,
+  SafetyOutlined,
+  ExperimentOutlined,
 } from '@ant-design/icons';
 import type { CrisisType } from '@/types/api';
 
@@ -28,10 +30,6 @@ const CRISIS_ICONS: Record<CrisisType, { icon: React.ComponentType<any>; color: 
     icon: ThunderboltOutlined,
     color: '#1890ff',
   },
-  EARTHQUAKE: {
-    icon: AlertOutlined,
-    color: '#722ed1',
-  },
   WILDLIFE: {
     icon: WarningOutlined,
     color: '#fa8c16',
@@ -40,9 +38,21 @@ const CRISIS_ICONS: Record<CrisisType, { icon: React.ComponentType<any>; color: 
     icon: CarOutlined,
     color: '#faad14',
   },
-  MEDICAL: {
+  SECURITY: {
+    icon: SafetyOutlined,
+    color: '#722ed1',
+  },
+  HEALTH: {
     icon: MedicineBoxOutlined,
     color: '#eb2f96',
+  },
+  LANDSLIDE: {
+    icon: WarningOutlined,
+    color: '#a16207',
+  },
+  HAZARDOUS_SPILL: {
+    icon: ExperimentOutlined,
+    color: '#13c2c2',
   },
   OTHER: {
     icon: AlertOutlined,
@@ -74,10 +84,12 @@ export function getCrisisLabel(type: CrisisType): string {
   const labels: Record<CrisisType, string> = {
     FIRE: 'Fire',
     FLOOD: 'Flood',
-    EARTHQUAKE: 'Earthquake',
     WILDLIFE: 'Wildlife',
     ACCIDENT: 'Accident',
-    MEDICAL: 'Medical Emergency',
+    SECURITY: 'Security',
+    HEALTH: 'Health Emergency',
+    LANDSLIDE: 'Landslide',
+    HAZARDOUS_SPILL: 'Hazardous Spill',
     OTHER: 'Other',
   };
   return labels[type];

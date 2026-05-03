@@ -11,6 +11,7 @@ from sqlalchemy.exc import SQLAlchemyError
 from app.db.session import engine, get_db_info
 from app.models.base import BaseModel
 import app.models  # noqa: F401 - register model metadata before create_all/drop_all
+from app.services.auth_service import hash_password
 
 logger = logging.getLogger(__name__)
 
@@ -27,6 +28,7 @@ def create_tables() -> bool:
         
         # Create all tables
         BaseModel.metadata.create_all(bind=engine)
+        ensure_auth_columns()
         
         logger.info("✓ Database tables created successfully")
         return True
@@ -34,6 +36,35 @@ def create_tables() -> bool:
     except SQLAlchemyError as e:
         logger.error(f"✗ Failed to create database tables: {e}")
         return False
+
+
+def ensure_auth_columns() -> bool:
+    """
+    Add auth columns to existing hackathon databases created before auth landed.
+
+    This is a small compatibility bridge until formal Alembic migrations are added.
+    """
+    try:
+        previous_echo = engine.echo
+        engine.echo = False
+        default_hash = hash_password("Password123!")
+        with engine.begin() as conn:
+            conn.execute(text("ALTER TABLE users ADD COLUMN IF NOT EXISTS hashed_password VARCHAR(255)"))
+            conn.execute(
+                text("UPDATE users SET hashed_password = :password_hash WHERE hashed_password IS NULL OR hashed_password = ''"),
+                {"password_hash": default_hash},
+            )
+            conn.execute(text("ALTER TABLE users ALTER COLUMN hashed_password SET NOT NULL"))
+            conn.execute(text("ALTER TABLE users ADD COLUMN IF NOT EXISTS is_active BOOLEAN NOT NULL DEFAULT TRUE"))
+            conn.execute(text("ALTER TABLE users ADD COLUMN IF NOT EXISTS email_verified BOOLEAN NOT NULL DEFAULT FALSE"))
+
+        logger.info("✓ Auth columns verified")
+        return True
+    except SQLAlchemyError as e:
+        logger.error(f"✗ Failed to verify auth columns: {e}")
+        return False
+    finally:
+        engine.echo = previous_echo
 
 
 def drop_tables() -> bool:

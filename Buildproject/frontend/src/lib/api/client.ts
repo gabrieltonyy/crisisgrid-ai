@@ -1,5 +1,10 @@
 import axios, { AxiosInstance, AxiosError, InternalAxiosRequestConfig } from 'axios';
 
+function clearStoredAuth() {
+  localStorage.removeItem('auth_token');
+  localStorage.removeItem('auth-storage');
+}
+
 // Create axios instance with default config
 const apiClient: AxiosInstance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_BASE_URL || '/api/v1',
@@ -56,8 +61,12 @@ apiClient.interceptors.response.use(
         case 401:
           // Unauthorized - clear token and redirect to login
           if (typeof window !== 'undefined') {
-            localStorage.removeItem('auth_token');
-            // window.location.href = '/login';
+            clearStoredAuth();
+            const isAuthRequest = error.config?.url?.includes('/auth/login') || error.config?.url?.includes('/auth/register');
+            const isAlreadyOnLogin = window.location.pathname === '/login';
+            if (!isAuthRequest && !isAlreadyOnLogin) {
+              window.location.href = '/login';
+            }
           }
           break;
         case 403:
@@ -88,6 +97,12 @@ export default apiClient;
 export const handleApiError = (error: unknown): string => {
   if (axios.isAxiosError(error)) {
     if (error.response?.data?.detail) {
+      if (Array.isArray(error.response.data.detail)) {
+        return error.response.data.detail
+          .map((item: { msg?: string }) => item.msg)
+          .filter(Boolean)
+          .join(', ');
+      }
       return error.response.data.detail;
     }
     if (error.response?.data?.message) {

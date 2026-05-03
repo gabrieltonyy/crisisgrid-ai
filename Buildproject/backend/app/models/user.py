@@ -3,7 +3,7 @@ User model for CrisisGrid AI.
 Stores user information and trust scores.
 """
 
-from sqlalchemy import Column, String, Numeric, Enum as SQLEnum
+from sqlalchemy import Column, String, Numeric, Boolean, Enum as SQLEnum
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
 import uuid
@@ -21,6 +21,7 @@ class User(BaseModel):
     name = Column(String(120), nullable=True)
     email = Column(String(180), unique=True, nullable=True)
     phone_number = Column(String(50), nullable=True)
+    hashed_password = Column(String(255), nullable=False)
     role = Column(
         SQLEnum(UserRole, name="user_role", create_type=False),
         nullable=False,
@@ -28,6 +29,8 @@ class User(BaseModel):
     )
     trust_score = Column(Numeric(5, 2), nullable=False, default=0.50)
     status = Column(String(30), nullable=False, default="ACTIVE")
+    is_active = Column(Boolean, nullable=False, default=True)
+    email_verified = Column(Boolean, nullable=False, default=False)
     
     # Relationships
     confirmations = relationship("Confirmation", back_populates="user")

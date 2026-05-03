@@ -27,11 +27,11 @@ class ReportRepository:
     ) -> Report:
         """
         Create a new report in the database.
-        
+
         Args:
             report_data: Validated report creation request
             user_id: Optional user ID if authenticated
-            
+
         Returns:
             Created Report model instance
         """
@@ -54,12 +54,12 @@ class ReportRepository:
             created_at=utc_now(),
             updated_at=utc_now()
         )
-        
+
         # Add to session and commit
         self.db.add(report)
         self.db.commit()
         self.db.refresh(report)
-        
+
         return report
     
     def get_by_id(self, report_id: UUID) -> Optional[Report]:
@@ -76,7 +76,7 @@ class ReportRepository:
     ) -> List[Report]:
         """
         Get all reports with optional filtering.
-        
+
         Args:
             skip: Number of records to skip
             limit: Maximum number of records to return
@@ -92,6 +92,31 @@ class ReportRepository:
         
         stmt = stmt.offset(skip).limit(limit).order_by(Report.created_at.desc())
         
+        result = self.db.execute(stmt)
+        return list(result.scalars().all())
+
+    def get_by_user_id(
+        self,
+        user_id: UUID,
+        status: Optional[IncidentStatus] = None
+    ) -> List[Report]:
+        """
+        Get all reports for a specific user.
+
+        Args:
+            user_id: User UUID
+            status: Optional status filter
+
+        Returns:
+            List of Report instances for the user
+        """
+        stmt = select(Report).where(Report.user_id == user_id)
+
+        if status:
+            stmt = stmt.where(Report.status == status)
+
+        stmt = stmt.order_by(Report.created_at.desc())
+
         result = self.db.execute(stmt)
         return list(result.scalars().all())
     

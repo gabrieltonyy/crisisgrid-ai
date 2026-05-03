@@ -3,7 +3,7 @@ Reports API routes for CrisisGrid AI.
 Handles crisis report submission and retrieval.
 """
 
-from typing import Optional
+from typing import Optional, List
 from uuid import UUID
 import logging
 from fastapi import APIRouter, Depends, HTTPException, Query, status
@@ -15,8 +15,11 @@ from app.schemas.reports import (
     ReportSubmissionResponse,
     ReportResponse
 )
+from app.schemas.common import IncidentStatus
 from app.repositories.report_repository import ReportRepository
 from app.services.cloudant_service import cloudant_service
+from app.dependencies.auth import get_current_active_user, get_optional_user
+from app.models.user import User
 
 logger = logging.getLogger(__name__)
 
@@ -32,11 +35,12 @@ router = APIRouter(prefix="/reports", tags=["reports"])
 )
 async def create_report(
     report_data: CrisisReportCreateRequest,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user: Optional[User] = Depends(get_optional_user)
 ) -> ReportSubmissionResponse:
     """
     Create a new crisis report.
-    
+
     This endpoint:
     1. Validates the report data (via Pydantic schema)
     2. Generates a unique report ID
@@ -47,7 +51,8 @@ async def create_report(
     Args:
         report_data: Validated crisis report data
         db: Database session
-        
+        current_user: Optional authenticated user (from JWT token)
+
     Returns:
         ReportSubmissionResponse with created report and processing status
         
@@ -60,9 +65,13 @@ async def create_report(
         # Create repository instance
         repo = ReportRepository(db)
         
-        # For Phase 3, we don't have authentication yet
-        # In future phases, extract user_id from JWT token
+        # Extract user_id from authenticated user, unless report is anonymous
         user_id: Optional[UUID] = None
+        if current_user and not report_data.is_anonymous:
+            user_id = current_user.id
+            logger.info(f"Report submitted by authenticated user: {user_id}")
+        else:
+            logger.info("Anonymous report submission")
         
         # Create report in PostgreSQL
         report = repo.create(
@@ -124,6 +133,40 @@ async def create_report(
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Failed to create report: {str(e)}"
+        )
+
+
+@router.get(
+    "/me",
+    response_model=List[ReportResponse],
+    summary="Get my reports",
+    description="Retrieve reports created by the current authenticated user"
+)
+async def get_my_reports(
+    current_user: User = Depends(get_current_active_user),
+    db: Session = Depends(get_db),
+    status_filter: Optional[IncidentStatus] = Query(None, alias="status")
+) -> List[ReportResponse]:
+    """
+    Get all reports created by the current authenticated user.
+
+    Args:
+        current_user: Authenticated user from JWT token
+        db: Database session
+        status_filter: Optional filter by report status
+
+    Returns:
+        List of reports created by the user
+    """
+    try:
+        repo = ReportRepository(db)
+        reports = repo.get_by_user_id(current_user.id, status=status_filter)
+        return [ReportResponse.model_validate(report) for report in reports]
+    except Exception as e:
+        logger.error(f"Failed to get user reports: {e}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to retrieve user reports: {str(e)}"
         )
 
 

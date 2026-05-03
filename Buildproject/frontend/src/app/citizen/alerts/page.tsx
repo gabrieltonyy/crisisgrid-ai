@@ -35,10 +35,12 @@ const CRISIS_TYPE_OPTIONS = [
   { label: 'All Types', value: 'all' },
   { label: 'Fire', value: 'FIRE' },
   { label: 'Flood', value: 'FLOOD' },
-  { label: 'Earthquake', value: 'EARTHQUAKE' },
   { label: 'Wildlife', value: 'WILDLIFE' },
   { label: 'Accident', value: 'ACCIDENT' },
-  { label: 'Medical', value: 'MEDICAL' },
+  { label: 'Security', value: 'SECURITY' },
+  { label: 'Health', value: 'HEALTH' },
+  { label: 'Landslide', value: 'LANDSLIDE' },
+  { label: 'Hazardous Spill', value: 'HAZARDOUS_SPILL' },
   { label: 'Other', value: 'OTHER' },
 ];
 
