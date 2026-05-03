@@ -6,27 +6,92 @@
 @import 'leaflet/dist/leaflet.css';
 
 :root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+  --cg-ink: #111827;
+  --cg-muted: #64748b;
+  --cg-border: #dbe4ef;
+  --cg-surface: #ffffff;
+  --cg-canvas: #eef3f7;
+  --cg-navy: #0f172a;
+  --cg-blue: #0ea5e9;
+  --cg-blue-dark: #0369a1;
+  --cg-danger: #ef4444;
+  --cg-warning: #f59e0b;
+  --cg-success: #16a34a;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
+html {
+  background: var(--cg-canvas);
 }
 
 body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+  margin: 0;
+  color: var(--cg-ink);
+  background:
+    radial-gradient(circle at top left, rgba(14, 165, 233, 0.12), transparent 32rem),
+    linear-gradient(180deg, #f8fbfd 0%, var(--cg-canvas) 100%);
+  min-height: 100vh;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--cg-blue-dark);
+}
+
+:focus-visible {
+  outline: 3px solid rgba(14, 165, 233, 0.35);
+  outline-offset: 2px;
+}
+
+.ant-layout {
+  background: transparent;
+}
+
+.ant-card {
+  border-color: rgba(148, 163, 184, 0.26);
+  box-shadow: 0 14px 35px rgba(15, 23, 42, 0.05);
+}
+
+.ant-card-head {
+  border-bottom-color: rgba(148, 163, 184, 0.18);
+}
+
+.ant-table-wrapper .ant-table {
+  color: #1f2937;
+}
+
+.ant-table-wrapper .ant-table-thead > tr > th {
+  background: #f8fafc;
+  color: #334155;
+  font-weight: 700;
+}
+
+.ant-table-wrapper .ant-table-tbody > tr > td {
+  border-bottom-color: #edf2f7;
+}
+
+.ant-table-wrapper .ant-table-tbody > tr:hover > td {
+  background: #f0f9ff !important;
+}
+
+.ops-panel {
+  background: rgba(255, 255, 255, 0.86);
+  border: 1px solid rgba(148, 163, 184, 0.24);
+  box-shadow: 0 18px 44px rgba(15, 23, 42, 0.07);
+  backdrop-filter: blur(12px);
+}
+
+.page-kicker {
+  color: var(--cg-muted);
+  font-size: 0.875rem;
+  letter-spacing: 0;
 }
 
 /* Custom scrollbar */
@@ -50,9 +115,9 @@ body {
 
 /* Leaflet map container */
 .leaflet-container {
-  height: 100%;
   width: 100%;
   z-index: 0;
+  background: #dbeafe;
 }
 
 /* Fix for Leaflet marker icons */

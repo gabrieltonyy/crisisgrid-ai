@@ -3,8 +3,7 @@ Alert API routes for CrisisGrid AI.
 Handles alert generation and retrieval endpoints.
 """
 
-from typing import List
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy.orm import Session
 import logging
 
@@ -12,10 +11,52 @@ from app.db.session import get_db
 from app.services.alert_service import alert_service
 from app.schemas.alerts import AlertResponse
 from app.schemas.common import APIResponse
+from app.repositories.alert_repository import alert_repository
 
 logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/alerts", tags=["alerts"])
+
+
+def _to_alert_response(alert) -> AlertResponse:
+    """Convert an Alert model to the public frontend response shape."""
+    return AlertResponse(
+        id=alert.alert_id,
+        incident_id=alert.incident_id,
+        crisis_type=alert.crisis_type,
+        alert_title=alert.title,
+        alert_message=alert.message,
+        severity=alert.severity,
+        target_radius_meters=alert.affected_radius_meters,
+        latitude=alert.latitude,
+        longitude=alert.longitude,
+        location_text=alert.incident.location_description if alert.incident else None,
+        status=alert.status,
+        created_at=alert.issued_at,
+        expires_at=alert.expires_at
+    )
+
+
+@router.get(
+    "",
+    response_model=list[AlertResponse],
+    summary="List active alerts",
+    description="Retrieve active alerts for citizen and admin dashboard views"
+)
+async def list_alerts(
+    limit: int = Query(100, ge=1, le=500),
+    db: Session = Depends(get_db)
+) -> list[AlertResponse]:
+    """List active alerts in newest-first order."""
+    try:
+        alerts = alert_repository.get_all_active_alerts(db, limit=limit)
+        return [_to_alert_response(alert) for alert in alerts]
+    except Exception as e:
+        logger.error(f"Error listing alerts: {e}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to list alerts: {str(e)}"
+        )
 
 
 @router.post(
@@ -59,21 +100,7 @@ async def generate_alert(
             )
         
         # Convert to response schema
-        alert_response = AlertResponse(
-            id=alert.alert_id,
-            incident_id=alert.incident_id,
-            crisis_type=alert.crisis_type,
-            alert_title=alert.title,
-            alert_message=alert.message,
-            severity=alert.severity,
-            target_radius_meters=alert.affected_radius_meters,
-            latitude=alert.latitude,
-            longitude=alert.longitude,
-            location_text=alert.incident.location_description if alert.incident else None,
-            status=alert.status,
-            created_at=alert.issued_at,
-            expires_at=alert.expires_at
-        )
+        alert_response = _to_alert_response(alert)
         
         return APIResponse(
             success=True,
@@ -115,24 +142,7 @@ async def get_incident_alerts(
         alerts = alert_service.get_incident_alerts(db, incident_id)
         
         # Convert to response schemas
-        alert_responses = [
-            AlertResponse(
-                id=alert.alert_id,
-                incident_id=alert.incident_id,
-                crisis_type=alert.crisis_type,
-                alert_title=alert.title,
-                alert_message=alert.message,
-                severity=alert.severity,
-                target_radius_meters=alert.affected_radius_meters,
-                latitude=alert.latitude,
-                longitude=alert.longitude,
-                location_text=alert.incident.location_description if alert.incident else None,
-                status=alert.status,
-                created_at=alert.issued_at,
-                expires_at=alert.expires_at
-            )
-            for alert in alerts
-        ]
+        alert_responses = [_to_alert_response(alert) for alert in alerts]
         
         return APIResponse(
             success=True,

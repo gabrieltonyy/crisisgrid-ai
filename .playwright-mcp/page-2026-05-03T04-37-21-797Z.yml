@@ -1,0 +1,59 @@
+- generic [ref=e2]:
+  - complementary [ref=e3]:
+    - generic [ref=e5]:
+      - link "appstore CrisisGrid AI Operations Console" [ref=e7] [cursor=pointer]:
+        - /url: /admin/dashboard
+        - img "appstore" [ref=e9]:
+          - img [ref=e10]
+        - generic [ref=e12]:
+          - generic [ref=e13]: CrisisGrid AI
+          - generic [ref=e14]: Operations Console
+      - menu [ref=e16]:
+        - menuitem "dashboardCommand Center" [ref=e17]:
+          - img "dashboard" [ref=e18]:
+            - img [ref=e19]
+          - link "Command Center" [ref=e22] [cursor=pointer]:
+            - /url: /admin/dashboard
+        - menuitem "file-textReports" [ref=e23]:
+          - img "file-text" [ref=e24]:
+            - img [ref=e25]
+          - link "Reports" [ref=e28] [cursor=pointer]:
+            - /url: /admin/reports
+        - menuitem "alertAlerts" [ref=e29]:
+          - img "alert" [ref=e30]:
+            - img [ref=e31]
+          - link "Alerts" [ref=e34] [cursor=pointer]:
+            - /url: /admin/alerts
+        - menuitem "sendDispatch" [ref=e35]:
+          - img "send" [ref=e36]:
+            - img [ref=e37]
+          - link "Dispatch" [ref=e40] [cursor=pointer]:
+            - /url: /admin/dispatch
+        - menuitem "clusterIncidents" [ref=e41]:
+          - img "cluster" [ref=e42]:
+            - img [ref=e43]
+          - link "Incidents" [ref=e46] [cursor=pointer]:
+            - /url: /admin/incidents
+      - generic [ref=e48]:
+        - generic [ref=e49]: Mission Mode
+        - text: Live monitoring
+        - paragraph [ref=e50]: Verification, alerting, and dispatch feeds refresh automatically for demo operations.
+  - generic [ref=e51]:
+    - banner [ref=e52]:
+      - generic [ref=e54]:
+        - img "home" [ref=e55]:
+          - img [ref=e56]
+        - generic [ref=e58]: Admin
+        - generic [ref=e59]: /
+        - generic [ref=e60]: Dashboard
+      - link "userCitizen Portal" [ref=e62] [cursor=pointer]:
+        - /url: /citizen
+        - button "userCitizen Portal" [ref=e63]:
+          - img "user" [ref=e65]:
+            - img [ref=e66]
+          - text: Citizen Portal
+    - main [ref=e68]:
+      - generic [ref=e71]:
+        - img "loading" [ref=e73]:
+          - img [ref=e74]
+        - paragraph [ref=e76]: Loading...

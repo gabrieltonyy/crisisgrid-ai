@@ -34,15 +34,15 @@ class TestHaversineDistance:
     
     def test_known_distance(self):
         """Test distance calculation with known coordinates."""
-        # Nairobi CBD to Westlands (approximately 5km)
+        # Nairobi CBD to Westlands using these coordinates is about 3.7km.
         distance = haversine_distance(-1.2921, 36.8219, -1.2630, 36.8063)
-        assert 4500 < distance < 5500  # Allow some tolerance
+        assert 3600 < distance < 3800  # Allow some tolerance
     
     def test_short_distance(self):
         """Test short distance calculation (within 1km)."""
-        # Two points about 500m apart
+        # Two nearby points about 820m apart
         distance = haversine_distance(-1.2921, 36.8219, -1.2864, 36.8172)
-        assert 600 < distance < 700
+        assert 800 < distance < 850
     
     def test_long_distance(self):
         """Test long distance calculation."""
@@ -219,9 +219,9 @@ class TestClusteringScenarios:
     
     def test_nearby_reports_cluster(self):
         """Test that nearby reports should cluster together."""
-        # Two reports 400m apart (within fire clustering radius of 500m)
+        # Two reports about 330m apart (within fire clustering radius of 500m)
         lat1, lon1 = -1.2921, 36.8219
-        lat2, lon2 = -1.2864, 36.8172
+        lat2, lon2 = -1.2891, 36.8219
         
         distance = haversine_distance(lat1, lon1, lat2, lon2)
         fire_radius = get_clustering_radius(CrisisType.FIRE)

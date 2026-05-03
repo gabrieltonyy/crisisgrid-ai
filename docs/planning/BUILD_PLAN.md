@@ -1304,4 +1304,4 @@ Issues/Notes:
 
 **Remember:** This is a marathon, not a sprint. Build carefully, test frequently, and conserve Bobcoins. The goal is a working demo that clearly shows value, not a perfect production system.
 
-**Next Step:** Review this plan, then proceed to create IBM_PRODUCT_ACCESS_REQUIREMENTS.md before starting Phase 0.
+**Next Step:** Review this plan, then proceed to create ../ibm/IBM_PRODUCT_ACCESS_REQUIREMENTS.md before starting Phase 0.

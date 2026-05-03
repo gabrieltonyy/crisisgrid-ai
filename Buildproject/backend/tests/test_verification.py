@@ -277,10 +277,53 @@ class TestVerificationService:
 # ============================================================================
 
 @pytest.fixture
-def client():
-    """Create test client."""
+def client(monkeypatch):
+    """Create test client with database-backed dependencies stubbed."""
     from fastapi.testclient import TestClient
     from app.main import app
+    import app.api.routes.verification as verification_routes
+
+    class FakeVerificationService:
+        def verify_report(self, report_id, force_revalidation=False):
+            raise ValueError(f"Report {report_id} not found")
+
+    class FakeVerificationRepository:
+        def __init__(self, db):
+            self.db = db
+
+        def get_report_by_id(self, report_id):
+            return None
+
+        def get_pending_verifications(
+            self,
+            skip=0,
+            limit=100,
+            crisis_type=None,
+            created_after=None
+        ):
+            return [], 0
+
+        def get_verification_stats(self):
+            return {
+                "total_verified": 0,
+                "total_rejected": 0,
+                "total_pending": 0,
+                "average_confidence": 0.0,
+                "average_verification_time": 0.0,
+                "verification_rate": 0.0,
+            }
+
+    monkeypatch.setattr(
+        verification_routes,
+        "get_verification_service",
+        lambda db: FakeVerificationService()
+    )
+    monkeypatch.setattr(
+        verification_routes,
+        "VerificationRepository",
+        FakeVerificationRepository
+    )
+
     return TestClient(app)
 
 

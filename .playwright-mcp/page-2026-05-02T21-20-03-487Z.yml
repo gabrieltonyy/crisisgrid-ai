@@ -1,0 +1,23 @@
+- generic [ref=e2]:
+  - heading "clusterIncident Management" [level=2] [ref=e4]:
+    - img "cluster" [ref=e5]:
+      - img [ref=e6]
+    - text: Incident Management
+  - generic [ref=e10]:
+    - img "cluster" [ref=e12]:
+      - img [ref=e13]
+    - generic [ref=e15]: Incident Management Coming Soon
+    - generic [ref=e16]: This feature will allow you to view and manage incident clusters created from multiple related reports.
+    - generic [ref=e17]:
+      - button "Back to Dashboard" [ref=e18]
+      - button "View Reports" [ref=e19]
+    - generic [ref=e21]:
+      - strong [ref=e23]: What are Incidents?
+      - generic [ref=e24]: Incidents are clusters of related reports that have been grouped together by our AI clustering system. This helps identify larger crisis events that span multiple reports from different sources.
+      - strong [ref=e26]: "Planned Features:"
+      - list [ref=e27]:
+        - listitem [ref=e28]: View all incident clusters with their related reports
+        - listitem [ref=e29]: Track incident severity and status over time
+        - listitem [ref=e30]: See geographic distribution of incidents
+        - listitem [ref=e31]: Manage incident lifecycle (active, monitoring, resolved)
+        - listitem [ref=e32]: View alerts and dispatches associated with each incident

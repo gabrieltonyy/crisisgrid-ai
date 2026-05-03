@@ -43,7 +43,7 @@ The project must be built efficiently, in small safe chunks, to reduce build fai
 Before writing any code, you must inspect the folder:
 
 ```text
-Prompt_contextdocs/
+docs/context/
 ```
 
 This folder contains all project planning and architecture markdown files.
@@ -108,7 +108,7 @@ This folder will contain:
 - tests
 - deployment files
 
-Do not place production code inside `Prompt_contextdocs/`.
+Do not place production code inside `docs/context/`.
 
 That folder is only for planning context.
 
@@ -119,7 +119,7 @@ That folder is only for planning context.
 Create the following file:
 
 ```text
-Buildproject/BUILD_PLAN.md
+docs/planning/BUILD_PLAN.md
 ```
 
 This file must contain a structured implementation plan based on the context documents.
@@ -200,7 +200,7 @@ Do not continue building multiple phases without approval.
 Create the following file:
 
 ```text
-Buildproject/IBM_PRODUCT_ACCESS_REQUIREMENTS.md
+docs/ibm/IBM_PRODUCT_ACCESS_REQUIREMENTS.md
 ```
 
 This file must list all IBM-related products/tools/services that may be used and what is required from the developer.
@@ -211,7 +211,7 @@ The file must include:
 Explain:
 - Bob IDE is mandatory for hackathon proof
 - Bob session reports must be exported
-- `bob_sessions/` folder must be created
+- `Buildproject/bob_sessions/` folder must be created
 - screenshots and markdown exports should be stored
 
 ## 2. IBM Cloudant
@@ -319,7 +319,7 @@ Create a simple checklist the developer can complete before coding:
 ```text
 [ ] IBM Bob IDE installed
 [ ] Hackathon Bob account selected
-[ ] bob_sessions folder created
+[ ] Buildproject/bob_sessions folder created
 [ ] PostgreSQL available locally or via Docker
 [ ] .env.example created
 [ ] Cloudant decision made: enabled / disabled
@@ -336,8 +336,8 @@ Create a simple checklist the developer can complete before coding:
 After creating:
 
 ```text
-Buildproject/BUILD_PLAN.md
-Buildproject/IBM_PRODUCT_ACCESS_REQUIREMENTS.md
+docs/planning/BUILD_PLAN.md
+docs/ibm/IBM_PRODUCT_ACCESS_REQUIREMENTS.md
 ```
 
 Stop.
@@ -362,7 +362,7 @@ When coding begins later, follow these rules:
 Never generate too many files at once unless explicitly approved.
 
 ## Rule 2: Use Existing Context
-Always reference the documents in `Prompt_contextdocs/`.
+Always reference the documents in `docs/context/`.
 
 ## Rule 3: Preserve Architecture
 Follow the architecture in:
@@ -400,7 +400,7 @@ Prioritize tests for:
 Create and maintain:
 
 ```text
-bob_sessions/
+Buildproject/bob_sessions/
 ```
 
 for exported IBM Bob task session reports and screenshots.
@@ -412,8 +412,8 @@ for exported IBM Bob task session reports and screenshots.
 After this prompt, produce only:
 
 ```text
-Buildproject/BUILD_PLAN.md
-Buildproject/IBM_PRODUCT_ACCESS_REQUIREMENTS.md
+docs/planning/BUILD_PLAN.md
+docs/ibm/IBM_PRODUCT_ACCESS_REQUIREMENTS.md
 ```
 
 Then stop and wait for approval.
@@ -428,7 +428,7 @@ Do not start creating the backend or frontend code yet.
 1. Create a folder named:
 
 ```text
-Prompt_contextdocs/
+docs/context/
 ```
 
 2. Place all generated project markdown documents inside it.
@@ -446,8 +446,8 @@ Buildproject/
 6. Wait for Bob to generate:
 
 ```text
-Buildproject/BUILD_PLAN.md
-Buildproject/IBM_PRODUCT_ACCESS_REQUIREMENTS.md
+docs/planning/BUILD_PLAN.md
+docs/ibm/IBM_PRODUCT_ACCESS_REQUIREMENTS.md
 ```
 
 7. Review the plan.
@@ -465,7 +465,7 @@ Proceed with Phase 0 only.
 
 Do not proceed to Phase 1 until I approve.
 
-Follow the BUILD_PLAN.md acceptance criteria and update the plan with completion notes.
+Follow the docs/planning/BUILD_PLAN.md acceptance criteria and update the plan with completion notes.
 ```
 
 ---

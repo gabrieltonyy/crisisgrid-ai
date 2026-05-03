@@ -1,0 +1,224 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - complementary [ref=e3]:
+      - generic [ref=e5]:
+        - link "appstore CrisisGrid AI Operations Console" [ref=e7] [cursor=pointer]:
+          - /url: /admin/dashboard
+          - img "appstore" [ref=e9]:
+            - img [ref=e10]
+          - generic [ref=e12]:
+            - generic [ref=e13]: CrisisGrid AI
+            - generic [ref=e14]: Operations Console
+        - menu [ref=e16]:
+          - menuitem "dashboard Command Center" [ref=e77] [cursor=pointer]:
+            - img "dashboard" [ref=e18]:
+              - img [ref=e19]
+            - link "Command Center" [ref=e22]:
+              - /url: /admin/dashboard
+          - menuitem "file-text Reports" [ref=e78] [cursor=pointer]:
+            - img "file-text" [ref=e24]:
+              - img [ref=e25]
+            - link "Reports" [ref=e28]:
+              - /url: /admin/reports
+          - menuitem "alert Alerts" [ref=e79] [cursor=pointer]:
+            - img "alert" [ref=e30]:
+              - img [ref=e31]
+            - link "Alerts" [ref=e34]:
+              - /url: /admin/alerts
+          - menuitem "send Dispatch" [ref=e80] [cursor=pointer]:
+            - img "send" [ref=e36]:
+              - img [ref=e37]
+            - link "Dispatch" [ref=e40]:
+              - /url: /admin/dispatch
+          - menuitem "cluster Incidents" [ref=e81] [cursor=pointer]:
+            - img "cluster" [ref=e42]:
+              - img [ref=e43]
+            - link "Incidents" [ref=e46]:
+              - /url: /admin/incidents
+        - generic [ref=e48]:
+          - generic [ref=e49]: Mission Mode
+          - generic [ref=e82]: Live monitoring
+          - paragraph [ref=e50]: Verification, alerting, and dispatch feeds refresh automatically for demo operations.
+    - generic [ref=e51]:
+      - banner [ref=e52]:
+        - generic [ref=e54]:
+          - img "home" [ref=e55]:
+            - img [ref=e56]
+          - generic [ref=e58]: Admin
+          - generic [ref=e59]: /
+          - generic [ref=e60]: Alerts
+        - link "user Citizen Portal" [ref=e83] [cursor=pointer]:
+          - /url: /citizen
+          - button "user Citizen Portal" [ref=e84]:
+            - img "user" [ref=e65]:
+              - img [ref=e66]
+            - generic [ref=e85]: Citizen Portal
+      - main [ref=e68]:
+        - generic [ref=e70]:
+          - generic [ref=e87]:
+            - generic [ref=e88]: Public warning feed
+            - heading "alert Alert Monitoring" [level=2] [ref=e89]:
+              - img "alert" [ref=e90]:
+                - img [ref=e91]
+              - text: Alert Monitoring
+            - generic [ref=e93]: 1 of 1 alerts • Auto-refreshing every 30s
+          - generic [ref=e96]:
+            - button "expanded filter Filters" [expanded] [ref=e97] [cursor=pointer]:
+              - img "expanded" [ref=e99]:
+                - img [ref=e100]
+              - generic [ref=e103]:
+                - img "filter" [ref=e104]:
+                  - img [ref=e105]
+                - generic [ref=e107]: Filters
+            - generic [ref=e110]:
+              - generic [ref=e111]:
+                - generic [ref=e113]:
+                  - generic "Severity" [ref=e115]
+                  - generic [ref=e119] [cursor=pointer]:
+                    - generic [ref=e121]:
+                      - combobox "Severity" [ref=e125]
+                      - generic: Select Severity
+                    - generic:
+                      - img:
+                        - img
+                - generic [ref=e127]:
+                  - generic "Crisis Type" [ref=e129]
+                  - generic [ref=e133] [cursor=pointer]:
+                    - generic [ref=e135]:
+                      - combobox "Crisis Type" [ref=e139]
+                      - generic: Select Crisis Type
+                    - generic:
+                      - img:
+                        - img
+                - generic [ref=e141]:
+                  - generic "Status" [ref=e143]
+                  - generic [ref=e147] [cursor=pointer]:
+                    - generic [ref=e149]:
+                      - combobox "Status" [ref=e151]
+                      - generic: Select Status
+                    - generic:
+                      - img:
+                        - img
+                - generic [ref=e153]:
+                  - generic "Search" [ref=e155]
+                  - generic [ref=e160]:
+                    - searchbox "Search" [ref=e162]
+                    - button "search" [ref=e165] [cursor=pointer]:
+                      - img "search" [ref=e167]:
+                        - img [ref=e168]
+              - generic [ref=e170]:
+                - button "filter Apply Filters" [ref=e171] [cursor=pointer]:
+                  - img "filter" [ref=e173]:
+                    - img [ref=e174]
+                  - generic [ref=e176]: Apply Filters
+                - button "clear Reset" [ref=e177] [cursor=pointer]:
+                  - img "clear" [ref=e179]:
+                    - img [ref=e180]
+                  - generic [ref=e182]: Reset
+          - generic [ref=e186]:
+            - table [ref=e190]:
+              - rowgroup [ref=e201]:
+                - row "Reference Crisis Type Severity Status Message Area Radius Created Actions" [ref=e202]:
+                  - columnheader "Reference" [ref=e203]
+                  - columnheader "Crisis Type" [ref=e204] [cursor=pointer]:
+                    - generic [ref=e205]:
+                      - generic [ref=e206]: Crisis Type
+                      - generic [ref=e208]:
+                        - img [ref=e209]:
+                          - img [ref=e210]
+                        - img [ref=e212]:
+                          - img [ref=e213]
+                  - columnheader "Severity" [ref=e215] [cursor=pointer]:
+                    - generic [ref=e216]:
+                      - generic [ref=e217]: Severity
+                      - generic [ref=e219]:
+                        - img [ref=e220]:
+                          - img [ref=e221]
+                        - img [ref=e223]:
+                          - img [ref=e224]
+                  - columnheader "Status" [ref=e226] [cursor=pointer]:
+                    - generic [ref=e227]:
+                      - generic [ref=e228]: Status
+                      - generic [ref=e230]:
+                        - img [ref=e231]:
+                          - img [ref=e232]
+                        - img [ref=e234]:
+                          - img [ref=e235]
+                  - columnheader "Message" [ref=e237]
+                  - columnheader "Area" [ref=e238]
+                  - columnheader "Radius" [ref=e239]
+                  - columnheader "Created" [ref=e240] [cursor=pointer]:
+                    - generic [ref=e241]:
+                      - generic [ref=e242]: Created
+                      - generic [ref=e244]:
+                        - img [ref=e245]:
+                          - img [ref=e246]
+                        - img [ref=e248]:
+                          - img [ref=e249]
+                  - columnheader "Actions" [ref=e251]
+              - rowgroup [ref=e252]:
+                - generic:
+                  - generic: Crisis Type
+                  - generic:
+                    - generic:
+                      - img:
+                        - img
+                      - img:
+                        - img
+                - generic:
+                  - generic: Severity
+                  - generic:
+                    - generic:
+                      - img:
+                        - img
+                      - img:
+                        - img
+                - generic:
+                  - generic: Status
+                  - generic:
+                    - generic:
+                      - img:
+                        - img
+                      - img:
+                        - img
+                - generic:
+                  - generic: Created
+                  - generic:
+                    - generic:
+                      - img:
+                        - img
+                      - img:
+                        - img
+                - row "alert_fi Fire Critical Active A major fire has been confirmed at Westlands Shopping Center. Evacuate immediately if you are within 500 meters. Emergency services are responding. Westlands Shopping Center, Nairobi 500m about 24 hours ago eye View" [ref=e253]:
+                  - cell "alert_fi" [ref=e254]:
+                    - code [ref=e256]: alert_fi
+                  - cell "Fire" [ref=e257]:
+                    - generic [ref=e258]: Fire
+                  - cell "Critical" [ref=e259]:
+                    - generic [ref=e260]: Critical
+                  - cell "Active" [ref=e261]:
+                    - generic [ref=e262]: Active
+                  - cell "A major fire has been confirmed at Westlands Shopping Center. Evacuate immediately if you are within 500 meters. Emergency services are responding." [ref=e263]:
+                    - generic [ref=e264]: A major fire has been confirmed at Westlands Shopping Center. Evacuate immediately if you are within 500 meters. Emergency services are responding.
+                  - cell "Westlands Shopping Center, Nairobi" [ref=e265]:
+                    - generic [ref=e266]: Westlands Shopping Center, Nairobi
+                  - cell "500m" [ref=e267]
+                  - cell "about 24 hours ago" [ref=e268]
+                  - cell "eye View" [ref=e269]:
+                    - button "eye View" [ref=e270] [cursor=pointer]:
+                      - img "eye" [ref=e272]:
+                        - img [ref=e273]
+                      - generic [ref=e275]: View
+            - list [ref=e276]:
+              - listitem [ref=e277]: 1-1 of 1 alerts
+              - listitem "Previous Page" [ref=e278]:
+                - button "left" [disabled] [ref=e279]:
+                  - img "left" [ref=e280]:
+                    - img [ref=e281]
+              - listitem "1" [ref=e283] [cursor=pointer]:
+                - generic [ref=e284]: "1"
+              - listitem "Next Page" [ref=e285]:
+                - button "right" [disabled] [ref=e286]:
+                  - img "right" [ref=e287]:
+                    - img [ref=e288]
+  - alert [ref=e290]

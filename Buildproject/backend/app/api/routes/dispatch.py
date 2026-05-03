@@ -3,8 +3,7 @@ Dispatch API routes for CrisisGrid AI.
 Handles authority dispatch simulation endpoints.
 """
 
-from typing import List
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy.orm import Session
 import logging
 
@@ -12,10 +11,53 @@ from app.db.session import get_db
 from app.services.dispatch_service import dispatch_service
 from app.schemas.dispatch import DispatchLogResponse
 from app.schemas.common import APIResponse
+from app.repositories.dispatch_repository import dispatch_repository
 
 logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/dispatch", tags=["dispatch"])
+
+
+def _to_dispatch_response(dispatch) -> DispatchLogResponse:
+    """Convert a DispatchLog model to the public frontend response shape."""
+    return DispatchLogResponse(
+        id=dispatch.dispatch_id,
+        incident_id=dispatch.incident_id,
+        authority_type=dispatch.authority_type,
+        crisis_type=dispatch.crisis_type,
+        message=dispatch.message_sent,
+        priority=dispatch.priority,
+        status=dispatch.status,
+        latitude=dispatch.latitude,
+        longitude=dispatch.longitude,
+        location_text=dispatch.location_description,
+        contact_method=dispatch.contact_method,
+        response_time_seconds=dispatch.response_time_seconds,
+        created_at=dispatch.dispatched_at,
+        acknowledged_at=dispatch.acknowledged_at
+    )
+
+
+@router.get(
+    "/logs",
+    response_model=list[DispatchLogResponse],
+    summary="List dispatch logs",
+    description="Retrieve dispatch logs for the admin coordination view"
+)
+async def list_dispatch_logs(
+    limit: int = Query(100, ge=1, le=500),
+    db: Session = Depends(get_db)
+) -> list[DispatchLogResponse]:
+    """List dispatch logs in newest-first order."""
+    try:
+        dispatches = dispatch_repository.get_all_dispatches(db, limit=limit)
+        return [_to_dispatch_response(dispatch) for dispatch in dispatches]
+    except Exception as e:
+        logger.error(f"Error listing dispatch logs: {e}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to list dispatch logs: {str(e)}"
+        )
 
 
 @router.post(
@@ -60,25 +102,7 @@ async def dispatch_authorities(
             )
         
         # Convert to response schemas
-        dispatch_responses = [
-            DispatchLogResponse(
-                id=dispatch.dispatch_id,
-                incident_id=dispatch.incident_id,
-                authority_type=dispatch.authority_type,
-                crisis_type=dispatch.crisis_type,
-                message=dispatch.message_sent,
-                priority=dispatch.priority,
-                status=dispatch.status,
-                latitude=dispatch.latitude,
-                longitude=dispatch.longitude,
-                location_text=dispatch.location_description,
-                contact_method=dispatch.contact_method,
-                response_time_seconds=dispatch.response_time_seconds,
-                created_at=dispatch.dispatched_at,
-                acknowledged_at=dispatch.acknowledged_at
-            )
-            for dispatch in dispatches
-        ]
+        dispatch_responses = [_to_dispatch_response(dispatch) for dispatch in dispatches]
         
         return APIResponse(
             success=True,
@@ -123,25 +147,7 @@ async def get_incident_dispatches(
         dispatches = dispatch_service.get_incident_dispatches(db, incident_id)
         
         # Convert to response schemas
-        dispatch_responses = [
-            DispatchLogResponse(
-                id=dispatch.dispatch_id,
-                incident_id=dispatch.incident_id,
-                authority_type=dispatch.authority_type,
-                crisis_type=dispatch.crisis_type,
-                message=dispatch.message_sent,
-                priority=dispatch.priority,
-                status=dispatch.status,
-                latitude=dispatch.latitude,
-                longitude=dispatch.longitude,
-                location_text=dispatch.location_description,
-                contact_method=dispatch.contact_method,
-                response_time_seconds=dispatch.response_time_seconds,
-                created_at=dispatch.dispatched_at,
-                acknowledged_at=dispatch.acknowledged_at
-            )
-            for dispatch in dispatches
-        ]
+        dispatch_responses = [_to_dispatch_response(dispatch) for dispatch in dispatches]
         
         return APIResponse(
             success=True,

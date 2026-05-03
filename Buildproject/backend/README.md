@@ -182,5 +182,5 @@ kill -9 <PID>
 
 For issues or questions, refer to:
 - Main project README
-- BUILD_PLAN.md
-- IBM_PRODUCT_ACCESS_REQUIREMENTS.md
+- ../../docs/planning/BUILD_PLAN.md
+- ../../docs/ibm/IBM_PRODUCT_ACCESS_REQUIREMENTS.md

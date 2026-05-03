@@ -1,0 +1,215 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - banner [ref=e3]:
+      - generic [ref=e4]:
+        - generic [ref=e5]: CrisisGrid
+        - generic [ref=e6]: Citizen Portal
+      - menu [ref=e8]:
+        - menuitem "home Home" [ref=e101] [cursor=pointer]:
+          - img "home" [ref=e10]:
+            - img [ref=e11]
+          - link "Home" [ref=e14]:
+            - /url: /citizen
+        - menuitem "alert Report Emergency" [ref=e102] [cursor=pointer]:
+          - img "alert" [ref=e16]:
+            - img [ref=e17]
+          - link "Report Emergency" [ref=e20]:
+            - /url: /citizen/report
+        - menuitem "file-text My Reports" [ref=e103] [cursor=pointer]:
+          - img "file-text" [ref=e22]:
+            - img [ref=e23]
+          - link "My Reports" [ref=e26]:
+            - /url: /citizen/reports
+        - menuitem "safety Safety Advisories" [ref=e104] [cursor=pointer]:
+          - img "safety" [ref=e28]:
+            - img [ref=e29]
+          - link "Safety Advisories" [ref=e33]:
+            - /url: /citizen/advisory
+        - menuitem "environment Nearby Alerts" [ref=e105] [cursor=pointer]:
+          - img "environment" [ref=e35]:
+            - img [ref=e36]
+          - link "Nearby Alerts" [ref=e39]:
+            - /url: /citizen/alerts
+        - menuitem "phone Emergency Contacts" [ref=e106] [cursor=pointer]:
+          - img "phone" [ref=e41]:
+            - img [ref=e42]
+          - link "Emergency Contacts" [ref=e45]:
+            - /url: /citizen/contacts
+        - menuitem [disabled]:
+          - img:
+            - img
+      - link "Emergency Contacts" [ref=e46] [cursor=pointer]:
+        - /url: /citizen/contacts
+        - button "Emergency Contacts" [ref=e47]:
+          - img "phone" [ref=e49]:
+            - img [ref=e50]
+          - generic [ref=e107]: Emergency
+    - main [ref=e52]:
+      - navigation [ref=e55]:
+        - list [ref=e56]:
+          - listitem [ref=e57]:
+            - link "home" [ref=e58] [cursor=pointer]:
+              - /url: /citizen
+              - img "home" [ref=e59]:
+                - img [ref=e60]
+          - listitem [ref=e62]: ">"
+          - listitem [ref=e63]:
+            - link "My Reports" [ref=e64] [cursor=pointer]:
+              - /url: /citizen/reports
+      - generic [ref=e67]:
+        - generic [ref=e108]:
+          - heading "My Reports" [level=2] [ref=e109]
+          - button "plus New Report" [ref=e110] [cursor=pointer]:
+            - img "plus" [ref=e112]:
+              - img [ref=e113]
+            - generic [ref=e116]: New Report
+        - generic [ref=e118]:
+          - generic [ref=e120]:
+            - img "filter" [ref=e121]:
+              - img [ref=e122]
+            - generic [ref=e124]: "Filter:"
+            - generic [ref=e125] [cursor=pointer]:
+              - generic [ref=e127]:
+                - combobox [ref=e129]
+                - generic "All Reports" [ref=e130]
+              - generic:
+                - img:
+                  - img
+          - generic [ref=e132]:
+            - generic [ref=e133]: "Sort:"
+            - generic [ref=e134] [cursor=pointer]:
+              - generic [ref=e136]:
+                - combobox [ref=e138]
+                - generic "Newest First" [ref=e139]
+              - generic:
+                - img:
+                  - img
+          - generic [ref=e141]: Showing 4 of 4 reports
+        - generic [ref=e142]:
+          - generic [ref=e146] [cursor=pointer]:
+            - generic [ref=e147]:
+              - generic [ref=e148]:
+                - img "fire" [ref=e149]:
+                  - img [ref=e150]
+                - generic [ref=e152]: Fire
+              - generic [ref=e153]: False Report
+            - paragraph [ref=e154]: Large fire reported at downtown building. Multiple floors affected.
+            - generic [ref=e155]:
+              - generic [ref=e156]:
+                - img "environment" [ref=e157]:
+                  - img [ref=e158]
+                - generic [ref=e160]: 123 Main St, New York, NY
+              - generic [ref=e161]:
+                - generic [ref=e162]:
+                  - img "clock-circle" [ref=e163]:
+                    - img [ref=e164]
+                  - generic [ref=e167]: about 22 hours ago
+                - generic [ref=e168]:
+                  - img "check-circle" [ref=e169]:
+                    - img [ref=e170]
+                  - generic [ref=e173]: "Confidence: 5700%"
+          - generic [ref=e177] [cursor=pointer]:
+            - generic [ref=e178]:
+              - generic [ref=e179]:
+                - img "fire" [ref=e180]:
+                  - img [ref=e181]
+                - generic [ref=e183]: Fire
+              - generic [ref=e184]: Verified
+            - paragraph [ref=e185]: Confirming fire at Westlands. Multiple floors affected.
+            - generic [ref=e186]:
+              - generic [ref=e187]:
+                - img "environment" [ref=e188]:
+                  - img [ref=e189]
+                - generic [ref=e191]: "-1.2925, 36.8215"
+              - generic [ref=e192]:
+                - generic [ref=e193]:
+                  - img "clock-circle" [ref=e194]:
+                    - img [ref=e195]
+                  - generic [ref=e198]: about 23 hours ago
+                - generic [ref=e199]:
+                  - img "check-circle" [ref=e200]:
+                    - img [ref=e201]
+                  - generic [ref=e204]: "Confidence: 8500%"
+            - generic [ref=e205]:
+              - generic [ref=e206]: 📷
+              - generic [ref=e207]: Media attached
+          - generic [ref=e211] [cursor=pointer]:
+            - generic [ref=e212]:
+              - generic [ref=e213]:
+                - img "fire" [ref=e214]:
+                  - img [ref=e215]
+                - generic [ref=e217]: Fire
+              - generic [ref=e218]: Verified
+            - paragraph [ref=e219]: Large fire at Westlands shopping center. Heavy smoke visible.
+            - generic [ref=e220]:
+              - generic [ref=e221]:
+                - img "environment" [ref=e222]:
+                  - img [ref=e223]
+                - generic [ref=e225]: "-1.2921, 36.8219"
+              - generic [ref=e226]:
+                - generic [ref=e227]:
+                  - img "clock-circle" [ref=e228]:
+                    - img [ref=e229]
+                  - generic [ref=e232]: about 23 hours ago
+                - generic [ref=e233]:
+                  - img "check-circle" [ref=e234]:
+                    - img [ref=e235]
+                  - generic [ref=e238]: "Confidence: 8000%"
+            - generic [ref=e239]:
+              - generic [ref=e240]: 📷
+              - generic [ref=e241]: Media attached
+          - generic [ref=e245] [cursor=pointer]:
+            - generic [ref=e246]:
+              - generic [ref=e247]:
+                - img "thunderbolt" [ref=e248]:
+                  - img [ref=e249]
+                - generic [ref=e251]: Flood
+              - generic [ref=e252]: Verified
+            - paragraph [ref=e253]: Heavy flooding on Thika Road. Water level rising rapidly.
+            - generic [ref=e254]:
+              - generic [ref=e255]:
+                - img "environment" [ref=e256]:
+                  - img [ref=e257]
+                - generic [ref=e259]: "-1.3167, 36.8833"
+              - generic [ref=e260]:
+                - generic [ref=e261]:
+                  - img "clock-circle" [ref=e262]:
+                    - img [ref=e263]
+                  - generic [ref=e266]: about 23 hours ago
+                - generic [ref=e267]:
+                  - img "check-circle" [ref=e268]:
+                    - img [ref=e269]
+                  - generic [ref=e272]: "Confidence: 6000%"
+    - contentinfo [ref=e74]:
+      - generic [ref=e75]:
+        - generic [ref=e76]:
+          - generic [ref=e77]:
+            - heading "Emergency Contacts" [level=3] [ref=e78]
+            - list [ref=e79]:
+              - listitem [ref=e80]:
+                - 'link "🚨 Emergency: 911" [ref=e81] [cursor=pointer]':
+                  - /url: tel:911
+              - listitem [ref=e82]:
+                - 'link "📞 Non-Emergency: 311" [ref=e83] [cursor=pointer]':
+                  - /url: tel:311
+              - listitem [ref=e84]:
+                - link "📋 All Contacts" [ref=e85] [cursor=pointer]:
+                  - /url: /citizen/contacts
+          - generic [ref=e86]:
+            - heading "Quick Links" [level=3] [ref=e87]
+            - list [ref=e88]:
+              - listitem [ref=e89]:
+                - link "Report Emergency" [ref=e90] [cursor=pointer]:
+                  - /url: /citizen/report
+              - listitem [ref=e91]:
+                - link "Safety Advisories" [ref=e92] [cursor=pointer]:
+                  - /url: /citizen/advisory
+              - listitem [ref=e93]:
+                - link "Nearby Alerts" [ref=e94] [cursor=pointer]:
+                  - /url: /citizen/alerts
+          - generic [ref=e95]:
+            - heading "About CrisisGrid" [level=3] [ref=e96]
+            - paragraph [ref=e97]: AI-powered emergency response coordination system for real-time crisis management.
+            - paragraph [ref=e98]: © 2026 CrisisGrid AI. All rights reserved.
+        - paragraph [ref=e100]: For life-threatening emergencies, always call 911 immediately.
+  - alert [ref=e273]

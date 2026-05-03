@@ -1,3 +1,5 @@
+'use client';
+
 import Link from 'next/link';
 import { Button, Card, Row, Col, Typography } from 'antd';
 import { DashboardOutlined, UserOutlined, AlertOutlined, SafetyOutlined } from '@ant-design/icons';

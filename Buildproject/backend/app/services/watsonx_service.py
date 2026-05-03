@@ -300,7 +300,7 @@ Provide your analysis:"""
             "severity_score": severity,
             "urgency_level": urgency,
             "recommended_action": action,
-            "reasoning": "Rule-based analysis (watsonx.ai unavailable)"
+            "reasoning": "Fallback rule-based analysis (watsonx.ai unavailable)"
         }
 
 

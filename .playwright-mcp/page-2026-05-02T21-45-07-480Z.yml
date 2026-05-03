@@ -1,0 +1,200 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - complementary [ref=e3]:
+      - generic [ref=e5]:
+        - link "appstore CrisisGrid AI Operations Console" [ref=e7] [cursor=pointer]:
+          - /url: /admin/dashboard
+          - img "appstore" [ref=e9]:
+            - img [ref=e10]
+          - generic [ref=e12]:
+            - generic [ref=e13]: CrisisGrid AI
+            - generic [ref=e14]: Operations Console
+        - menu [ref=e16]:
+          - menuitem "dashboard Command Center" [ref=e77] [cursor=pointer]:
+            - img "dashboard" [ref=e18]:
+              - img [ref=e19]
+            - link "Command Center" [ref=e22]:
+              - /url: /admin/dashboard
+          - menuitem "file-text Reports" [ref=e78] [cursor=pointer]:
+            - img "file-text" [ref=e24]:
+              - img [ref=e25]
+            - link "Reports" [ref=e28]:
+              - /url: /admin/reports
+          - menuitem "alert Alerts" [ref=e79] [cursor=pointer]:
+            - img "alert" [ref=e30]:
+              - img [ref=e31]
+            - link "Alerts" [ref=e34]:
+              - /url: /admin/alerts
+          - menuitem "send Dispatch" [ref=e80] [cursor=pointer]:
+            - img "send" [ref=e36]:
+              - img [ref=e37]
+            - link "Dispatch" [ref=e40]:
+              - /url: /admin/dispatch
+          - menuitem "cluster Incidents" [ref=e81] [cursor=pointer]:
+            - img "cluster" [ref=e42]:
+              - img [ref=e43]
+            - link "Incidents" [ref=e46]:
+              - /url: /admin/incidents
+        - generic [ref=e48]:
+          - generic [ref=e49]: Mission Mode
+          - generic [ref=e82]: Live monitoring
+          - paragraph [ref=e50]: Verification, alerting, and dispatch feeds refresh automatically for demo operations.
+    - generic [ref=e51]:
+      - banner [ref=e52]:
+        - generic [ref=e54]:
+          - img "home" [ref=e55]:
+            - img [ref=e56]
+          - generic [ref=e58]: Admin
+          - generic [ref=e59]: /
+          - generic [ref=e60]: Dispatch
+        - link "user Citizen Portal" [ref=e83] [cursor=pointer]:
+          - /url: /citizen
+          - button "user Citizen Portal" [ref=e84]:
+            - img "user" [ref=e65]:
+              - img [ref=e66]
+            - generic [ref=e85]: Citizen Portal
+      - main [ref=e68]:
+        - generic [ref=e70]:
+          - generic [ref=e87]:
+            - generic [ref=e88]: Response coordination
+            - heading "send Dispatch Coordination" [level=2] [ref=e89]:
+              - img "send" [ref=e90]:
+                - img [ref=e91]
+              - text: Dispatch Coordination
+            - generic [ref=e93]: 1 of 1 dispatch logs
+          - generic [ref=e96]:
+            - button "expanded filter Filters" [expanded] [ref=e97] [cursor=pointer]:
+              - img "expanded" [ref=e99]:
+                - img [ref=e100]
+              - generic [ref=e103]:
+                - img "filter" [ref=e104]:
+                  - img [ref=e105]
+                - generic [ref=e107]: Filters
+            - generic [ref=e110]:
+              - generic [ref=e111]:
+                - generic [ref=e113]:
+                  - generic "Authority Type" [ref=e115]
+                  - generic [ref=e119] [cursor=pointer]:
+                    - generic [ref=e121]:
+                      - combobox "Authority Type" [ref=e125]
+                      - generic: Select Authority Type
+                    - generic:
+                      - img:
+                        - img
+                - generic [ref=e127]:
+                  - generic "Status" [ref=e129]
+                  - generic [ref=e133] [cursor=pointer]:
+                    - generic [ref=e135]:
+                      - combobox "Status" [ref=e139]
+                      - generic: Select Status
+                    - generic:
+                      - img:
+                        - img
+              - generic [ref=e140]:
+                - button "filter Apply Filters" [ref=e141] [cursor=pointer]:
+                  - img "filter" [ref=e143]:
+                    - img [ref=e144]
+                  - generic [ref=e146]: Apply Filters
+                - button "clear Reset" [ref=e147] [cursor=pointer]:
+                  - img "clear" [ref=e149]:
+                    - img [ref=e150]
+                  - generic [ref=e152]: Reset
+          - generic [ref=e153]:
+            - heading "clock-circle Recent Dispatch Activity" [level=4] [ref=e154]:
+              - img "clock-circle" [ref=e155]:
+                - img [ref=e156]
+              - text: Recent Dispatch Activity
+            - list [ref=e159]:
+              - listitem [ref=e160]:
+                - generic [ref=e163]:
+                  - generic [ref=e164]:
+                    - generic [ref=e165]: Fire Service
+                    - generic [ref=e166]: Arrived
+                    - code [ref=e168]: dispatch
+                  - text: CRITICAL fire incident at Westlands Shopping Center. 4 units dispatched.about 24 hours ago
+          - generic [ref=e172]:
+            - table [ref=e176]:
+              - rowgroup [ref=e186]:
+                - row "Reference Authority Type Status Priority Message Location Response Time Dispatched" [ref=e187]:
+                  - columnheader "Reference" [ref=e188]
+                  - columnheader "Authority Type" [ref=e189] [cursor=pointer]:
+                    - generic [ref=e190]:
+                      - generic [ref=e191]: Authority Type
+                      - generic [ref=e193]:
+                        - img [ref=e194]:
+                          - img [ref=e195]
+                        - img [ref=e197]:
+                          - img [ref=e198]
+                  - columnheader "Status" [ref=e200] [cursor=pointer]:
+                    - generic [ref=e201]:
+                      - generic [ref=e202]: Status
+                      - generic [ref=e204]:
+                        - img [ref=e205]:
+                          - img [ref=e206]
+                        - img [ref=e208]:
+                          - img [ref=e209]
+                  - columnheader "Priority" [ref=e211]
+                  - columnheader "Message" [ref=e212]
+                  - columnheader "Location" [ref=e213]
+                  - columnheader "Response Time" [ref=e214]
+                  - columnheader "Dispatched" [ref=e215] [cursor=pointer]:
+                    - generic [ref=e216]:
+                      - generic [ref=e217]: Dispatched
+                      - generic [ref=e219]:
+                        - img [ref=e220]:
+                          - img [ref=e221]
+                        - img [ref=e223]:
+                          - img [ref=e224]
+              - rowgroup [ref=e226]:
+                - generic:
+                  - generic: Authority Type
+                  - generic:
+                    - generic:
+                      - img:
+                        - img
+                      - img:
+                        - img
+                - generic:
+                  - generic: Status
+                  - generic:
+                    - generic:
+                      - img:
+                        - img
+                      - img:
+                        - img
+                - generic:
+                  - generic: Dispatched
+                  - generic:
+                    - generic:
+                      - img:
+                        - img
+                      - img:
+                        - img
+                - row "dispatch Fire Service Arrived CRITICAL CRITICAL fire incident at Westlands Shopping Center. 4 units dispatched. Westlands Shopping Center, Nairobi 8m about 24 hours ago" [ref=e227]:
+                  - cell "dispatch" [ref=e228]:
+                    - code [ref=e230]: dispatch
+                  - cell "Fire Service" [ref=e231]:
+                    - generic [ref=e232]: Fire Service
+                  - cell "Arrived" [ref=e233]:
+                    - generic [ref=e234]: Arrived
+                  - cell "CRITICAL" [ref=e235]:
+                    - generic [ref=e236]: CRITICAL
+                  - cell "CRITICAL fire incident at Westlands Shopping Center. 4 units dispatched." [ref=e237]:
+                    - generic [ref=e238]: CRITICAL fire incident at Westlands Shopping Center. 4 units dispatched.
+                  - cell "Westlands Shopping Center, Nairobi" [ref=e239]:
+                    - generic [ref=e240]: Westlands Shopping Center, Nairobi
+                  - cell "8m" [ref=e241]
+                  - cell "about 24 hours ago" [ref=e242]
+            - list [ref=e243]:
+              - listitem [ref=e244]: 1-1 of 1 dispatches
+              - listitem "Previous Page" [ref=e245]:
+                - button "left" [disabled] [ref=e246]:
+                  - img "left" [ref=e247]:
+                    - img [ref=e248]
+              - listitem "1" [ref=e250] [cursor=pointer]:
+                - generic [ref=e251]: "1"
+              - listitem "Next Page" [ref=e252]:
+                - button "right" [disabled] [ref=e253]:
+                  - img "right" [ref=e254]:
+                    - img [ref=e255]
+  - alert [ref=e257]

@@ -1,0 +1,54 @@
+- main [ref=e2]:
+  - generic [ref=e3]:
+    - generic [ref=e4]:
+      - heading "alertCrisisGrid AI" [level=1] [ref=e5]:
+        - img "alert" [ref=e6]:
+          - img [ref=e7]
+        - text: CrisisGrid AI
+      - generic [ref=e9]: AI-Powered Emergency Response Coordination System
+      - generic [ref=e10]: Real-time crisis management platform leveraging IBM watsonx.ai for intelligent alert verification, resource dispatch optimization, and citizen safety coordination.
+    - generic [ref=e11]:
+      - generic [ref=e13]:
+        - img "alert" [ref=e16]:
+          - img [ref=e17]
+        - generic [ref=e21]:
+          - generic [ref=e22]: Real-Time Alert Processing
+          - generic [ref=e23]: AI-powered verification and clustering of emergency reports from multiple sources
+      - generic [ref=e25]:
+        - img "safety" [ref=e28]:
+          - img [ref=e29]
+        - generic [ref=e34]:
+          - generic [ref=e35]: Smart Resource Dispatch
+          - generic [ref=e36]: Optimized emergency response coordination with geo-risk analysis and routing
+      - generic [ref=e38]:
+        - img "user" [ref=e41]:
+          - img [ref=e42]
+        - generic [ref=e46]:
+          - generic [ref=e47]: Citizen Engagement
+          - generic [ref=e48]: Public reporting portal with real-time safety advisories and incident updates
+    - generic [ref=e49]:
+      - generic [ref=e52]:
+        - img "dashboard" [ref=e53]:
+          - img [ref=e54]
+        - heading "Admin Dashboard" [level=3] [ref=e56]
+        - generic [ref=e57]: Access the command center for emergency response coordination, alert management, and resource dispatch.
+        - link "dashboardEnter Admin Portal" [ref=e58] [cursor=pointer]:
+          - /url: /admin
+          - button "dashboardEnter Admin Portal" [ref=e59]:
+            - img "dashboard" [ref=e61]:
+              - img [ref=e62]
+            - text: Enter Admin Portal
+      - generic [ref=e66]:
+        - img "user" [ref=e67]:
+          - img [ref=e68]
+        - heading "Citizen Portal" [level=3] [ref=e70]
+        - generic [ref=e71]: Report emergencies, view safety advisories, and stay informed about incidents in your area.
+        - link "userEnter Citizen Portal" [ref=e72] [cursor=pointer]:
+          - /url: /citizen
+          - button "userEnter Citizen Portal" [ref=e73]:
+            - img "user" [ref=e75]:
+              - img [ref=e76]
+            - text: Enter Citizen Portal
+    - generic [ref=e78]:
+      - generic [ref=e79]: Powered by IBM watsonx.ai, IBM Cloudant, and IBM Granite Models
+      - generic [ref=e80]: Built for the IBM Call for Code 2024 Hackathon

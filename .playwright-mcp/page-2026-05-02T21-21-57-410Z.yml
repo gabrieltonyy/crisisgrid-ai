@@ -1,0 +1,94 @@
+- generic [ref=e2]:
+  - banner [ref=e3]:
+    - generic [ref=e4]:
+      - generic [ref=e5]: CrisisGrid
+      - generic [ref=e6]: Citizen Portal
+    - menu [ref=e8]:
+      - menuitem "homeHome" [ref=e9]:
+        - img "home" [ref=e10]:
+          - img [ref=e11]
+        - link "Home" [ref=e14] [cursor=pointer]:
+          - /url: /citizen
+      - menuitem "alertReport Emergency" [ref=e15]:
+        - img "alert" [ref=e16]:
+          - img [ref=e17]
+        - link "Report Emergency" [ref=e20] [cursor=pointer]:
+          - /url: /citizen/report
+      - menuitem "file-textMy Reports" [ref=e21]:
+        - img "file-text" [ref=e22]:
+          - img [ref=e23]
+        - link "My Reports" [ref=e26] [cursor=pointer]:
+          - /url: /citizen/reports
+      - menuitem "safetySafety Advisories" [ref=e27]:
+        - img "safety" [ref=e28]:
+          - img [ref=e29]
+        - link "Safety Advisories" [ref=e33] [cursor=pointer]:
+          - /url: /citizen/advisory
+      - menuitem "environmentNearby Alerts" [ref=e34]:
+        - img "environment" [ref=e35]:
+          - img [ref=e36]
+        - link "Nearby Alerts" [ref=e39] [cursor=pointer]:
+          - /url: /citizen/alerts
+      - menuitem "phoneEmergency Contacts" [ref=e40]:
+        - img "phone" [ref=e41]:
+          - img [ref=e42]
+        - link "Emergency Contacts" [ref=e45] [cursor=pointer]:
+          - /url: /citizen/contacts
+      - menuitem:
+        - img:
+          - img
+    - link "Emergency Contacts" [ref=e46] [cursor=pointer]:
+      - /url: /citizen/contacts
+      - button "Emergency Contacts" [ref=e47]:
+        - img "phone" [ref=e49]:
+          - img [ref=e50]
+        - text: Emergency
+  - main [ref=e52]:
+    - generic [ref=e56]:
+      - heading "Citizen Portal" [level=2] [ref=e57]
+      - generic [ref=e58]: Public safety and emergency reporting - Coming soon in Phase 9 implementation
+      - generic [ref=e59]:
+        - generic [ref=e60]:
+          - heading "Report Emergency" [level=4] [ref=e61]
+          - generic [ref=e62]: Submit emergency reports with location and media
+        - generic [ref=e63]:
+          - heading "Safety Advisories" [level=4] [ref=e64]
+          - generic [ref=e65]: View active safety alerts in your area
+        - generic [ref=e66]:
+          - heading "Incident Map" [level=4] [ref=e67]
+          - generic [ref=e68]: See nearby incidents and emergency zones
+        - generic [ref=e69]:
+          - heading "My Reports" [level=4] [ref=e70]
+          - generic [ref=e71]: Track status of your submitted reports
+  - contentinfo [ref=e72]:
+    - generic [ref=e73]:
+      - generic [ref=e74]:
+        - generic [ref=e75]:
+          - heading "Emergency Contacts" [level=3] [ref=e76]
+          - list [ref=e77]:
+            - listitem [ref=e78]:
+              - 'link "🚨 Emergency: 911" [ref=e79] [cursor=pointer]':
+                - /url: tel:911
+            - listitem [ref=e80]:
+              - 'link "📞 Non-Emergency: 311" [ref=e81] [cursor=pointer]':
+                - /url: tel:311
+            - listitem [ref=e82]:
+              - link "📋 All Contacts" [ref=e83] [cursor=pointer]:
+                - /url: /citizen/contacts
+        - generic [ref=e84]:
+          - heading "Quick Links" [level=3] [ref=e85]
+          - list [ref=e86]:
+            - listitem [ref=e87]:
+              - link "Report Emergency" [ref=e88] [cursor=pointer]:
+                - /url: /citizen/report
+            - listitem [ref=e89]:
+              - link "Safety Advisories" [ref=e90] [cursor=pointer]:
+                - /url: /citizen/advisory
+            - listitem [ref=e91]:
+              - link "Nearby Alerts" [ref=e92] [cursor=pointer]:
+                - /url: /citizen/alerts
+        - generic [ref=e93]:
+          - heading "About CrisisGrid" [level=3] [ref=e94]
+          - paragraph [ref=e95]: AI-powered emergency response coordination system for real-time crisis management.
+          - paragraph [ref=e96]: © 2026 CrisisGrid AI. All rights reserved.
+      - paragraph [ref=e98]: For life-threatening emergencies, always call 911 immediately.

@@ -1,0 +1,198 @@
+- generic [ref=e2]:
+  - banner [ref=e3]:
+    - generic [ref=e4]:
+      - generic [ref=e5]: CrisisGrid
+      - generic [ref=e6]: Citizen Portal
+    - menu [ref=e8]:
+      - menuitem "homeHome" [ref=e9]:
+        - img "home" [ref=e10]:
+          - img [ref=e11]
+        - link "Home" [ref=e14] [cursor=pointer]:
+          - /url: /citizen
+      - menuitem "alertReport Emergency" [ref=e15]:
+        - img "alert" [ref=e16]:
+          - img [ref=e17]
+        - link "Report Emergency" [ref=e20] [cursor=pointer]:
+          - /url: /citizen/report
+      - menuitem "file-textMy Reports" [ref=e21]:
+        - img "file-text" [ref=e22]:
+          - img [ref=e23]
+        - link "My Reports" [ref=e26] [cursor=pointer]:
+          - /url: /citizen/reports
+      - menuitem "safetySafety Advisories" [ref=e27]:
+        - img "safety" [ref=e28]:
+          - img [ref=e29]
+        - link "Safety Advisories" [ref=e33] [cursor=pointer]:
+          - /url: /citizen/advisory
+      - menuitem "environmentNearby Alerts" [ref=e34]:
+        - img "environment" [ref=e35]:
+          - img [ref=e36]
+        - link "Nearby Alerts" [ref=e39] [cursor=pointer]:
+          - /url: /citizen/alerts
+      - menuitem "phoneEmergency Contacts" [ref=e40]:
+        - img "phone" [ref=e41]:
+          - img [ref=e42]
+        - link "Emergency Contacts" [ref=e45] [cursor=pointer]:
+          - /url: /citizen/contacts
+      - menuitem:
+        - img:
+          - img
+    - link "Emergency Contacts" [ref=e46] [cursor=pointer]:
+      - /url: /citizen/contacts
+      - button "Emergency Contacts" [ref=e47]:
+        - img "phone" [ref=e49]:
+          - img [ref=e50]
+        - text: Emergency
+  - main [ref=e52]:
+    - navigation [ref=e55]:
+      - list [ref=e56]:
+        - listitem [ref=e57]:
+          - link "home" [ref=e58] [cursor=pointer]:
+            - /url: /citizen
+            - img "home" [ref=e59]:
+              - img [ref=e60]
+        - listitem [ref=e62]: ">"
+        - listitem [ref=e63]:
+          - link "Report Emergency" [ref=e64] [cursor=pointer]:
+            - /url: /citizen/report
+    - generic [ref=e67]:
+      - generic [ref=e68]:
+        - heading "warningReport a Crisis" [level=2] [ref=e69]:
+          - img "warning" [ref=e70]:
+            - img [ref=e71]
+          - text: Report a Crisis
+        - generic [ref=e73]: Help us respond quickly by providing accurate information about the emergency situation.
+      - alert [ref=e74]:
+        - img "warning" [ref=e75]:
+          - img [ref=e76]
+        - generic [ref=e78]:
+          - generic [ref=e79]: Life-Threatening Emergency?
+          - generic [ref=e81]:
+            - strong [ref=e83]: If this is a life-threatening emergency, call 911 immediately.
+            - generic [ref=e84]: Use this form for non-life-threatening situations or to provide additional information about an ongoing emergency.
+      - generic [ref=e85]:
+        - heading "safetyHow to Report Effectively" [level=4] [ref=e86]:
+          - img "safety" [ref=e87]:
+            - img [ref=e88]
+          - text: How to Report Effectively
+        - generic [ref=e91]:
+          - generic [ref=e93]:
+            - img "check-circle" [ref=e94]:
+              - img [ref=e95]
+            - generic [ref=e98]:
+              - strong [ref=e99]: "Be Specific:"
+              - text: Describe exactly what you see, hear, or smell
+          - generic [ref=e101]:
+            - img "check-circle" [ref=e102]:
+              - img [ref=e103]
+            - generic [ref=e106]:
+              - strong [ref=e107]: "Include Details:"
+              - text: Mention landmarks, street names, or building numbers
+          - generic [ref=e109]:
+            - img "check-circle" [ref=e110]:
+              - img [ref=e111]
+            - generic [ref=e114]:
+              - strong [ref=e115]: "Add Media:"
+              - text: Photos and videos help verify your report faster
+          - generic [ref=e117]:
+            - img "check-circle" [ref=e118]:
+              - img [ref=e119]
+            - generic [ref=e122]:
+              - strong [ref=e123]: "Stay Safe:"
+              - text: Only report if it is safe to do so - your safety comes first
+      - generic [ref=e124]:
+        - generic [ref=e127]: Report a Crisis
+        - generic [ref=e129]:
+          - generic [ref=e131]:
+            - generic [ref=e133]: Crisis Type
+            - generic [ref=e138]:
+              - generic [ref=e140]:
+                - combobox [ref=e142]
+                - text: Select crisis type
+              - img [ref=e144]:
+                - img [ref=e145]
+          - generic [ref=e148]:
+            - generic [ref=e150]: Description
+            - generic [ref=e154]:
+              - 'textbox "Describe what you''re seeing. Include details like: What is happening? How severe is it? Are people in danger? Any landmarks nearby?" [ref=e155]'
+              - generic [ref=e156]: 0 / 1000
+          - generic [ref=e160]: Location
+          - separator
+          - generic [ref=e162]:
+            - generic [ref=e164]: Photos & Videos (Optional)
+            - button "inbox Click or drag files to upload Support for images and videos. Max 10MB per file. Up to 5 images and 2 videos allowed." [ref=e172]:
+              - generic [ref=e173]:
+                - paragraph [ref=e174]:
+                  - img "inbox" [ref=e175]:
+                    - img [ref=e176]
+                - paragraph [ref=e178]: Click or drag files to upload
+                - paragraph [ref=e179]:
+                  - text: Support for images and videos. Max 10MB per file.
+                  - text: Up to 5 images and 2 videos allowed.
+          - separator
+          - button "sendSubmit Report" [ref=e187]:
+            - img "send" [ref=e189]:
+              - img [ref=e190]
+            - text: Submit Report
+      - generic [ref=e192]:
+        - heading "What Happens Next?" [level=5] [ref=e193]
+        - generic [ref=e194]:
+          - generic [ref=e196]:
+            - generic [ref=e197]: "1."
+            - generic [ref=e198]: Your report is immediately analyzed by our AI verification system
+          - generic [ref=e200]:
+            - generic [ref=e201]: "2."
+            - generic [ref=e202]: Emergency services are automatically notified based on severity
+          - generic [ref=e204]:
+            - generic [ref=e205]: "3."
+            - generic [ref=e206]: Nearby citizens receive safety alerts if the situation affects them
+          - generic [ref=e208]:
+            - generic [ref=e209]: "4."
+            - generic [ref=e210]: You can track your report status in the "My Reports" section
+      - alert [ref=e211]:
+        - img "info-circle" [ref=e212]:
+          - img [ref=e213]
+        - generic [ref=e215]:
+          - generic [ref=e216]: Privacy & Data Usage
+          - generic [ref=e217]: Your report data is used solely for emergency response coordination. Location data helps dispatch the nearest resources. Media files are analyzed to verify the crisis and may be shared with emergency responders. We protect your privacy while ensuring effective emergency response.
+  - contentinfo [ref=e218]:
+    - generic [ref=e219]:
+      - generic [ref=e220]:
+        - generic [ref=e221]:
+          - heading "Emergency Contacts" [level=3] [ref=e222]
+          - list [ref=e223]:
+            - listitem [ref=e224]:
+              - 'link "phone Emergency: 911" [ref=e225] [cursor=pointer]':
+                - /url: tel:911
+                - img "phone" [ref=e226]:
+                  - img [ref=e227]
+                - text: "Emergency: 911"
+            - listitem [ref=e229]:
+              - 'link "phone Non-Emergency: 311" [ref=e230] [cursor=pointer]':
+                - /url: tel:311
+                - img "phone" [ref=e231]:
+                  - img [ref=e232]
+                - text: "Non-Emergency: 311"
+            - listitem [ref=e234]:
+              - link "file-text All Contacts" [ref=e235] [cursor=pointer]:
+                - /url: /citizen/contacts
+                - img "file-text" [ref=e236]:
+                  - img [ref=e237]
+                - text: All Contacts
+        - generic [ref=e239]:
+          - heading "Quick Links" [level=3] [ref=e240]
+          - list [ref=e241]:
+            - listitem [ref=e242]:
+              - link "Report Emergency" [ref=e243] [cursor=pointer]:
+                - /url: /citizen/report
+            - listitem [ref=e244]:
+              - link "Safety Advisories" [ref=e245] [cursor=pointer]:
+                - /url: /citizen/advisory
+            - listitem [ref=e246]:
+              - link "Nearby Alerts" [ref=e247] [cursor=pointer]:
+                - /url: /citizen/alerts
+        - generic [ref=e248]:
+          - heading "About CrisisGrid" [level=3] [ref=e249]
+          - paragraph [ref=e250]: AI-powered emergency response coordination system for real-time crisis management.
+          - paragraph [ref=e251]: © 2026 CrisisGrid AI. All rights reserved.
+      - paragraph [ref=e253]: For life-threatening emergencies, always call 911 immediately.

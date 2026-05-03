@@ -1,0 +1,21 @@
+{
+  "browser": {
+    "browserName": "chromium",
+    "isolated": false,
+    "contextOptions": {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "ignoreHTTPSErrors": true
+    }
+  },
+  "server": {
+    "port": 8931,
+    "host": "127.0.0.1",
+    "allowedHosts": [
+      "localhost",
+      "127.0.0.1"
+    ]
+  }
+}

@@ -1,0 +1,145 @@
+- generic [ref=e2]:
+  - banner [ref=e3]:
+    - generic [ref=e4]:
+      - generic [ref=e5]: CrisisGrid
+      - generic [ref=e6]: Citizen Portal
+    - menu [ref=e8]:
+      - menuitem "homeHome" [ref=e9]:
+        - img "home" [ref=e10]:
+          - img [ref=e11]
+        - link "Home" [ref=e14] [cursor=pointer]:
+          - /url: /citizen
+      - menuitem "alertReport Emergency" [ref=e15]:
+        - img "alert" [ref=e16]:
+          - img [ref=e17]
+        - link "Report Emergency" [ref=e20] [cursor=pointer]:
+          - /url: /citizen/report
+      - menuitem "file-textMy Reports" [ref=e21]:
+        - img "file-text" [ref=e22]:
+          - img [ref=e23]
+        - link "My Reports" [ref=e26] [cursor=pointer]:
+          - /url: /citizen/reports
+      - menuitem "safetySafety Advisories" [ref=e27]:
+        - img "safety" [ref=e28]:
+          - img [ref=e29]
+        - link "Safety Advisories" [ref=e33] [cursor=pointer]:
+          - /url: /citizen/advisory
+      - menuitem "environmentNearby Alerts" [ref=e34]:
+        - img "environment" [ref=e35]:
+          - img [ref=e36]
+        - link "Nearby Alerts" [ref=e39] [cursor=pointer]:
+          - /url: /citizen/alerts
+      - menuitem "phoneEmergency Contacts" [ref=e40]:
+        - img "phone" [ref=e41]:
+          - img [ref=e42]
+        - link "Emergency Contacts" [ref=e45] [cursor=pointer]:
+          - /url: /citizen/contacts
+      - menuitem:
+        - img:
+          - img
+    - link "Emergency Contacts" [ref=e46] [cursor=pointer]:
+      - /url: /citizen/contacts
+      - button "Emergency Contacts" [ref=e47]:
+        - img "phone" [ref=e49]:
+          - img [ref=e50]
+        - text: Emergency
+  - main [ref=e52]:
+    - generic [ref=e55]:
+      - generic [ref=e57]:
+        - generic [ref=e58]:
+          - generic [ref=e59]: Citizen safety portal
+          - heading "Crisis reporting and local safety intelligence" [level=1] [ref=e60]
+          - generic [ref=e61]: Send verified field reports, monitor active alerts, and access clear safety guidance during fast-moving incidents.
+        - generic [ref=e62]:
+          - link "warningReport Crisis" [ref=e64] [cursor=pointer]:
+            - /url: /citizen/report
+            - button "warningReport Crisis" [ref=e65]:
+              - img "warning" [ref=e67]:
+                - img [ref=e68]
+              - text: Report Crisis
+          - link "phoneCall 911" [ref=e71] [cursor=pointer]:
+            - /url: tel:911
+            - button "phoneCall 911" [ref=e72]:
+              - img "phone" [ref=e74]:
+                - img [ref=e75]
+              - text: Call 911
+      - alert [ref=e77]:
+        - img "warning" [ref=e78]:
+          - img [ref=e79]
+        - generic [ref=e81]:
+          - generic [ref=e82]: For life-threatening emergencies, call 911 immediately.
+          - generic [ref=e83]: Use CrisisGrid AI to share situational details when it is safe, and follow all official instructions from local authorities.
+      - generic [ref=e84]:
+        - link "alert Report Emergency Submit a report with location, description, and optional media for AI verification." [ref=e86] [cursor=pointer]:
+          - /url: /citizen/report
+          - generic [ref=e89]:
+            - img "alert" [ref=e91]:
+              - img [ref=e92]
+            - generic [ref=e94]:
+              - heading "Report Emergency" [level=4] [ref=e95]
+              - text: Submit a report with location, description, and optional media for AI verification.
+        - link "environment Nearby Alerts View active public warnings on the map and filter by severity or crisis type." [ref=e97] [cursor=pointer]:
+          - /url: /citizen/alerts
+          - generic [ref=e100]:
+            - img "environment" [ref=e102]:
+              - img [ref=e103]
+            - generic [ref=e105]:
+              - heading "Nearby Alerts" [level=4] [ref=e106]
+              - text: View active public warnings on the map and filter by severity or crisis type.
+        - link "safety Safety Advisories Get crisis-specific guidance and immediate safety actions from the advisory agent." [ref=e108] [cursor=pointer]:
+          - /url: /citizen/advisory
+          - generic [ref=e111]:
+            - img "safety" [ref=e113]:
+              - img [ref=e114]
+            - generic [ref=e117]:
+              - heading "Safety Advisories" [level=4] [ref=e118]
+              - text: Get crisis-specific guidance and immediate safety actions from the advisory agent.
+        - link "file-text My Reports Track verification status, confidence, and response activity for submitted reports." [ref=e120] [cursor=pointer]:
+          - /url: /citizen/reports
+          - generic [ref=e123]:
+            - img "file-text" [ref=e125]:
+              - img [ref=e126]
+            - generic [ref=e128]:
+              - heading "My Reports" [level=4] [ref=e129]
+              - text: Track verification status, confidence, and response activity for submitted reports.
+  - contentinfo [ref=e130]:
+    - generic [ref=e131]:
+      - generic [ref=e132]:
+        - generic [ref=e133]:
+          - heading "Emergency Contacts" [level=3] [ref=e134]
+          - list [ref=e135]:
+            - listitem [ref=e136]:
+              - 'link "phone Emergency: 911" [ref=e137] [cursor=pointer]':
+                - /url: tel:911
+                - img "phone" [ref=e138]:
+                  - img [ref=e139]
+                - text: "Emergency: 911"
+            - listitem [ref=e141]:
+              - 'link "phone Non-Emergency: 311" [ref=e142] [cursor=pointer]':
+                - /url: tel:311
+                - img "phone" [ref=e143]:
+                  - img [ref=e144]
+                - text: "Non-Emergency: 311"
+            - listitem [ref=e146]:
+              - link "file-text All Contacts" [ref=e147] [cursor=pointer]:
+                - /url: /citizen/contacts
+                - img "file-text" [ref=e148]:
+                  - img [ref=e149]
+                - text: All Contacts
+        - generic [ref=e151]:
+          - heading "Quick Links" [level=3] [ref=e152]
+          - list [ref=e153]:
+            - listitem [ref=e154]:
+              - link "Report Emergency" [ref=e155] [cursor=pointer]:
+                - /url: /citizen/report
+            - listitem [ref=e156]:
+              - link "Safety Advisories" [ref=e157] [cursor=pointer]:
+                - /url: /citizen/advisory
+            - listitem [ref=e158]:
+              - link "Nearby Alerts" [ref=e159] [cursor=pointer]:
+                - /url: /citizen/alerts
+        - generic [ref=e160]:
+          - heading "About CrisisGrid" [level=3] [ref=e161]
+          - paragraph [ref=e162]: AI-powered emergency response coordination system for real-time crisis management.
+          - paragraph [ref=e163]: © 2026 CrisisGrid AI. All rights reserved.
+      - paragraph [ref=e165]: For life-threatening emergencies, always call 911 immediately.

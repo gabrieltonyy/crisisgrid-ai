@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import { AntdRegistry } from '@ant-design/nextjs-registry';
 import { ConfigProvider } from 'antd';
+import 'antd/dist/reset.css';
 import './globals.css';
 import { Providers } from './providers';
 
@@ -28,8 +29,27 @@ export default function RootLayout({
                 colorPrimary: '#0ea5e9',
                 colorError: '#ef4444',
                 colorWarning: '#f59e0b',
-                colorSuccess: '#22c55e',
+                colorSuccess: '#16a34a',
+                colorInfo: '#0ea5e9',
+                colorText: '#111827',
+                colorTextSecondary: '#64748b',
+                colorBgLayout: '#eef3f7',
+                colorBorder: '#dbe4ef',
                 borderRadius: 8,
+                fontSize: 14,
+              },
+              components: {
+                Button: {
+                  controlHeight: 38,
+                  fontWeight: 600,
+                },
+                Card: {
+                  headerFontSize: 16,
+                },
+                Table: {
+                  headerBg: '#f8fafc',
+                  rowHoverBg: '#f0f9ff',
+                },
               },
             }}
           >

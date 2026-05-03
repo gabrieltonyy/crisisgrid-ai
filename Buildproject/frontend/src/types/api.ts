@@ -11,9 +11,18 @@ export interface Location extends Coordinates {
   country?: string;
 }
 
-// Alert types
+// Crisis and Status types (matching backend)
+export type CrisisType = 'FIRE' | 'FLOOD' | 'EARTHQUAKE' | 'WILDLIFE' | 'ACCIDENT' | 'MEDICAL' | 'OTHER';
+export type IncidentStatus = 'PENDING_VERIFICATION' | 'VERIFIED' | 'PROVISIONAL_CRITICAL' | 'FALSE_REPORT' | 'RESOLVED';
+export type SeverityLevel = 'CRITICAL' | 'HIGH' | 'MEDIUM' | 'LOW';
+export type AlertStatus = 'ACTIVE' | 'EXPIRED' | 'CANCELLED';
+export type DispatchStatus = 'PENDING' | 'SIMULATED_SENT' | 'SENT' | 'ACKNOWLEDGED' | 'ARRIVED' | 'COMPLETED' | 'CANCELLED' | 'FAILED';
+export type AuthorityType = 'FIRE_SERVICE' | 'DISASTER_MANAGEMENT' | 'WILDLIFE_AUTHORITY' | 'POLICE' | 'MEDICAL';
+export type AgentName = 'verification_agent' | 'clustering_agent' | 'alert_agent' | 'dispatch_agent' | 'advisory_agent';
+export type AgentRunStatus = 'PENDING' | 'RUNNING' | 'COMPLETED' | 'FAILED';
+
+// Alert types (legacy - keeping for compatibility)
 export type AlertSeverity = 'critical' | 'high' | 'medium' | 'low';
-export type AlertStatus = 'pending' | 'verified' | 'dispatched' | 'resolved' | 'false_alarm';
 export type AlertType = 'fire' | 'flood' | 'earthquake' | 'medical' | 'accident' | 'crime' | 'other';
 
 export interface Alert {
@@ -47,7 +56,6 @@ export interface Report {
 }
 
 // Dispatch types
-export type DispatchStatus = 'pending' | 'assigned' | 'en_route' | 'on_scene' | 'completed' | 'cancelled';
 export type ResourceType = 'fire_truck' | 'ambulance' | 'police' | 'rescue' | 'utility';
 
 export interface DispatchLog {
@@ -94,13 +102,29 @@ export interface Incident {
 
 // Verification types
 export interface VerificationResult {
-  report_id: string;
-  verified: boolean;
-  trust_score: number;
-  confidence: number;
+  credibility_score: number;
+  crisis_category: CrisisType;
+  severity_score: number;
+  urgency_level: string;
+  recommended_action: string;
   reasoning: string;
-  cross_references: string[];
-  timestamp: string;
+}
+
+export interface AgentRunSummary {
+  run_id: string;
+  agent_name: AgentName;
+  status: AgentRunStatus;
+  confidence_score?: number;
+  decision?: string;
+  started_at: string;
+  completed_at?: string;
+  duration_seconds?: number;
+  error_message?: string;
+}
+
+export interface VerificationHistoryItem {
+  agent_run: AgentRunSummary;
+  verification_result?: VerificationResult;
 }
 
 // Analytics types
@@ -128,16 +152,22 @@ export interface PaginatedResponse<T> {
   total: number;
   page: number;
   page_size: number;
-  total_pages: number;
+  total_pages?: number;
 }
 
-// API Request types
+// ============================================================================
+// API REQUEST TYPES
+// ============================================================================
+
 export interface CreateReportRequest {
-  type: AlertType;
+  crisis_type: CrisisType;
   description: string;
-  location: Location;
-  media_files?: File[];
-  citizen_id?: string;
+  latitude: number;
+  longitude: number;
+  location_text?: string;
+  image_url?: string;
+  video_url?: string;
+  is_anonymous?: boolean;
 }
 
 export interface VerifyReportRequest {
@@ -159,6 +189,152 @@ export interface CreateAdvisoryRequest {
   level: AdvisoryLevel;
   affected_areas: string[];
   valid_until: string;
+}
+
+export interface AdvisoryQueryParams {
+  user_latitude?: number;
+  user_longitude?: number;
+  user_context?: string;
+}
+
+export interface AdvisoryRequest {
+  incident_id: string;
+  user_latitude?: number;
+  user_longitude?: number;
+  user_context?: string;
+}
+
+// ============================================================================
+// API RESPONSE TYPES
+// ============================================================================
+
+export interface ReportResponse {
+  id: string;
+  incident_id?: string;
+  user_id?: string;
+  crisis_type: CrisisType;
+  description: string;
+  image_url?: string;
+  video_url?: string;
+  latitude: number;
+  longitude: number;
+  location_text?: string;
+  status: IncidentStatus;
+  confidence_score: number;
+  severity_score: number;
+  source: string;
+  is_anonymous: boolean;
+  created_at: string;
+  updated_at?: string;
+}
+
+export interface ReportSubmissionResponse {
+  report: ReportResponse;
+  processing_status: string;
+  estimated_verification_time: number;
+}
+
+export interface VerificationResponse {
+  report_id: string;
+  status: IncidentStatus;
+  verification_result: VerificationResult;
+  final_confidence_score: number;
+  final_severity_score: number;
+  verified: boolean;
+  agent_run_id: string;
+  verified_at: string;
+}
+
+export interface VerificationHistoryResponse {
+  report_id: string;
+  current_status: IncidentStatus;
+  verification_count: number;
+  history: VerificationHistoryItem[];
+}
+
+export interface PendingVerificationItem {
+  id: string;
+  crisis_type: CrisisType;
+  description: string;
+  latitude: number;
+  longitude: number;
+  location_text?: string;
+  status: IncidentStatus;
+  created_at: string;
+  has_media: boolean;
+}
+
+export interface VerificationStats {
+  total_verified: number;
+  total_rejected: number;
+  total_pending: number;
+  average_confidence: number;
+  average_verification_time: number;
+  verification_rate: number;
+}
+
+export interface AlertResponse {
+  id: string;
+  incident_id: string;
+  crisis_type: CrisisType;
+  alert_title: string;
+  alert_message: string;
+  severity: SeverityLevel;
+  target_radius_meters: number;
+  latitude: number;
+  longitude: number;
+  location_text?: string;
+  status: AlertStatus;
+  created_at: string;
+  expires_at?: string;
+}
+
+export interface DispatchResponse {
+  id: string;
+  incident_id: string;
+  authority_type: AuthorityType;
+  crisis_type: CrisisType;
+  message?: string;
+  priority: string;
+  status: DispatchStatus;
+  latitude: number;
+  longitude: number;
+  location_text?: string;
+  contact_method: string;
+  response_time_seconds?: number;
+  created_at: string;
+  acknowledged_at?: string;
+}
+
+export interface SafetyAction {
+  priority: number;
+  action: string;
+  rationale: string;
+}
+
+export interface AdvisoryResponse {
+  incident_id: string;
+  crisis_type: CrisisType;
+  severity: SeverityLevel;
+  distance_meters?: number;
+  risk_level: string;
+  primary_advice: string;
+  immediate_actions: SafetyAction[];
+  what_to_do: string[];
+  what_not_to_do: string[];
+  evacuation_advice?: string;
+  emergency_contacts: Array<{ service: string; number: string }>;
+  additional_resources: string[];
+  generated_at: string;
+  playbook_used: string;
+  ai_enhanced: boolean;
+}
+
+export interface HealthResponse {
+  status: string;
+  timestamp: string;
+  version?: string;
+  services?: Record<string, string>;
 }
 
 // Filter types

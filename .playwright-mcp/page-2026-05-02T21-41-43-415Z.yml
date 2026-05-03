@@ -1,0 +1,257 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - complementary [ref=e3]:
+      - generic [ref=e5]:
+        - link "appstore CrisisGrid AI Operations Console" [ref=e7] [cursor=pointer]:
+          - /url: /admin/dashboard
+          - img "appstore" [ref=e9]:
+            - img [ref=e10]
+          - generic [ref=e12]:
+            - generic [ref=e13]: CrisisGrid AI
+            - generic [ref=e14]: Operations Console
+        - menu [ref=e16]:
+          - menuitem "dashboard Command Center" [ref=e17] [cursor=pointer]:
+            - img "dashboard" [ref=e18]:
+              - img [ref=e19]
+            - link "Command Center" [ref=e22]:
+              - /url: /admin/dashboard
+          - menuitem "file-text Reports" [ref=e23] [cursor=pointer]:
+            - img "file-text" [ref=e24]:
+              - img [ref=e25]
+            - link "Reports" [ref=e28]:
+              - /url: /admin/reports
+          - menuitem "alert Alerts" [ref=e29] [cursor=pointer]:
+            - img "alert" [ref=e30]:
+              - img [ref=e31]
+            - link "Alerts" [ref=e34]:
+              - /url: /admin/alerts
+          - menuitem "send Dispatch" [ref=e35] [cursor=pointer]:
+            - img "send" [ref=e36]:
+              - img [ref=e37]
+            - link "Dispatch" [ref=e40]:
+              - /url: /admin/dispatch
+          - menuitem "cluster Incidents" [ref=e41] [cursor=pointer]:
+            - img "cluster" [ref=e42]:
+              - img [ref=e43]
+            - link "Incidents" [ref=e46]:
+              - /url: /admin/incidents
+        - generic [ref=e48]:
+          - generic [ref=e49]: Mission Mode
+          - generic [ref=e50]: Live monitoring
+          - paragraph [ref=e51]: Verification, alerting, and dispatch feeds refresh automatically for demo operations.
+    - generic [ref=e52]:
+      - banner [ref=e53]:
+        - generic [ref=e55]:
+          - img "home" [ref=e56]:
+            - img [ref=e57]
+          - generic [ref=e59]: Admin
+          - generic [ref=e60]: /
+          - generic [ref=e61]: Dashboard
+        - link "user Citizen Portal" [ref=e63] [cursor=pointer]:
+          - /url: /citizen
+          - button "user Citizen Portal" [ref=e64]:
+            - img "user" [ref=e66]:
+              - img [ref=e67]
+            - generic [ref=e69]: Citizen Portal
+      - main [ref=e70]:
+        - generic [ref=e72]:
+          - generic [ref=e73]:
+            - generic [ref=e74]:
+              - generic [ref=e75]: Operations overview
+              - heading "dashboard Command Center" [level=2] [ref=e76]:
+                - img "dashboard" [ref=e77]:
+                  - img [ref=e78]
+                - text: Command Center
+              - text: Real-time crisis intelligence, verification, alerting, and dispatch coordination.
+            - generic [ref=e80]:
+              - generic [ref=e82]: System Stable
+              - generic [ref=e84]: Auto-refresh 30s
+          - generic [ref=e85]:
+            - generic [ref=e89]:
+              - generic [ref=e90]:
+                - generic [ref=e91]:
+                  - generic [ref=e92]: Total Reports
+                  - generic [ref=e94]: "4"
+                - generic [ref=e95]:
+                  - generic [ref=e96]:
+                    - img "arrow-up" [ref=e97]:
+                      - img [ref=e98]
+                    - generic [ref=e100]: 15%
+                  - generic [ref=e101]: 4 in last 24h
+              - img "file-text" [ref=e103]:
+                - img [ref=e104]
+            - generic [ref=e109]:
+              - generic [ref=e110]:
+                - generic [ref=e111]:
+                  - generic [ref=e112]: Verified Reports
+                  - generic [ref=e114]: "3"
+                - generic [ref=e116]: 75% verified
+              - img "check-circle" [ref=e118]:
+                - img [ref=e119]
+            - generic [ref=e125]:
+              - generic [ref=e126]:
+                - generic [ref=e127]:
+                  - generic [ref=e128]: Active Incidents
+                  - generic [ref=e130]: "2"
+                - generic [ref=e132]: 1 critical alerts
+              - img "cluster" [ref=e134]:
+                - img [ref=e135]
+            - generic [ref=e140]:
+              - generic [ref=e141]:
+                - generic [ref=e142]:
+                  - generic [ref=e143]: Generated Alerts
+                  - generic [ref=e145]: "1"
+                - generic [ref=e147]: 1 active
+              - img "alert" [ref=e149]:
+                - img [ref=e150]
+            - generic [ref=e155]:
+              - generic [ref=e156]:
+                - generic [ref=e157]:
+                  - generic [ref=e158]: Dispatch Activity
+                  - generic [ref=e160]: "1"
+                - generic [ref=e162]: 1 on scene/done
+              - img "send" [ref=e164]:
+                - img [ref=e165]
+            - generic [ref=e170]:
+              - generic [ref=e171]:
+                - generic [ref=e172]:
+                  - generic [ref=e173]: System Health
+                  - generic [ref=e175]: Stable
+                - generic [ref=e177]: 3 services
+              - img "check-circle" [ref=e179]:
+                - img [ref=e180]
+          - generic [ref=e183]:
+            - generic [ref=e185]:
+              - generic [ref=e189]:
+                - img "radar-chart" [ref=e190]:
+                  - img [ref=e191]
+                - text: Agent Verification
+              - generic [ref=e194]:
+                - progressbar [ref=e195]:
+                  - generic "75%" [ref=e200]
+                - generic [ref=e201]:
+                  - generic [ref=e202]:
+                    - generic [ref=e203]: "3"
+                    - generic [ref=e204]: Verified
+                  - generic [ref=e205]:
+                    - generic [ref=e206]: "0"
+                    - generic [ref=e207]: Pending
+                  - generic [ref=e208]:
+                    - generic [ref=e209]: 75%
+                    - generic [ref=e210]: Avg. confidence
+            - generic [ref=e212]:
+              - generic [ref=e216]:
+                - img "safety" [ref=e217]:
+                  - img [ref=e218]
+                - text: High-Severity Incidents
+              - list [ref=e225]:
+                - listitem [ref=e226]:
+                  - generic [ref=e228]:
+                    - 'heading "CRITICAL: Major Fire at Westlands Shopping Center Critical" [level=4] [ref=e229]':
+                      - generic [ref=e230]:
+                        - generic [ref=e231]: "CRITICAL: Major Fire at Westlands Shopping Center"
+                        - generic [ref=e232]: Critical
+                    - generic [ref=e234]: Westlands Shopping Center, Nairobi
+            - generic [ref=e236]:
+              - generic [ref=e240]:
+                - img "check-circle" [ref=e241]:
+                  - img [ref=e242]
+                - text: System Health
+              - generic [ref=e246]:
+                - generic [ref=e247]:
+                  - generic [ref=e248]: postgres
+                  - generic [ref=e249]: connected
+                - generic [ref=e250]:
+                  - generic [ref=e251]: cloudant
+                  - generic [ref=e252]: configured
+                - generic [ref=e253]:
+                  - generic [ref=e254]: watsonx
+                  - generic [ref=e255]: configured
+          - generic [ref=e256]:
+            - generic [ref=e258]:
+              - generic [ref=e262]:
+                - img "send" [ref=e263]:
+                  - img [ref=e264]
+                - text: Quick Actions
+              - generic [ref=e267]:
+                - button "file-text Review Reports" [ref=e269] [cursor=pointer]:
+                  - img "file-text" [ref=e271]:
+                    - img [ref=e272]
+                  - generic [ref=e274]: Review Reports
+                - button "alert Monitor Alerts" [ref=e276] [cursor=pointer]:
+                  - img "alert" [ref=e278]:
+                    - img [ref=e279]
+                  - generic [ref=e281]: Monitor Alerts
+                - button "send Dispatch Logs" [ref=e283] [cursor=pointer]:
+                  - img "send" [ref=e285]:
+                    - img [ref=e286]
+                  - generic [ref=e288]: Dispatch Logs
+                - button "Incident Clusters" [ref=e290] [cursor=pointer]:
+                  - generic [ref=e291]: Incident Clusters
+            - generic [ref=e293]:
+              - generic [ref=e297]:
+                - img "dashboard" [ref=e298]:
+                  - img [ref=e299]
+                - text: Recent Activity
+              - list [ref=e305]:
+                - listitem [ref=e306] [cursor=pointer]:
+                  - generic [ref=e307]:
+                    - img "file-text" [ref=e309]:
+                      - img [ref=e310]
+                    - generic [ref=e312]:
+                      - heading "FIRE report received False Report" [level=4] [ref=e313]:
+                        - generic [ref=e314]:
+                          - generic [ref=e315]: FIRE report received
+                          - generic [ref=e316]: False Report
+                      - generic [ref=e318]:
+                        - generic [ref=e319]: Large fire reported at downtown building. Multiple floors affected.
+                        - generic [ref=e320]: about 22 hours ago
+                - listitem [ref=e321] [cursor=pointer]:
+                  - generic [ref=e322]:
+                    - img "file-text" [ref=e324]:
+                      - img [ref=e325]
+                    - generic [ref=e327]:
+                      - heading "FIRE report received Verified" [level=4] [ref=e328]:
+                        - generic [ref=e329]:
+                          - generic [ref=e330]: FIRE report received
+                          - generic [ref=e331]: Verified
+                      - generic [ref=e333]:
+                        - generic [ref=e334]: Confirming fire at Westlands. Multiple floors affected.
+                        - generic [ref=e335]: about 24 hours ago
+                - listitem [ref=e336] [cursor=pointer]:
+                  - generic [ref=e337]:
+                    - img "file-text" [ref=e339]:
+                      - img [ref=e340]
+                    - generic [ref=e342]:
+                      - heading "FIRE report received Verified" [level=4] [ref=e343]:
+                        - generic [ref=e344]:
+                          - generic [ref=e345]: FIRE report received
+                          - generic [ref=e346]: Verified
+                      - generic [ref=e348]:
+                        - generic [ref=e349]: Large fire at Westlands shopping center. Heavy smoke visible.
+                        - generic [ref=e350]: about 24 hours ago
+                - listitem [ref=e351] [cursor=pointer]:
+                  - generic [ref=e352]:
+                    - img "file-text" [ref=e354]:
+                      - img [ref=e355]
+                    - generic [ref=e357]:
+                      - heading "FLOOD report received Verified" [level=4] [ref=e358]:
+                        - generic [ref=e359]:
+                          - generic [ref=e360]: FLOOD report received
+                          - generic [ref=e361]: Verified
+                      - generic [ref=e363]:
+                        - generic [ref=e364]: Heavy flooding on Thika Road. Water level rising rapidly.
+                        - generic [ref=e365]: about 24 hours ago
+                - listitem [ref=e366] [cursor=pointer]:
+                  - generic [ref=e367]:
+                    - img "alert" [ref=e369]:
+                      - img [ref=e370]
+                    - generic [ref=e372]:
+                      - heading "CRITICAL alert issued Critical" [level=4] [ref=e373]:
+                        - generic [ref=e374]:
+                          - generic [ref=e375]: CRITICAL alert issued
+                          - generic [ref=e376]: Critical
+                      - generic [ref=e378]:
+                        - generic [ref=e379]: A major fire has been confirmed at Westlands Shopping Center. Evacuate i...
+                        - generic [ref=e380]: about 24 hours ago
+  - alert [ref=e381]

@@ -930,4 +930,4 @@ python -c "from dotenv import load_dotenv; load_dotenv(); import os; print(os.ge
 
 **Remember:** The system is designed to work locally without any external services. All IBM products and external APIs are enhancements, not requirements. Focus on building a working MVP first, then progressively enhance with IBM services as time allows.
 
-**Next Step:** Review this document, make access decisions, then begin Phase 0 of the BUILD_PLAN.md.
+**Next Step:** Review this document, make access decisions, then begin Phase 0 of ../planning/BUILD_PLAN.md.

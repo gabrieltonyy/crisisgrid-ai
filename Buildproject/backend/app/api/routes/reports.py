@@ -6,7 +6,7 @@ Handles crisis report submission and retrieval.
 from typing import Optional
 from uuid import UUID
 import logging
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy.orm import Session
 
 from app.db.session import get_db
@@ -124,6 +124,31 @@ async def create_report(
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Failed to create report: {str(e)}"
+        )
+
+
+@router.get(
+    "",
+    response_model=list[ReportResponse],
+    summary="List reports",
+    description="Retrieve reports for dashboard and citizen tracking views"
+)
+async def list_reports(
+    skip: int = Query(0, ge=0),
+    limit: int = Query(100, ge=1, le=500),
+    status_filter: Optional[str] = Query(None, alias="status"),
+    db: Session = Depends(get_db)
+) -> list[ReportResponse]:
+    """List reports in newest-first order."""
+    try:
+        repo = ReportRepository(db)
+        reports = repo.get_all(skip=skip, limit=limit, status=status_filter)
+        return [ReportResponse.model_validate(report) for report in reports]
+    except Exception as e:
+        logger.error(f"Failed to list reports: {e}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to list reports: {str(e)}"
         )
 
 

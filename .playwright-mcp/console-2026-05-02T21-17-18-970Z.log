@@ -1,0 +1,18 @@
+[     261ms] [LOG] [Fast Refresh] rebuilding @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/react-dev-overlay/app/hot-reloader-client.js:186
+[   15725ms] [INFO] %cDownload the React DevTools for a better development experience: https://reactjs.org/link/react-devtools font-weight:bold @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-dom/cjs/react-dom.development.js:38559
+[   16493ms] [ERROR] Access to fetch at 'http://localhost:8000/api/v1/alerts' from origin 'http://localhost:3001' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ http://localhost:3001/admin/dashboard:0
+[   16499ms] [ERROR] Failed to load resource: net::ERR_FAILED @ http://localhost:8000/api/v1/alerts:0
+[   16523ms] [ERROR] Access to fetch at 'http://localhost:8000/api/v1/reports' from origin 'http://localhost:3001' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ http://localhost:3001/admin/dashboard:0
+[   16523ms] [ERROR] Failed to load resource: net::ERR_FAILED @ http://localhost:8000/api/v1/reports:0
+[   16578ms] [ERROR] Access to fetch at 'http://localhost:8000/api/v1/verification/stats' from origin 'http://localhost:3001' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ http://localhost:3001/admin/dashboard:0
+[   16578ms] [ERROR] Failed to load resource: net::ERR_FAILED @ http://localhost:8000/api/v1/verification/stats:0
+[   16604ms] [ERROR] Access to fetch at 'http://localhost:8000/api/v1/health' from origin 'http://localhost:3001' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ http://localhost:3001/admin/dashboard:0
+[   16605ms] [ERROR] Failed to load resource: net::ERR_FAILED @ http://localhost:8000/api/v1/health:0
+[   17533ms] [ERROR] Access to fetch at 'http://localhost:8000/api/v1/alerts' from origin 'http://localhost:3001' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ http://localhost:3001/admin/dashboard:0
+[   17533ms] [ERROR] Failed to load resource: net::ERR_FAILED @ http://localhost:8000/api/v1/alerts:0
+[   17558ms] [ERROR] Access to fetch at 'http://localhost:8000/api/v1/reports' from origin 'http://localhost:3001' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ http://localhost:3001/admin/dashboard:0
+[   17559ms] [ERROR] Failed to load resource: net::ERR_FAILED @ http://localhost:8000/api/v1/reports:0
+[   17637ms] [ERROR] Access to fetch at 'http://localhost:8000/api/v1/verification/stats' from origin 'http://localhost:3001' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ http://localhost:3001/admin/dashboard:0
+[   17637ms] [ERROR] Failed to load resource: net::ERR_FAILED @ http://localhost:8000/api/v1/verification/stats:0
+[   17678ms] [ERROR] Access to fetch at 'http://localhost:8000/api/v1/health' from origin 'http://localhost:3001' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ http://localhost:3001/admin/dashboard:0
+[   17681ms] [ERROR] Failed to load resource: net::ERR_FAILED @ http://localhost:8000/api/v1/health:0
