@@ -19,19 +19,17 @@ import type { ReportResponse, CrisisType, IncidentStatus } from '@/types/api';
 import { formatPercentScore, normalizePercentScore } from '@/lib/utils';
 import { formatDistanceToNow } from 'date-fns';
 import type { ColumnsType } from 'antd/es/table';
+import apiClient from '@/lib/api/client';
 
 const { Title, Text } = Typography;
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || '/api/v1';
-
-// Fetch reports
+// Fetch reports using apiClient (attaches Authorization header)
 const fetchReports = async (): Promise<ReportResponse[]> => {
-  const response = await fetch(`${API_BASE_URL}/reports`);
-  if (!response.ok) throw new Error('Failed to fetch reports');
-  return response.json();
+  const response = await apiClient.get<ReportResponse[]>('/reports');
+  return response.data;
 };
 
-// Filter configurations
+// Filter configurations for report table
 const filterConfigs: FilterConfig[] = [
   {
     name: 'status',
@@ -77,13 +75,13 @@ export default function AdminReportsPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 20;
 
-  // Fetch reports
+  // Fetch reports using React Query
   const { data: reports, isLoading, error, refetch } = useQuery({
     queryKey: ['admin-reports'],
     queryFn: fetchReports,
   });
 
-  // Apply filters
+  // Apply filters to reports
   const filteredReports = reports?.filter((report) => {
     // Status filter
     if (filters.status?.length > 0 && !filters.status.includes(report.status)) {
@@ -108,7 +106,7 @@ export default function AdminReportsPage() {
     return true;
   }) || [];
 
-  // Table columns
+  // Define table columns
   const columns: ColumnsType<ReportResponse> = [
     {
       title: 'Reference',
@@ -126,9 +124,7 @@ export default function AdminReportsPage() {
       dataIndex: 'crisis_type',
       key: 'crisis_type',
       width: 130,
-      render: (type: CrisisType) => (
-        <Tag color="blue">{getCrisisLabel(type)}</Tag>
-      ),
+      render: (type: CrisisType) => <Tag color="blue">{getCrisisLabel(type)}</Tag>,
       sorter: (a, b) => a.crisis_type.localeCompare(b.crisis_type),
     },
     {
@@ -145,7 +141,15 @@ export default function AdminReportsPage() {
       key: 'confidence_score',
       width: 130,
       render: (score: number) => (
-        <span className={normalizePercentScore(score) > 80 ? 'text-green-600 font-medium' : normalizePercentScore(score) > 50 ? 'text-yellow-600' : 'text-red-600'}>
+        <span
+          className={
+            normalizePercentScore(score) > 80
+              ? 'text-green-600 font-medium'
+              : normalizePercentScore(score) > 50
+              ? 'text-yellow-600'
+              : 'text-red-600'
+          }
+        >
           {formatPercentScore(score)}
         </span>
       ),
@@ -185,7 +189,7 @@ export default function AdminReportsPage() {
           type="link"
           size="small"
           icon={<EyeOutlined />}
-          onClick={() => router.push(`/citizen/reports/${record.id}`)}
+          onClick={() => router.push(`/admin/reports/${record.id}`)}
         >
           View
         </Button>
@@ -193,12 +197,12 @@ export default function AdminReportsPage() {
     },
   ];
 
-  // Export to CSV (simple implementation)
+  // Export to CSV handler (unchanged)
   const handleExport = () => {
     if (!filteredReports.length) return;
 
     const headers = ['ID', 'Crisis Type', 'Status', 'Confidence', 'Description', 'Location', 'Created At'];
-    const rows = filteredReports.map(r => [
+    const rows = filteredReports.map((r) => [
       r.id,
       r.crisis_type,
       r.status,
@@ -210,7 +214,7 @@ export default function AdminReportsPage() {
 
     const csv = [
       headers.join(','),
-      ...rows.map(row => row.join(','))
+      ...rows.map((row) => row.join(',')),
     ].join('\n');
 
     const blob = new Blob([csv], { type: 'text/csv' });
@@ -243,7 +247,7 @@ export default function AdminReportsPage() {
   }
 
   return (
-      <div className="space-y-6">
+    <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between flex-wrap gap-4">
         <div>
@@ -289,7 +293,7 @@ export default function AdminReportsPage() {
           }}
           scroll={{ x: 1200 }}
           onRow={(record) => ({
-            onClick: () => router.push(`/citizen/reports/${record.id}`),
+            onClick: () => router.push(`/admin/reports/${record.id}`),
             className: 'cursor-pointer hover:bg-gray-50',
           })}
         />

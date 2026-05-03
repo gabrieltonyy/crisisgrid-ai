@@ -47,24 +47,13 @@ async def create_report(
     3. Stores the report in PostgreSQL
     4. Optionally stores raw payload in Cloudant for audit trail
     5. Returns the created report with processing status
-    
-    Args:
-        report_data: Validated crisis report data
-        db: Database session
-        current_user: Optional authenticated user (from JWT token)
-
-    Returns:
-        ReportSubmissionResponse with created report and processing status
-        
-    Raises:
-        HTTPException: If report creation fails
     """
     try:
         logger.info(f"Received crisis report: {report_data.crisis_type}")
-        
+
         # Create repository instance
         repo = ReportRepository(db)
-        
+
         # Extract user_id from authenticated user, unless report is anonymous
         user_id: Optional[UUID] = None
         if current_user and not report_data.is_anonymous:
@@ -72,15 +61,15 @@ async def create_report(
             logger.info(f"Report submitted by authenticated user: {user_id}")
         else:
             logger.info("Anonymous report submission")
-        
+
         # Create report in PostgreSQL
         report = repo.create(
             report_data=report_data,
             user_id=user_id
         )
-        
+
         logger.info(f"Report created successfully: {report.id}")
-        
+
         # Store raw payload in Cloudant for audit trail (if enabled)
         if cloudant_service.enabled:
             try:
@@ -97,7 +86,7 @@ async def create_report(
             except Exception as e:
                 # Don't fail the request if Cloudant storage fails
                 logger.error(f"Failed to store in Cloudant: {e}")
-        
+
         # Store audit event in Cloudant
         if cloudant_service.enabled:
             try:
@@ -115,24 +104,24 @@ async def create_report(
                 )
             except Exception as e:
                 logger.error(f"Failed to store audit event: {e}")
-        
+
         # Convert SQLAlchemy model to Pydantic response
         report_response = ReportResponse.model_validate(report)
-        
+
         # Build response
         response = ReportSubmissionResponse(
             report=report_response,
             processing_status="QUEUED_FOR_VERIFICATION",
             estimated_verification_time=30  # seconds
         )
-        
+
         return response
-        
+
     except Exception as e:
         logger.error(f"Failed to create report: {e}")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Failed to create report: {str(e)}"
+            detail="Failed to create report. Please try again."
         )
 
 
@@ -149,14 +138,6 @@ async def get_my_reports(
 ) -> List[ReportResponse]:
     """
     Get all reports created by the current authenticated user.
-
-    Args:
-        current_user: Authenticated user from JWT token
-        db: Database session
-        status_filter: Optional filter by report status
-
-    Returns:
-        List of reports created by the user
     """
     try:
         repo = ReportRepository(db)
@@ -166,7 +147,7 @@ async def get_my_reports(
         logger.error(f"Failed to get user reports: {e}")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Failed to retrieve user reports: {str(e)}"
+            detail="Failed to retrieve reports"
         )
 
 
@@ -174,15 +155,34 @@ async def get_my_reports(
     "",
     response_model=list[ReportResponse],
     summary="List reports",
-    description="Retrieve reports for dashboard and citizen tracking views"
+    description="Retrieve reports for dashboard and authority views (requires ADMIN or AUTHORITY role)"
 )
 async def list_reports(
     skip: int = Query(0, ge=0),
     limit: int = Query(100, ge=1, le=500),
     status_filter: Optional[str] = Query(None, alias="status"),
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_active_user)
 ) -> list[ReportResponse]:
-    """List reports in newest-first order."""
+    """
+    List reports in newest-first order.
+
+    Access control:
+    - ADMIN and AUTHORITY: Can view all reports
+    - CITIZEN: Can only view their own reports (use /reports/me endpoint instead)
+    """
+    from app.schemas.common import UserRole
+
+    # Check role authorization
+    if current_user.role not in [UserRole.ADMIN, UserRole.AUTHORITY]:
+        logger.warning(
+            f"Unauthorized access attempt to list all reports by user {current_user.id} with role {current_user.role}"
+        )
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Insufficient permissions. Only ADMIN and AUTHORITY roles can view all reports."
+        )
+
     try:
         repo = ReportRepository(db)
         reports = repo.get_all(skip=skip, limit=limit, status=status_filter)
@@ -191,7 +191,7 @@ async def list_reports(
         logger.error(f"Failed to list reports: {e}")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Failed to list reports: {str(e)}"
+            detail="Failed to retrieve reports"
         )
 
 
@@ -199,35 +199,43 @@ async def list_reports(
     "/{report_id}",
     response_model=ReportResponse,
     summary="Get report by ID",
-    description="Retrieve a specific report by its UUID"
+    description="Retrieve a specific report by its UUID (requires authentication)"
 )
 async def get_report(
     report_id: UUID,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_active_user)
 ) -> ReportResponse:
     """
     Get a report by its ID.
-    
-    Args:
-        report_id: Report UUID
-        db: Database session
-        
-    Returns:
-        ReportResponse with report details
-        
-    Raises:
-        HTTPException: If report not found
+
+    Access control:
+    - ADMIN and AUTHORITY: Can view any report
+    - CITIZEN: Can only view their own reports
     """
+    from app.schemas.common import UserRole
+
     repo = ReportRepository(db)
     report = repo.get_by_id(report_id)
-    
+
     if not report:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"Report {report_id} not found"
         )
-    
-    return ReportResponse.model_validate(report)
 
+    # Check authorization
+    if current_user.role not in [UserRole.ADMIN, UserRole.AUTHORITY]:
+        # Citizen role - check ownership
+        if report.user_id != current_user.id:
+            logger.warning(
+                f"Unauthorized access attempt to report {report_id} by user {current_user.id}"
+            )
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="You do not have permission to view this report"
+            )
+
+    return ReportResponse.model_validate(report)
 
 # Made with Bob
