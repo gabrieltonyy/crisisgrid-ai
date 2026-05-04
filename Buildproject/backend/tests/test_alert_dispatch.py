@@ -290,11 +290,14 @@ class TestDispatchService:
         """Test duplicate dispatch prevention (idempotency)."""
         mock_db.query.return_value.filter.return_value.first.return_value = verified_fire_incident
         mock_repo.check_duplicate_dispatch.return_value = True
+        existing_dispatch = Mock(spec=DispatchLog)
+        existing_dispatch.dispatch_id = "dispatch_fire_001"
+        mock_repo.get_dispatches_by_incident.return_value = [existing_dispatch]
         
         dispatches = dispatch_service.dispatch_authority(mock_db, "incident_fire_001")
         
-        # Should not create dispatch if duplicate exists
-        assert len(dispatches) == 0
+        # Should return existing dispatches and not create duplicates.
+        assert dispatches == [existing_dispatch]
         assert not mock_repo.create_dispatch.called
     
     def test_dispatch_authority_incident_not_found(self, mock_db):

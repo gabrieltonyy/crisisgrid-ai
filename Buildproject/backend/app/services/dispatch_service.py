@@ -236,6 +236,9 @@ class DispatchService:
                     f"(priority: {priority}, ETA: {eta_minutes} min)"
                 )
             
+            if not dispatches:
+                return dispatch_repository.get_dispatches_by_incident(db, incident_id)
+
             return dispatches
             
         except Exception as e:

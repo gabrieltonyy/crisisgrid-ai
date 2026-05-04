@@ -147,9 +147,38 @@ def check_watsonx() -> dict[str, Any]:
     return result
 
 
+def check_iam_token() -> dict[str, Any]:
+    result: dict[str, Any] = {
+        "enabled": bool(settings.WATSONX_ENABLED),
+        "configured": bool(settings.WATSONX_API_KEY and settings.WATSONX_IAM_URL),
+        "ok": False,
+    }
+
+    if not result["enabled"]:
+        result["status"] = "skipped_disabled"
+        return result
+
+    if not result["configured"]:
+        result["status"] = "misconfigured"
+        return result
+
+    try:
+        from app.services.ibm_auth import get_iam_token
+
+        token = get_iam_token()
+        result["ok"] = bool(token)
+        result["status"] = "ok" if result["ok"] else "empty_token"
+    except Exception as exc:  # noqa: BLE001 - report sanitized diagnostics
+        result["status"] = "failed"
+        result["error"] = sanitize(exc)
+
+    return result
+
+
 def main() -> int:
     checks = {
         "cloudant": check_cloudant(),
+        "iam_token": check_iam_token(),
         "watsonx": check_watsonx(),
     }
     enabled_checks = [value for value in checks.values() if value["enabled"]]

@@ -379,7 +379,11 @@ class ClusteringService:
             longitude=centroid_lon,
             location_description=primary_report.location_text,
             confidence_score=0.0,
+            media_confidence=0.0,
             cross_report_confidence=cross_report_confidence,
+            external_signal_confidence=0.0,
+            reporter_trust_confidence=0.0,
+            geo_time_consistency=0.0,
             report_count=len(cluster),
             first_reported_at=min(r.created_at for r in cluster),
             description=f"Clustered incident from {len(cluster)} reports"

@@ -42,6 +42,7 @@ class Settings(BaseSettings):
     # IBM watsonx.ai (Optional)
     WATSONX_ENABLED: bool = False
     WATSONX_API_KEY: Optional[str] = None
+    WATSONX_IAM_URL: str = "https://iam.cloud.ibm.com/identity/token"
     WATSONX_PROJECT_ID: Optional[str] = None
     WATSONX_URL: str = "https://us-south.ml.cloud.ibm.com"
     WATSONX_MODEL_ID: str = "ibm/granite-13b-chat-v2"
