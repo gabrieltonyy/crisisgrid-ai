@@ -3,12 +3,84 @@ Agent schemas for CrisisGrid AI.
 Defines Pydantic models for agent execution and logging.
 """
 
-from typing import Optional, Dict, Any
+from typing import Optional, Dict, Any, List, Literal, Union
 from pydantic import BaseModel, Field
 from datetime import datetime
 from uuid import UUID
 
 from app.schemas.common import AgentName, AgentRunStatus
+
+
+AgentContractStatus = Literal["SUCCESS", "FAILED", "SKIPPED"]
+PipelineRunStatus = Literal["SUCCESS", "FAILED", "PARTIAL"]
+
+
+# ============================================================================
+# LOCAL ORCHESTRATION CONTRACTS
+# ============================================================================
+
+class PipelineStepConfig(BaseModel):
+    """Single pipeline step loaded from orchestration/pipeline.yaml."""
+
+    name: str = Field(..., description="Registered agent name")
+    condition: Optional[str] = Field(None, description="Optional safe condition expression")
+
+
+class PipelineConfig(BaseModel):
+    """Local pipeline configuration."""
+
+    pipeline_id: str = Field(..., description="Unique pipeline identifier")
+    version: Union[str, float] = Field(..., description="Pipeline version")
+    mode: Literal["local"] = Field(..., description="Execution mode")
+    agents: List[PipelineStepConfig] = Field(..., min_length=1, description="Ordered agent steps")
+
+
+class AgentExecutionResult(BaseModel):
+    """Required execution contract returned by every local agent."""
+
+    agent_name: str = Field(..., description="Agent name")
+    status: AgentContractStatus = Field(..., description="Agent execution status")
+    output: Dict[str, Any] = Field(default_factory=dict, description="Validated agent output")
+    confidence: float = Field(0.0, ge=0.0, le=1.0, description="Normalized confidence from 0.0 to 1.0")
+    errors: List[str] = Field(default_factory=list, description="Non-secret error messages")
+    started_at: datetime = Field(..., description="Agent start timestamp")
+    completed_at: datetime = Field(..., description="Agent completion timestamp")
+
+
+class AgentRegistryMetadata(BaseModel):
+    """Serializable registry metadata for an agent."""
+
+    name: str = Field(..., description="Registered agent name")
+    version: str = Field(..., description="Agent implementation version")
+    input_schema: str = Field(..., description="Pydantic input schema name")
+    output_schema: str = Field(..., description="Pydantic output schema name")
+
+
+class PipelineStepTrace(BaseModel):
+    """Trace for one pipeline step."""
+
+    agent_name: str = Field(..., description="Agent name")
+    status: AgentContractStatus = Field(..., description="Final step status")
+    condition: Optional[str] = Field(None, description="Condition evaluated before execution")
+    attempts: int = Field(0, ge=0, description="Number of execution attempts")
+    result: Optional[AgentExecutionResult] = Field(None, description="Final agent result")
+    errors: List[str] = Field(default_factory=list, description="Non-secret step errors")
+    started_at: datetime = Field(..., description="Step start timestamp")
+    completed_at: datetime = Field(..., description="Step completion timestamp")
+
+
+class PipelineExecutionTrace(BaseModel):
+    """Full trace returned by the local orchestration engine."""
+
+    pipeline_id: str = Field(..., description="Pipeline identifier")
+    version: Union[str, float] = Field(..., description="Pipeline version")
+    mode: Literal["local"] = Field(..., description="Pipeline execution mode")
+    status: PipelineRunStatus = Field(..., description="Final pipeline status")
+    context: Dict[str, Any] = Field(default_factory=dict, description="Shared final context")
+    steps: List[PipelineStepTrace] = Field(default_factory=list, description="Ordered step traces")
+    errors: List[str] = Field(default_factory=list, description="Pipeline-level non-secret errors")
+    started_at: datetime = Field(..., description="Pipeline start timestamp")
+    completed_at: datetime = Field(..., description="Pipeline completion timestamp")
 
 
 # ============================================================================

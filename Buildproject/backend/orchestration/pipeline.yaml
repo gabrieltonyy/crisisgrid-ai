@@ -1,0 +1,14 @@
+pipeline_id: crisisgrid-main-pipeline
+version: 1.0
+mode: local
+
+agents:
+  - name: intake_agent
+  - name: deduplication_agent
+  - name: verification_agent
+    condition: confidence >= 0.6
+  - name: clustering_agent
+  - name: priority_agent
+  - name: alert_agent
+    condition: priority in ["P1", "P2"]
+  - name: dispatch_agent

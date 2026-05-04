@@ -1,9 +1,9 @@
 # IBM Cloud Services
 # ===================
 
-# IBM WatsonX.ai
+# IBM watsonx.ai SDK used by app/services/watsonx_service.py
 ibm-watsonx-ai>=1.3.0
 
-# IBM Cloudant NoSQL Database
+# IBM Cloudant NoSQL SDK used by app/services/cloudant_service.py
 ibmcloudant>=0.9.0
 ibm-cloud-sdk-core>=3.20.0

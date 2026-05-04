@@ -90,6 +90,22 @@ class Settings(BaseSettings):
     ENABLE_SIMULATED_VERIFICATION: bool = True
     ENABLE_SIMULATED_DISPATCH: bool = True
     ENABLE_DEMO_SEED_DATA: bool = True
+
+    # Local orchestration control plane
+    ORCHESTRATE_ENABLED: bool = True
+    ORCHESTRATE_MODE: str = "local"
+    ORCHESTRATE_API_URL: Optional[str] = None
+    ORCHESTRATE_API_KEY: Optional[str] = None
+    ORCHESTRATE_IAM_URL: str = "https://iam.cloud.ibm.com/identity/token"
+    ORCHESTRATE_PIPELINE_ID: str = "crisisgrid-main-pipeline"
+    ORCHESTRATE_PIPELINE_CONFIG: str = "orchestration/pipeline.yaml"
+    AGENT_TIMEOUT_SECONDS: int = 30
+    AGENT_MAX_RETRIES: int = 3
+    AGENT_CONFIDENCE_THRESHOLD: float = 0.6
+    AGENT_PRIORITY_THRESHOLD: str = "P2"
+    ENABLE_AGENT_AUDIT_LOGS: bool = True
+    ENABLE_AGENT_RATE_LIMIT: bool = True
+    AGENT_RATE_LIMIT_PER_MINUTE: int = 60
     
     # Crisis Thresholds
     FIRE_ALERT_THRESHOLD: float = 0.60

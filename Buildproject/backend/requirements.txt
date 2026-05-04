@@ -20,10 +20,14 @@ passlib[bcrypt]>=1.7.4
 bcrypt>=4.0.1,<4.1.0
 python-dateutil>=2.8.2
 pytz>=2023.3
+PyYAML>=6.0.1
 
 # HTTP Client
 httpx>=0.25.1
 requests>=2.31.0
+
+# IBM Cloud Services
+-r requirements-ibm.txt
 
 # Logging and Monitoring
 structlog>=23.2.0

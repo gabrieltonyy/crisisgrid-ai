@@ -110,6 +110,22 @@ def test_anonymous_report_submission_does_not_require_auth(client, monkeypatch):
             )
 
     monkeypatch.setattr(reports_routes, "ReportRepository", FakeReportRepository)
+    monkeypatch.setattr(
+        reports_routes,
+        "OrchestratorEngine",
+        lambda: SimpleNamespace(
+            run=lambda initial_context: SimpleNamespace(
+                status="SUCCESS",
+                context={"confidence": 0.8, "admin_review_required": False},
+                steps=[],
+            )
+        ),
+    )
+    monkeypatch.setattr(
+        reports_routes,
+        "persist_pipeline_trace",
+        lambda db, report_id, trace: {"postgres_agent_run_id": "run_orchestrator_1"},
+    )
     monkeypatch.setattr(reports_routes.cloudant_service, "enabled", False)
 
     response = client.post(
@@ -129,7 +145,7 @@ def test_anonymous_report_submission_does_not_require_auth(client, monkeypatch):
     assert body["report"]["id"] == str(report_id)
     assert body["report"]["user_id"] is None
     assert body["report"]["is_anonymous"] is True
-    assert body["processing_status"] == "QUEUED_FOR_VERIFICATION"
+    assert body["processing_status"] == "PROCESSED"
 
 
 def test_alerts_list_matches_frontend_contract(client, monkeypatch):
