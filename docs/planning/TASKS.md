@@ -1,6 +1,6 @@
 # CrisisGrid AI - Development Tasks
 
-## Phase 0: Repository and Environment Setup
+## Phase 0: Repository and Environment Setup ✅ COMPLETE
 - [x] Create monorepo folder structure
 - [x] Initialize git repository
 - [x] Create `.env.example` with all variables
@@ -72,30 +72,30 @@
 - [x] Add API endpoint for safety advice
 - [x] Test advisory responses
 
-## Phase 8: Frontend Report Flow
-- [ ] Initialize Next.js application
-- [ ] Create report submission form
-- [ ] Add crisis type selector
-- [ ] Implement location capture
-- [ ] Add image upload component
-- [ ] Create API client
-- [ ] Test report submission flow
+## Phase 8: Frontend Report Flow ✅ COMPLETE
+- [x] Initialize Next.js application
+- [x] Create report submission form
+- [x] Add crisis type selector
+- [x] Implement location capture
+- [x] Add image upload component
+- [x] Create API client
+- [x] Test report submission flow
 
-## Phase 9: Dashboard and Incident View
-- [ ] Create dashboard page
-- [ ] Build incident list component
-- [ ] Add incident detail view
-- [ ] Create alert feed
-- [ ] Add basic crisis map
-- [ ] Test dashboard functionality
+## Phase 9: Dashboard and Incident View ✅ COMPLETE
+- [x] Create dashboard page
+- [x] Build incident list component
+- [x] Add incident detail view through report detail and incident-cluster surfaces
+- [x] Create alert feed
+- [x] Add basic crisis map
+- [x] Test dashboard functionality
 
-## Phase 10: Demo Data and Testing
-- [ ] Create seed data script
-- [ ] Generate demo users
-- [ ] Create sample reports
-- [ ] Test fire demo scenario
-- [ ] Test flood demo scenario
-- [ ] Test wildlife demo scenario
+## Phase 10: Demo Data and Testing 🚧 PARTIAL
+- [x] Create seed data script
+- [x] Generate demo users
+- [x] Create sample reports
+- [x] Test fire demo scenario
+- [ ] Test flood demo scenario end-to-end
+- [ ] Test wildlife demo scenario end-to-end
 
 ## Phase 11: IBM Bob Session Export
 - [ ] Export Bob task session reports
@@ -104,18 +104,61 @@
 - [ ] Create Bob usage summary
 - [ ] Update README with Bob section
 
-## Phase 12: Deployment/README Polish
-- [ ] Polish main README
-- [ ] Add setup instructions
-- [ ] Add demo instructions
-- [ ] Create architecture diagram
-- [ ] Add screenshots
-- [ ] Document API endpoints
+## Phase 12: Deployment/README Polish 🚧 PARTIAL
+- [x] Polish main README
+- [x] Add setup instructions
+- [ ] Add final demo instructions
+- [x] Create architecture diagram
+- [x] Add screenshots
+- [x] Document API endpoints
 - [ ] Final testing pass
+
+## Phase 13: Post-Submission Orchestration Hardening 🚧 IN PROGRESS
+- [x] Create local branch `post-submission-completion-local`
+- [x] Verify local PostgreSQL, backend, frontend, lint, type-check, and Playwright smoke checks
+- [x] Verify citizen/admin authentication and role protection
+- [x] Verify citizen report submission, validation, success, detail, and error states
+- [x] Verify admin dashboard metrics, report list, filters, and report detail access
+- [x] Implement local multi-agent orchestration pipeline
+- [x] Wire `POST /api/v1/reports` to orchestration after report persistence
+- [x] Persist masked pipeline traces to PostgreSQL `AgentRun` and optional Cloudant logs
+- [x] Verify authenticated report orchestration smoke: report, incident, alert, dispatch, traces
+- [x] Replace admin incident placeholder with incident-cluster table
+- [x] Verify admin incident table with Playwright and no console errors
+- [x] Validate low-confidence, prompt-injection-like, and duplicate-like report edge cases
+- [x] Verify persisted trace metadata does not expose bearer/JWT/access-token/password markers
+- [ ] Add or validate explicit admin review UI for `admin_review_required` reports
+- [ ] Isolate broader backend pytest hang seen in full-suite runs
+- [ ] Run final clean demo path: citizen report → orchestration → incident → alert → dispatch → admin review/incident visibility
 
 ---
 
-## Current Phase: Phase 2 - Shared Schemas and Database Models
+## Current Status Snapshot
+
+**Last Updated:** 2026-05-05  
+**Active Branch:** `post-submission-completion-local`  
+**Latest Major Commit Observed:** `64ba3ce feat(orchestration): implement local multi-agent control plane and integrate with report submission`
+
+### Verified Locally
+- P0 local runtime: PostgreSQL, backend, frontend, lint, type-check, backend tests, and Playwright homepage smoke checks.
+- P1 authentication: citizen/admin login, invalid login, logout, admin API auth, and citizen block from admin pages.
+- P2 citizen reporting: validation, successful submission, success state, detail navigation, anonymous backend intake, and API error display.
+- P3 admin visibility: dashboard metrics, protected API calls, reports table, search/status filters, report detail, and access protection.
+- Orchestration: intake, deduplication, verification, clustering, priority, alert, and dispatch pipeline wired into report submission.
+- Alerts/dispatch: high-severity report flow creates incident context, generated alert, simulated dispatch log, and persisted trace records.
+- IBM path: Cloudant, IAM token manager, watsonx SDK, and IBM auth unit checks documented as passing without exposing secrets.
+- Incident UI: `/admin/incidents` now renders clustered incidents, report counts, alert counts, dispatch counts, and row actions.
+
+### Remaining Priority Work
+- Add or verify an admin review workflow for reports flagged with `admin_review_required`.
+- Investigate broader backend pytest hangs; focused suites are passing, but full-suite reliability still needs cleanup.
+- Run explicit flood and wildlife end-to-end demo scenarios.
+- Recheck media upload if uploaded evidence is required for the final demo path.
+- Produce final demo instructions and run one clean final local demo pass.
+
+---
+
+## Historical Phase Detail: Phase 2 - Shared Schemas and Database Models
 **Status:** ✅ COMPLETE
 **Started:** 2026-05-01
 **Completed:** 2026-05-01
@@ -149,7 +192,7 @@
 
 ---
 
-## Current Phase: Phase 3 - Report Submission API
+## Historical Phase Detail: Phase 3 - Report Submission API
 **Status:** ✅ COMPLETE
 **Started:** 2026-05-02
 **Completed:** 2026-05-02
@@ -204,7 +247,7 @@
 - ✅ POST /api/v1/reports - Creates new crisis reports
 - ✅ GET /api/v1/reports/{id} - Retrieves report by ID
 
-## Current Phase: Phase 4 - AI Verification & Crisis Decision Engine
+## Historical Phase Detail: Phase 4 - AI Verification & Crisis Decision Engine
 **Status:** ✅ COMPLETE
 **Started:** 2026-05-02
 **Completed:** 2026-05-02
@@ -279,7 +322,7 @@
 - Extends ReportRepository from Phase 3
 - No modifications to existing API contracts
 
-## Current Phase: Phase 5 - GeoRisk and Clustering Logic
+## Historical Phase Detail: Phase 5 - GeoRisk and Clustering Logic
 **Status:** ✅ COMPLETE
 **Started:** 2026-05-02
 **Completed:** 2026-05-02
@@ -352,7 +395,7 @@
 - Extends common schemas with geographic utilities
 - Ready for integration with Alert and Dispatch agents in Phase 6
 
-## Current Phase: Phase 6 - Alert and Dispatch Simulation
+## Historical Phase Detail: Phase 6 - Alert and Dispatch Simulation
 **Status:** ✅ COMPLETE
 **Started:** 2026-05-02
 **Completed:** 2026-05-02
@@ -490,7 +533,7 @@
 - ✅ All endpoints registered correctly
 - ✅ No breaking changes to existing functionality
 
-## Current Phase: Phase 7 - Safety Advisory Logic
+## Historical Phase Detail: Phase 7 - Safety Advisory Logic
 **Status:** ✅ COMPLETE
 **Started:** 2026-05-02
 **Completed:** 2026-05-02
@@ -585,8 +628,10 @@
 - ✅ AI enhancement tested
 - ✅ Edge cases covered
 
-### Next Phase: Phase 8 - Frontend Report Flow
+### Next Phase From This Historical Section
+
+Phase 8 frontend report flow is now complete. See the current status snapshot near the top of this file for the latest roadmap.
 
 ---
 
-Last Updated: 2026-05-02T10:46:00Z
+Last Updated: 2026-05-05

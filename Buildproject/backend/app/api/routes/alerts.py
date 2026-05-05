@@ -12,6 +12,10 @@ from app.services.alert_service import alert_service
 from app.schemas.alerts import AlertResponse
 from app.schemas.common import APIResponse
 from app.repositories.alert_repository import alert_repository
+from app.utils.http_errors import (
+    database_unavailable_exception,
+    is_database_unavailable_error,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -53,9 +57,11 @@ async def list_alerts(
         return [_to_alert_response(alert) for alert in alerts]
     except Exception as e:
         logger.error(f"Error listing alerts: {e}")
+        if is_database_unavailable_error(e):
+            raise database_unavailable_exception()
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Failed to list alerts: {str(e)}"
+            detail="Failed to list alerts"
         )
 
 
@@ -112,9 +118,11 @@ async def generate_alert(
         raise
     except Exception as e:
         logger.error(f"Error generating alert for incident {incident_id}: {e}")
+        if is_database_unavailable_error(e):
+            raise database_unavailable_exception()
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Failed to generate alert: {str(e)}"
+            detail="Failed to generate alert"
         )
 
 
@@ -155,9 +163,11 @@ async def get_incident_alerts(
         
     except Exception as e:
         logger.error(f"Error retrieving alerts for incident {incident_id}: {e}")
+        if is_database_unavailable_error(e):
+            raise database_unavailable_exception()
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Failed to retrieve alerts: {str(e)}"
+            detail="Failed to retrieve alerts"
         )
 
 

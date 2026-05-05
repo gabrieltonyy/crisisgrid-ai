@@ -9,6 +9,7 @@ import logging
 
 from app.core.config import Settings, get_settings
 from app.db.session import check_db_connection, get_db_info
+from app.services.orchestrate_health import get_orchestrate_health
 
 logger = logging.getLogger(__name__)
 
@@ -24,6 +25,7 @@ async def health_check(settings: Settings = Depends(get_settings)) -> Dict[str, 
     - PostgreSQL database
     - IBM Cloudant (if enabled)
     - IBM watsonx.ai (if enabled)
+    - watsonx Orchestrate local/remote control plane
     
     Returns:
         dict: Health status information
@@ -36,7 +38,8 @@ async def health_check(settings: Settings = Depends(get_settings)) -> Dict[str, 
             "services": {
                 "postgres": "connected",
                 "cloudant": "configured",
-                "watsonx": "configured"
+                "watsonx": "configured",
+                "watsonx_orchestrate": "hybrid_ready"
             }
         }
     """
@@ -58,6 +61,8 @@ async def health_check(settings: Settings = Depends(get_settings)) -> Dict[str, 
             watsonx_status = "configured"
         else:
             watsonx_status = "misconfigured"
+
+    orchestrate_health = get_orchestrate_health(settings)
     
     # Determine overall status
     overall_status = "ok" if postgres_status == "connected" else "degraded"
@@ -66,10 +71,12 @@ async def health_check(settings: Settings = Depends(get_settings)) -> Dict[str, 
         "status": overall_status,
         "app": settings.APP_NAME,
         "environment": settings.APP_ENV,
+        "orchestrate": orchestrate_health,
         "services": {
             "postgres": postgres_status,
             "cloudant": cloudant_status,
             "watsonx": watsonx_status,
+            "watsonx_orchestrate": orchestrate_health["status"],
         }
     }
 
@@ -110,6 +117,7 @@ async def detailed_health_check(settings: Settings = Depends(get_settings)) -> D
     
     # Get service validation status
     service_status = settings.validate_required_services()
+    orchestrate_health = get_orchestrate_health(settings)
     
     return {
         "status": "ok" if db_info.get("connected") else "degraded",
@@ -128,6 +136,7 @@ async def detailed_health_check(settings: Settings = Depends(get_settings)) -> D
             "simulated_dispatch": settings.ENABLE_SIMULATED_DISPATCH,
             "agent_run_logs": settings.ENABLE_AGENT_RUN_LOGS,
         },
+        "orchestrate": orchestrate_health,
         "service_status": service_status,
     }
 

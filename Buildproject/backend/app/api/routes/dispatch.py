@@ -12,6 +12,10 @@ from app.services.dispatch_service import dispatch_service
 from app.schemas.dispatch import DispatchLogResponse
 from app.schemas.common import APIResponse
 from app.repositories.dispatch_repository import dispatch_repository
+from app.utils.http_errors import (
+    database_unavailable_exception,
+    is_database_unavailable_error,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -54,9 +58,11 @@ async def list_dispatch_logs(
         return [_to_dispatch_response(dispatch) for dispatch in dispatches]
     except Exception as e:
         logger.error(f"Error listing dispatch logs: {e}")
+        if is_database_unavailable_error(e):
+            raise database_unavailable_exception()
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Failed to list dispatch logs: {str(e)}"
+            detail="Failed to list dispatch logs"
         )
 
 
@@ -117,9 +123,11 @@ async def dispatch_authorities(
         raise
     except Exception as e:
         logger.error(f"Error dispatching authorities for incident {incident_id}: {e}")
+        if is_database_unavailable_error(e):
+            raise database_unavailable_exception()
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Failed to dispatch authorities: {str(e)}"
+            detail="Failed to dispatch authorities"
         )
 
 
@@ -160,9 +168,11 @@ async def get_incident_dispatches(
         
     except Exception as e:
         logger.error(f"Error retrieving dispatches for incident {incident_id}: {e}")
+        if is_database_unavailable_error(e):
+            raise database_unavailable_exception()
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Failed to retrieve dispatches: {str(e)}"
+            detail="Failed to retrieve dispatches"
         )
 
 

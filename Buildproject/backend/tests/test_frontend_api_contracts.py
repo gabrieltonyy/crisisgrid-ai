@@ -6,6 +6,7 @@ from uuid import uuid4
 
 import pytest
 from fastapi.testclient import TestClient
+from sqlalchemy.exc import OperationalError
 
 from app.db.session import get_db
 from app.main import app
@@ -77,6 +78,34 @@ def test_reports_list_matches_frontend_contract(client, monkeypatch):
     assert body[0]["id"] == str(report_id)
     assert body[0]["crisis_type"] == "FIRE"
     assert body[0]["status"] == "PENDING_VERIFICATION"
+
+
+def test_reports_list_sanitizes_database_unavailable_errors(client, monkeypatch):
+    import app.api.routes.reports as reports_routes
+
+    admin_user = SimpleNamespace(
+        id=uuid4(),
+        role=UserRole.ADMIN,
+        is_active=True,
+    )
+
+    class UnavailableReportRepository:
+        def __init__(self, db):
+            self.db = db
+
+        def get_all(self, skip=0, limit=100, status=None):
+            raise OperationalError("SELECT reports", {}, Exception("connection refused"))
+
+    monkeypatch.setattr(reports_routes, "ReportRepository", UnavailableReportRepository)
+    app.dependency_overrides[reports_routes.get_current_active_user] = lambda: admin_user
+
+    response = client.get("/api/v1/reports")
+
+    assert response.status_code == 503
+    body = response.json()
+    assert "Database unavailable" in body["detail"]
+    assert "connection refused" not in body["detail"]
+    assert "psycopg2" not in body["detail"]
 
 
 def test_anonymous_report_submission_does_not_require_auth(client, monkeypatch):
@@ -181,6 +210,27 @@ def test_alerts_list_matches_frontend_contract(client, monkeypatch):
     assert body[0]["id"] == "alert_fire_001"
     assert body[0]["alert_title"] == "Fire Alert"
     assert body[0]["status"] == "ACTIVE"
+
+
+def test_alerts_list_sanitizes_database_unavailable_errors(client, monkeypatch):
+    import app.api.routes.alerts as alerts_routes
+
+    def raise_database_unavailable(db, limit=100):
+        raise OperationalError("SELECT alerts", {}, Exception("connection refused"))
+
+    monkeypatch.setattr(
+        alerts_routes.alert_repository,
+        "get_all_active_alerts",
+        raise_database_unavailable,
+    )
+
+    response = client.get("/api/v1/alerts")
+
+    assert response.status_code == 503
+    body = response.json()
+    assert "Database unavailable" in body["detail"]
+    assert "connection refused" not in body["detail"]
+    assert "psycopg2" not in body["detail"]
 
 
 def test_dispatch_logs_list_matches_frontend_contract(client, monkeypatch):

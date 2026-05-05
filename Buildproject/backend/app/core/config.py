@@ -99,6 +99,8 @@ class Settings(BaseSettings):
     ORCHESTRATE_IAM_URL: str = "https://iam.cloud.ibm.com/identity/token"
     ORCHESTRATE_PIPELINE_ID: str = "crisisgrid-main-pipeline"
     ORCHESTRATE_PIPELINE_CONFIG: str = "orchestration/pipeline.yaml"
+    ORCHESTRATE_TIMEOUT_SECONDS: int = 15
+    ORCHESTRATE_FALLBACK_TO_LOCAL: bool = True
     AGENT_TIMEOUT_SECONDS: int = 30
     AGENT_MAX_RETRIES: int = 3
     AGENT_CONFIDENCE_THRESHOLD: float = 0.6
@@ -129,10 +131,21 @@ class Settings(BaseSettings):
         Validate that required services are configured.
         Returns status of optional services.
         """
+        orchestrate_remote_configured = bool(
+            self.ORCHESTRATE_API_URL
+            and self.ORCHESTRATE_API_KEY
+            and self.ORCHESTRATE_PIPELINE_ID
+        )
+        orchestrate_local_configured = (
+            self.ORCHESTRATE_MODE.lower() in {"local", "hybrid"}
+            and bool(self.ORCHESTRATE_PIPELINE_CONFIG)
+        )
         status = {
             "postgres": bool(self.DATABASE_URL),
             "cloudant": self.CLOUDANT_ENABLED and bool(self.CLOUDANT_URL) and bool(self.CLOUDANT_API_KEY),
             "watsonx": self.WATSONX_ENABLED and bool(self.WATSONX_API_KEY) and bool(self.WATSONX_PROJECT_ID),
+            "watsonx_orchestrate": self.ORCHESTRATE_ENABLED
+            and (orchestrate_local_configured or orchestrate_remote_configured),
             "weather": self.WEATHER_ENABLED and bool(self.WEATHER_API_KEY),
             "sms": self.SMS_ENABLED and bool(self.SMS_API_KEY),
         }

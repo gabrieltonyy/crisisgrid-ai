@@ -186,6 +186,26 @@ python -m app.db.init_db
 uvicorn app.main:app --reload
 ```
 
+For a clean local database with current demo users and reports, run the
+project-level reset/seed helper from `Buildproject`:
+
+```bash
+cd Buildproject
+python scripts/reset_seed_local_db.py
+```
+
+This command starts PostgreSQL, destructively recreates local tables, and seeds
+50 demo users plus 300 Nairobi/Kenya reports using the current backend seed
+logic. It prints safe seed counts and demo account names only.
+
+Expected demo redirects:
+
+| Role | Email | Redirect |
+| --- | --- | --- |
+| Citizen | `citizen.demo01@demo.crisisgrid.ai` | `/citizen` |
+| Authority | `authority.demo01@demo.crisisgrid.ai` | `/admin/dashboard` |
+| Admin | `admin.demo01@demo.crisisgrid.ai` | `/admin/dashboard` |
+
 ### Frontend
 
 ```bash

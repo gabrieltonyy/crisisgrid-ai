@@ -1,11 +1,22 @@
 """
-Unified CrisisGrid AI demo seed script.
+Unified CrisisGrid AI Demo Seed Script
 
-Seeds realistic linked lifecycle data:
-Users -> Reports -> Confirmations -> Incidents -> AgentRuns -> Alerts -> DispatchLogs
+Purpose:
+    Seeds realistic hackathon demo data that shows the full CrisisGrid AI pipeline:
+
+        Users -> Reports -> Confirmations -> Incidents -> Agent Runs -> Alerts -> Dispatch Logs
 
 Run from Buildproject/backend:
     python scripts/seed_data.py
+
+Recommended flow:
+    python -m app.db.init_db
+    python scripts/seed_data.py
+
+Demo credentials:
+    Citizen:   citizen.demo01@demo.crisisgrid.ai / Password123!
+    Authority: authority.demo01@demo.crisisgrid.ai / Password123!
+    Admin:     admin.demo01@demo.crisisgrid.ai / Password123!
 """
 
 from __future__ import annotations
@@ -22,8 +33,8 @@ ROOT_DIR = Path(__file__).resolve().parents[1]
 if str(ROOT_DIR) not in sys.path:
     sys.path.insert(0, str(ROOT_DIR))
 
-from app.db.init_db import ensure_auth_columns
 from app.db.session import SessionLocal, engine
+from app.db.init_db import ensure_auth_columns
 from app.models import Alert, AgentRun, Confirmation, DispatchLog, Incident, Report, User
 from app.schemas.common import (
     AgentName,
@@ -112,14 +123,14 @@ CRISIS_DESCRIPTIONS = {
 
 AUTHORITY_BY_CRISIS = {
     CrisisType.FIRE: AuthorityType.FIRE_SERVICE,
-    CrisisType.FLOOD: AuthorityType.DISASTER_MANAGEMENT,
-    CrisisType.WILDLIFE: AuthorityType.WILDLIFE_AUTHORITY,
+    CrisisType.FLOOD: AuthorityType.DISASTER_RESPONSE,
+    CrisisType.WILDLIFE: AuthorityType.WILDLIFE_SERVICE,
     CrisisType.ACCIDENT: AuthorityType.POLICE,
     CrisisType.SECURITY: AuthorityType.POLICE,
-    CrisisType.HEALTH: AuthorityType.PUBLIC_HEALTH,
-    CrisisType.LANDSLIDE: AuthorityType.DISASTER_MANAGEMENT,
-    CrisisType.HAZARDOUS_SPILL: AuthorityType.DISASTER_MANAGEMENT,
-    CrisisType.OTHER: AuthorityType.DISASTER_MANAGEMENT,
+    CrisisType.HEALTH: AuthorityType.MEDICAL_SERVICE,
+    CrisisType.LANDSLIDE: AuthorityType.DISASTER_RESPONSE,
+    CrisisType.HAZARDOUS_SPILL: AuthorityType.DISASTER_RESPONSE,
+    CrisisType.OTHER: AuthorityType.DISASTER_RESPONSE,
 }
 
 
@@ -195,15 +206,17 @@ def create_users(db) -> list[User]:
     return users
 
 
-def reset_demo_reports(db, users: list[User]) -> None:
-    reset_demo_data(db, users)
-
-
 def reset_demo_data(db, users: Iterable[User]) -> None:
+    """Delete existing demo data only, not the whole database."""
     user_ids = [user.id for user in users]
 
     demo_report_ids = [row[0] for row in db.query(Report.id).filter(Report.user_id.in_(user_ids)).all()]
-    demo_incident_ids = [row[0] for row in db.query(Incident.id).filter(Incident.id.like("demo_incident_%")).all()]
+    demo_incident_ids = [
+        row[0]
+        for row in db.query(Incident.id)
+        .filter(Incident.id.like("demo_incident_%"))
+        .all()
+    ]
 
     if demo_report_ids:
         db.query(Confirmation).filter(Confirmation.report_id.in_(demo_report_ids)).delete(synchronize_session=False)
@@ -257,6 +270,7 @@ def create_report(
 
 
 def create_showcase_reports(db, citizens: list[User], now: datetime) -> dict[str, list[Report]]:
+    """Create guaranteed demo scenarios that make the product story obvious."""
     scenarios: dict[str, list[Report]] = defaultdict(list)
 
     westlands_lat, westlands_lng = -1.2676, 36.8108
@@ -424,15 +438,15 @@ def create_incident_from_reports(db, incident_id: str, reports: list[Report], de
         crisis_type=crisis_type,
         status=status,
         severity=severity_from_score(avg_severity),
-        latitude=round(avg_lat, 7),
-        longitude=round(avg_lng, 7),
+        latitude=decimal_value(round(avg_lat, 7)),
+        longitude=decimal_value(round(avg_lng, 7)),
         location_description=reports[0].location_text,
-        confidence_score=round(avg_confidence, 2),
-        media_confidence=round(max(0, avg_confidence - random.uniform(0, 8)), 2),
-        cross_report_confidence=round(min(98, avg_confidence + len(reports) * 2.5), 2),
-        external_signal_confidence=round(random.uniform(55, 90), 2),
-        reporter_trust_confidence=round(random.uniform(65, 96), 2),
-        geo_time_consistency=round(random.uniform(70, 98), 2),
+        confidence_score=decimal_value(round(avg_confidence, 2)),
+        media_confidence=decimal_value(round(avg_confidence - random.uniform(0, 8), 2)),
+        cross_report_confidence=decimal_value(min(98, round(avg_confidence + len(reports) * 2.5, 2))),
+        external_signal_confidence=decimal_value(round(random.uniform(55, 90), 2)),
+        reporter_trust_confidence=decimal_value(round(random.uniform(65, 96), 2)),
+        geo_time_consistency=decimal_value(round(random.uniform(70, 98), 2)),
         report_count=len(reports),
         first_reported_at=first_reported_at,
         last_updated_at=last_updated_at,
@@ -487,7 +501,7 @@ def create_incidents(db, all_reports: list[Report], showcase: dict[str, list[Rep
         grouped[key].append(report)
 
     index = 1
-    for group in grouped.values():
+    for (_, _), group in grouped.items():
         if len(group) < 2:
             continue
         selected = group[: min(len(group), random.randint(2, 6))]
@@ -503,7 +517,11 @@ def create_confirmations(db, incidents: list[Incident], citizens: list[User]) ->
     confirmations: list[Confirmation] = []
     now = datetime.now(UTC).replace(tzinfo=None)
 
-    incident_reports = {incident.id: db.query(Report).filter(Report.incident_id == incident.id).all() for incident in incidents}
+    incident_reports = {
+        incident.id: db.query(Report).filter(Report.incident_id == incident.id).all()
+        for incident in incidents
+    }
+
     counter = 1
     for incident in incidents[:18]:
         reports = incident_reports.get(incident.id, [])
@@ -517,12 +535,12 @@ def create_confirmations(db, incidents: list[Incident], citizens: list[User]) ->
                 report_id=report.id,
                 user_id=user.id,
                 confirmation_type=ConfirmationType.CONFIRM,
-                latitude=float(jitter(float(report.latitude), 0.0015)),
-                longitude=float(jitter(float(report.longitude), 0.0015)),
-                distance_from_report_meters=float(decimal_value(round(random.uniform(20, 220), 2))),
+                latitude=jitter(float(report.latitude), 0.0015),
+                longitude=jitter(float(report.longitude), 0.0015),
+                distance_from_report_meters=decimal_value(round(random.uniform(20, 220), 2)),
                 notes="Nearby citizen confirmation added during demo simulation.",
                 confirmed_at=(report.created_at or now) + timedelta(minutes=random.randint(5, 35)),
-                trust_weight=float(decimal_value(round(random.uniform(0.55, 0.96), 2))),
+                trust_weight=decimal_value(round(random.uniform(0.55, 0.96), 2)),
             )
             confirmations.append(confirmation)
             db.add(confirmation)
@@ -544,19 +562,19 @@ def create_agent_runs(db, incidents: list[Incident]) -> list[AgentRun]:
         verification = AgentRun(
             run_id=f"demo_run_verification_{counter:03d}",
             agent_name=AgentName.VERIFICATION_AGENT,
-            status=AgentRunStatus.COMPLETED,
+            status=AgentRunStatus.SUCCESS,
             report_id=first_report.id if first_report else None,
             incident_id=incident.id,
             started_at=base_time + timedelta(minutes=1),
             completed_at=base_time + timedelta(minutes=1, seconds=3),
-            duration_seconds=round(random.uniform(1.5, 4.2), 2),
+            duration_seconds=decimal_value(round(random.uniform(1.5, 4.2), 2)),
             input_data={"incident_id": incident.id, "report_count": incident.report_count},
             output_data={
                 "decision": incident.status.value,
                 "confidence_score": float(incident.confidence_score or 0),
                 "reason": "Cross-report similarity, reporter trust, geo-time consistency, and severity signals evaluated.",
             },
-            confidence_score=float(incident.confidence_score or 0),
+            confidence_score=incident.confidence_score,
             decision=incident.status.value,
             model_used="demo-ai-verification",
         )
@@ -564,18 +582,16 @@ def create_agent_runs(db, incidents: list[Incident]) -> list[AgentRun]:
         georisk = AgentRun(
             run_id=f"demo_run_georisk_{counter:03d}",
             agent_name=AgentName.GEORISK_AGENT,
-            status=AgentRunStatus.COMPLETED,
+            status=AgentRunStatus.SUCCESS,
             incident_id=incident.id,
             started_at=base_time + timedelta(minutes=2),
             completed_at=base_time + timedelta(minutes=2, seconds=2),
-            duration_seconds=round(random.uniform(1.2, 3.8), 2),
+            duration_seconds=decimal_value(round(random.uniform(1.2, 3.8), 2)),
             input_data={"latitude": float(incident.latitude), "longitude": float(incident.longitude)},
             output_data={
                 "risk_level": incident.severity.value,
                 "affected_radius_meters": 750 if incident.severity == SeverityLevel.CRITICAL else 400,
-                "recommended_action": "Generate alert"
-                if incident.status in {IncidentStatus.VERIFIED, IncidentStatus.PROVISIONAL_CRITICAL, IncidentStatus.DISPATCHED}
-                else "Request confirmation",
+                "recommended_action": "Generate alert" if incident.status in {IncidentStatus.VERIFIED, IncidentStatus.PROVISIONAL_CRITICAL, IncidentStatus.DISPATCHED} else "Request confirmation",
             },
             risk_level=incident.severity.value,
             decision="HIGH_RISK" if incident.severity in {SeverityLevel.HIGH, SeverityLevel.CRITICAL} else "MONITOR",
@@ -642,23 +658,21 @@ def create_alerts(db, incidents: list[Incident]) -> list[Alert]:
             crisis_type=incident.crisis_type,
             severity=incident.severity,
             status=AlertStatus.ACTIVE if incident.status != IncidentStatus.RESOLVED else AlertStatus.EXPIRED,
-            latitude=float(incident.latitude),
-            longitude=float(incident.longitude),
-            affected_radius_meters=float(decimal_value(750 if incident.severity == SeverityLevel.CRITICAL else 400)),
+            latitude=incident.latitude,
+            longitude=incident.longitude,
+            affected_radius_meters=decimal_value(750 if incident.severity == SeverityLevel.CRITICAL else 400),
             title=title,
             message=message,
             safety_instructions=instructions,
             issued_at=incident.last_updated_at or now,
             expires_at=(incident.last_updated_at or now) + timedelta(hours=3),
-            affected_population_estimate=float(decimal_value(random.randint(800, 7000))),
+            affected_population_estimate=decimal_value(random.randint(800, 7000)),
             priority_level=incident.severity.value,
-            sms_sent_count=float(decimal_value(random.randint(120, 1800))),
-            push_sent_count=float(decimal_value(random.randint(300, 4500))),
+            sms_sent_count=decimal_value(random.randint(120, 1800)),
+            push_sent_count=decimal_value(random.randint(300, 4500)),
             tags=[incident.crisis_type.value.lower(), "demo", "ai-alert"],
         )
         db.add(alert)
-        db.flush()
-        incident.alert_generated = alert.alert_id
         alerts.append(alert)
         counter += 1
 
@@ -678,57 +692,36 @@ def create_dispatch_logs(db, incidents: list[Incident]) -> list[DispatchLog]:
 
         dispatched_at = (incident.last_updated_at or datetime.now(UTC).replace(tzinfo=None)) + timedelta(minutes=2)
         eta = 6 if incident.severity == SeverityLevel.CRITICAL else random.randint(10, 25)
-        status = DispatchStatus.ARRIVED if incident.severity == SeverityLevel.CRITICAL else DispatchStatus.SIMULATED_SENT
+        status = DispatchStatus.ARRIVED if incident.severity == SeverityLevel.CRITICAL else DispatchStatus.DISPATCHED
 
         dispatch = DispatchLog(
             dispatch_id=f"demo_dispatch_{counter:03d}",
             incident_id=incident.id,
             crisis_type=incident.crisis_type,
-            authority_type=AUTHORITY_BY_CRISIS.get(incident.crisis_type, AuthorityType.DISASTER_MANAGEMENT),
+            authority_type=AUTHORITY_BY_CRISIS.get(incident.crisis_type, AuthorityType.DISASTER_RESPONSE),
             status=status,
-            latitude=float(incident.latitude),
-            longitude=float(incident.longitude),
+            latitude=incident.latitude,
+            longitude=incident.longitude,
             location_description=incident.location_description,
             priority=incident.severity.value,
-            units_dispatched=float(decimal_value(4 if incident.severity == SeverityLevel.CRITICAL else random.randint(1, 3))),
-            estimated_arrival_minutes=float(decimal_value(eta)),
+            units_dispatched=decimal_value(4 if incident.severity == SeverityLevel.CRITICAL else random.randint(1, 3)),
+            estimated_arrival_minutes=decimal_value(eta),
             dispatched_at=dispatched_at,
             acknowledged_at=dispatched_at + timedelta(minutes=1),
             arrived_at=dispatched_at + timedelta(minutes=eta) if status == DispatchStatus.ARRIVED else None,
             contact_method="SIMULATED",
             message_sent=f"{incident.severity.value} {incident.crisis_type.value} incident at {incident.location_description}. Response team dispatched.",
             response_notes="Demo dispatch generated from AI incident severity and location analysis.",
-            resources_deployed=["Response Unit 1", "Response Unit 2"]
-            if incident.severity != SeverityLevel.CRITICAL
-            else ["Command Unit", "Rescue Unit", "Engine 1", "Engine 2"],
+            resources_deployed=["Response Unit 1", "Response Unit 2"] if incident.severity != SeverityLevel.CRITICAL else ["Command Unit", "Rescue Unit", "Engine 1", "Engine 2"],
             simulated=True,
             tags=[incident.crisis_type.value.lower(), "demo", "dispatch"],
         )
         db.add(dispatch)
-        db.flush()
-        incident.dispatched_at = dispatched_at
         dispatches.append(dispatch)
         counter += 1
 
     db.commit()
     return dispatches
-
-
-def create_reports(db, users: list[User], target_count: int = 300) -> list[Report]:
-    citizens = [user for user in users if user.role == UserRole.CITIZEN]
-    now = datetime.now(UTC).replace(tzinfo=None)
-
-    showcase = create_showcase_reports(db, citizens, now)
-    random_target = max(0, target_count - sum(len(item) for item in showcase.values()))
-    random_reports = create_random_reports(db, citizens, now, target_count=random_target)
-    all_reports = [report for group in showcase.values() for report in group] + random_reports
-
-    incidents = create_incidents(db, all_reports, showcase)
-    create_confirmations(db, incidents, citizens)
-    create_agent_runs(db, incidents)
-    create_alerts(db, incidents)
-    create_dispatch_logs(db, incidents)
-    return all_reports
 
 
 def print_credentials() -> None:
@@ -739,43 +732,48 @@ def print_credentials() -> None:
     print(f"Admin:     {demo_email('admin', 1)} / {PASSWORD}")
 
 
-def count_seed_entities(db) -> dict[str, int]:
-    return {
-        "users": db.query(User).count(),
-        "reports": db.query(Report).count(),
-        "incidents": db.query(Incident).count(),
-        "confirmations": db.query(Confirmation).count(),
-        "agent_runs": db.query(AgentRun).count(),
-        "alerts": db.query(Alert).count(),
-        "dispatch_logs": db.query(DispatchLog).count(),
-    }
-
-
 def main() -> int:
     random.seed(SEED)
     engine.echo = False
 
     if not ensure_auth_columns():
+        print("Auth column verification failed. Run python -m app.db.init_db first.", file=sys.stderr)
         return 1
 
     db = SessionLocal()
     try:
         users = create_users(db)
-        reset_demo_reports(db, users)
-        reports = create_reports(db, users, target_count=300)
-        stats = count_seed_entities(db)
+        citizens = [user for user in users if user.role == UserRole.CITIZEN]
+        reset_demo_data(db, users)
+
+        now = datetime.now(UTC).replace(tzinfo=None)
+        showcase = create_showcase_reports(db, citizens, now)
+        random_reports = create_random_reports(db, citizens, now, target_count=291)
+        all_reports = [report for group in showcase.values() for report in group] + random_reports
+
+        incidents = create_incidents(db, all_reports, showcase)
+        confirmations = create_confirmations(db, incidents, citizens)
+        agent_runs = create_agent_runs(db, incidents)
+        alerts = create_alerts(db, incidents)
+        dispatches = create_dispatch_logs(db, incidents)
 
         print("\nUnified demo seed complete")
         print("==========================")
-        print(f"Users:          {stats['users']}")
-        print(f"Reports:        {len(reports)}")
-        print(f"Incidents:      {stats['incidents']}")
-        print(f"Confirmations:  {stats['confirmations']}")
-        print(f"Agent runs:     {stats['agent_runs']}")
-        print(f"Alerts:         {stats['alerts']}")
-        print(f"Dispatch logs:  {stats['dispatch_logs']}")
+        print(f"Users:          {len(users)}")
+        print(f"Reports:        {len(all_reports)}")
+        print(f"Incidents:      {len(incidents)}")
+        print(f"Confirmations:  {len(confirmations)}")
+        print(f"Agent runs:     {len(agent_runs)}")
+        print(f"Alerts:         {len(alerts)}")
+        print(f"Dispatch logs:  {len(dispatches)}")
+        print("\nShowcase scenarios")
+        print("==================")
+        print("1. CRITICAL verified fire: Westlands, Waiyaki Way")
+        print("2. Developing flood needing confirmation: Thika Road, Roysambu")
+        print("3. False/low-confidence wildlife report: Karen, Ngong Road")
         print_credentials()
         return 0
+
     except Exception as exc:
         db.rollback()
         print(f"Seed failed: {exc}", file=sys.stderr)

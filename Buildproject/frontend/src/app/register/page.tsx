@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Form, Input, Button, Card, message, Typography, Select } from 'antd';
+import { Alert, Form, Input, Button, Card, Typography, Select } from 'antd';
 import { UserOutlined, LockOutlined, MailOutlined, PhoneOutlined } from '@ant-design/icons';
 import Link from 'next/link';
 import { useAuth } from '@/hooks/useAuth';
@@ -15,6 +15,7 @@ export default function RegisterPage() {
   const router = useRouter();
   const { register } = useAuth();
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const onFinish = async (values: {
     name: string;
@@ -33,14 +34,14 @@ export default function RegisterPage() {
     };
 
     setLoading(true);
+    setError(null);
     const result = await register(payload);
     setLoading(false);
 
     if (result.success) {
-      message.success('Registration successful! Please login.');
       router.replace('/login?registered=1');
     } else {
-      message.error(result.error || 'Registration failed');
+      setError(result.error || 'Registration failed');
     }
   };
 
@@ -51,6 +52,15 @@ export default function RegisterPage() {
           <Title level={2}>Create Account</Title>
           <Text type="secondary">Join CrisisGrid AI</Text>
         </div>
+
+        {error && (
+          <Alert
+            type="error"
+            showIcon
+            message={error}
+            className="mb-4"
+          />
+        )}
 
         <Form
           name="register"

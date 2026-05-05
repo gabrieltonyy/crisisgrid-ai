@@ -12,6 +12,10 @@ import sys
 from app.core.config import settings
 from app.api.routes import health, reports, verification, alerts, dispatch, advisory, auth
 from app.db.session import check_db_connection
+from app.utils.http_errors import (
+    DATABASE_UNAVAILABLE_DETAIL,
+    is_database_unavailable_error,
+)
 
 
 # create missing database tables on startup.
@@ -146,6 +150,18 @@ async def global_exception_handler(request, exc):
     Global exception handler for unhandled errors.
     """
     logger.error(f"Unhandled exception: {str(exc)}", exc_info=True)
+
+    if is_database_unavailable_error(exc):
+        return JSONResponse(
+            status_code=503,
+            content={
+                "success": False,
+                "message": DATABASE_UNAVAILABLE_DETAIL,
+                "error": {
+                    "code": "DATABASE_UNAVAILABLE"
+                }
+            }
+        )
 
     # Don't expose internal errors in production
     if settings.is_production:

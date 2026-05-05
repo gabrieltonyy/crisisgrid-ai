@@ -13,6 +13,7 @@ from app.schemas.common import AgentName, AgentRunStatus
 
 AgentContractStatus = Literal["SUCCESS", "FAILED", "SKIPPED"]
 PipelineRunStatus = Literal["SUCCESS", "FAILED", "PARTIAL"]
+PipelineExecutionMode = Literal["local", "remote", "hybrid_fallback"]
 
 
 # ============================================================================
@@ -74,7 +75,7 @@ class PipelineExecutionTrace(BaseModel):
 
     pipeline_id: str = Field(..., description="Pipeline identifier")
     version: Union[str, float] = Field(..., description="Pipeline version")
-    mode: Literal["local"] = Field(..., description="Pipeline execution mode")
+    mode: PipelineExecutionMode = Field(..., description="Pipeline execution mode")
     status: PipelineRunStatus = Field(..., description="Final pipeline status")
     context: Dict[str, Any] = Field(default_factory=dict, description="Shared final context")
     steps: List[PipelineStepTrace] = Field(default_factory=list, description="Ordered step traces")

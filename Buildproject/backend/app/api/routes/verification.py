@@ -24,6 +24,10 @@ from app.schemas.verification import (
 from app.schemas.common import CrisisType
 from app.services.verification_service import get_verification_service
 from app.repositories.verification_repository import VerificationRepository
+from app.utils.http_errors import (
+    database_unavailable_exception,
+    is_database_unavailable_error,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -99,9 +103,11 @@ async def verify_report(
             )
     except Exception as e:
         logger.error(f"Verification failed for report {report_id}: {e}")
+        if is_database_unavailable_error(e):
+            raise database_unavailable_exception()
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Verification failed: {str(e)}"
+            detail="Verification failed"
         )
 
 
@@ -171,9 +177,11 @@ async def get_verification_history(
         raise
     except Exception as e:
         logger.error(f"Failed to get verification history for {report_id}: {e}")
+        if is_database_unavailable_error(e):
+            raise database_unavailable_exception()
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Failed to retrieve verification history: {str(e)}"
+            detail="Failed to retrieve verification history"
         )
 
 
@@ -246,9 +254,11 @@ async def get_pending_verifications(
         
     except Exception as e:
         logger.error(f"Failed to get pending verifications: {e}")
+        if is_database_unavailable_error(e):
+            raise database_unavailable_exception()
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Failed to retrieve pending verifications: {str(e)}"
+            detail="Failed to retrieve pending verifications"
         )
 
 
@@ -284,9 +294,11 @@ async def get_verification_stats(
         
     except Exception as e:
         logger.error(f"Failed to get verification stats: {e}")
+        if is_database_unavailable_error(e):
+            raise database_unavailable_exception()
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Failed to retrieve verification statistics: {str(e)}"
+            detail="Failed to retrieve verification statistics"
         )
 
 # Made with Bob

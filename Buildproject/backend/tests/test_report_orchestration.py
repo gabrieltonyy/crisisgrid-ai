@@ -89,17 +89,21 @@ async def test_create_report_invokes_orchestrator_and_persists_trace(
         def get_by_id(self, report_id):
             return created_report if report_id == created_report.id else None
 
-    class FakeOrchestratorEngine:
-        def run(self, initial_context):
+    class FakeOrchestrationExecutionService:
+        def execute(self, initial_context, db, report):
             created_contexts.append(initial_context)
-            return _trace()
+            return SimpleNamespace(trace=_trace(), processing_status="PROCESSED")
 
     def fake_persist_pipeline_trace(db, report_id, trace):
         persisted.append((db, report_id, trace.status))
         return {"postgres_agent_run_id": "run_orchestrator_1", "cloudant_log_id": None}
 
     monkeypatch.setattr(reports_routes, "ReportRepository", FakeReportRepository)
-    monkeypatch.setattr(reports_routes, "OrchestratorEngine", FakeOrchestratorEngine)
+    monkeypatch.setattr(
+        reports_routes,
+        "OrchestrationExecutionService",
+        FakeOrchestrationExecutionService,
+    )
     monkeypatch.setattr(reports_routes, "persist_pipeline_trace", fake_persist_pipeline_trace)
     monkeypatch.setattr(reports_routes.cloudant_service, "enabled", False)
 
@@ -142,18 +146,24 @@ async def test_create_report_returns_review_status_for_admin_review_context(
         def get_by_id(self, report_id):
             return created_report
 
-    class FakeOrchestratorEngine:
-        def run(self, initial_context):
-            return _trace(
+    class FakeOrchestrationExecutionService:
+        def execute(self, initial_context, db, report):
+            return SimpleNamespace(
+                trace=_trace(
                 context={
                     "confidence": 0.4,
                     "admin_review_required": True,
                     "prompt_injection_detected": True,
-                }
+                }),
+                processing_status="PROCESSED_WITH_REVIEW",
             )
 
     monkeypatch.setattr(reports_routes, "ReportRepository", FakeReportRepository)
-    monkeypatch.setattr(reports_routes, "OrchestratorEngine", FakeOrchestratorEngine)
+    monkeypatch.setattr(
+        reports_routes,
+        "OrchestrationExecutionService",
+        FakeOrchestrationExecutionService,
+    )
     monkeypatch.setattr(
         reports_routes,
         "persist_pipeline_trace",
@@ -188,12 +198,16 @@ async def test_create_report_treats_orchestrator_exception_as_review(
         def get_by_id(self, report_id):
             return created_report
 
-    class FakeOrchestratorEngine:
-        def run(self, initial_context):
+    class FakeOrchestrationExecutionService:
+        def execute(self, initial_context, db, report):
             raise RuntimeError("local orchestration unavailable")
 
     monkeypatch.setattr(reports_routes, "ReportRepository", FakeReportRepository)
-    monkeypatch.setattr(reports_routes, "OrchestratorEngine", FakeOrchestratorEngine)
+    monkeypatch.setattr(
+        reports_routes,
+        "OrchestrationExecutionService",
+        FakeOrchestrationExecutionService,
+    )
     monkeypatch.setattr(
         reports_routes,
         "persist_pipeline_trace",

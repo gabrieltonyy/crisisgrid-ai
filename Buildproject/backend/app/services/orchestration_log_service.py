@@ -1,4 +1,4 @@
-"""Persistence helpers for local orchestration pipeline traces."""
+"""Persistence helpers for orchestration pipeline traces."""
 
 from __future__ import annotations
 
@@ -63,6 +63,13 @@ def _persist_trace_to_postgres(
             else AgentRunStatus.FAILED
         )
 
+        execution_mode = trace.context.get("execution_mode", trace.mode)
+        provider = trace.context.get("orchestrator_provider", "local")
+        remote_workflow_id = trace.context.get("remote_workflow_id")
+        remote_run_id = trace.context.get("remote_run_id")
+        reason_code = trace.context.get("remote_reason_code")
+        latency_ms = trace.context.get("latency_ms")
+
         agent_run = AgentRun(
             run_id=run_id,
             agent_name=AgentName.ANALYTICS_AGENT,
@@ -74,13 +81,28 @@ def _persist_trace_to_postgres(
             input_data={
                 "pipeline_id": trace.pipeline_id,
                 "mode": trace.mode,
+                "execution_mode": execution_mode,
+                "orchestrator_provider": provider,
+                "remote_workflow_id": remote_workflow_id,
             },
             output_data=payload,
             confidence_score=confidence,
             decision=trace.status,
             retry_count=sum(step.attempts for step in trace.steps),
-            tags=["local_orchestration", trace.pipeline_id],
-            notes="Local orchestration pipeline trace",
+            tags=[
+                "orchestration",
+                str(provider),
+                str(execution_mode),
+                trace.pipeline_id,
+            ],
+            notes=(
+                "Orchestration pipeline trace"
+                f" provider={provider}"
+                f" mode={execution_mode}"
+                f" remote_run_id={remote_run_id or 'none'}"
+                f" reason={reason_code or 'none'}"
+                f" latency_ms={latency_ms if latency_ms is not None else 'none'}"
+            ),
         )
 
         db.add(agent_run)
@@ -100,11 +122,18 @@ def _persist_trace_to_cloudant(
     try:
         return cloudant_service.store_agent_log(
             agent_run_id=f"pipeline_{report_id}",
-            agent_type="orchestrator_engine",
+            agent_type=str(trace.context.get("orchestrator_provider", "orchestrator_engine")),
             payload={
                 "report_id": str(report_id),
                 "pipeline_id": trace.pipeline_id,
                 "status": trace.status,
+                "execution_mode": trace.context.get("execution_mode", trace.mode),
+                "orchestrator_provider": trace.context.get("orchestrator_provider", "local"),
+                "remote_workflow_id": trace.context.get("remote_workflow_id"),
+                "remote_run_id": trace.context.get("remote_run_id"),
+                "remote_reason_code": trace.context.get("remote_reason_code"),
+                "latency_ms": trace.context.get("latency_ms"),
+                "admin_review_required": trace.context.get("admin_review_required", False),
                 "trace": payload,
             },
         )

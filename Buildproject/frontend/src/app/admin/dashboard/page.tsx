@@ -62,6 +62,17 @@ const fetchDispatchLogs = async (): Promise<DispatchResponse[]> => {
   return response.data;
 };
 
+const healthyServiceStatuses = new Set([
+  'connected',
+  'configured',
+  'ok',
+  'healthy',
+  'hybrid_ready',
+  'local_ready',
+  'remote_configured',
+  'remote_reachable',
+]);
+
 export default function AdminDashboardPage() {
   const router = useRouter();
 
@@ -117,6 +128,8 @@ export default function AdminDashboardPage() {
   const averageConfidence = normalizePercentScore(verificationStats?.average_confidence);
   const pendingVerifications = verificationStats?.total_pending || 0;
   const serviceEntries = Object.entries(health?.services || {});
+  const orchestrate = health?.orchestrate;
+  const orchestrationMode = orchestrate?.current_execution_mode || orchestrate?.mode;
   const systemHealthy = ['healthy', 'ok'].includes((health?.status || '').toLowerCase())
     && serviceEntries.every(([, status]) => !['down', 'failed', 'error', 'disconnected'].includes(status.toLowerCase()));
 
@@ -325,11 +338,33 @@ export default function AdminDashboardPage() {
                 serviceEntries.map(([service, status]) => (
                   <div key={service} className="flex items-center justify-between rounded-lg bg-slate-50 px-3 py-2">
                     <span className="font-medium capitalize text-slate-700">{service.replace(/_/g, ' ')}</span>
-                    <Tag color={['connected', 'configured', 'ok', 'healthy'].includes(status.toLowerCase()) ? 'success' : 'warning'}>
+                    <Tag color={healthyServiceStatuses.has(status.toLowerCase()) ? 'success' : 'warning'}>
                       {status}
                     </Tag>
                   </div>
                 ))
+              )}
+              {orchestrate && (
+                <div className="space-y-2 border-t border-slate-100 pt-3">
+                  <div className="flex items-center justify-between rounded-lg bg-slate-50 px-3 py-2">
+                    <span className="font-medium text-slate-700">Orchestration Mode</span>
+                    <Tag color={orchestrationMode === 'hybrid' ? 'processing' : 'default'}>
+                      {orchestrationMode || 'unknown'}
+                    </Tag>
+                  </div>
+                  <div className="flex items-center justify-between rounded-lg bg-slate-50 px-3 py-2">
+                    <span className="font-medium text-slate-700">Fallback</span>
+                    <Tag color={orchestrate.fallback_to_local ? 'success' : 'warning'}>
+                      {orchestrate.fallback_to_local ? 'enabled' : 'disabled'}
+                    </Tag>
+                  </div>
+                  <div className="flex items-center justify-between rounded-lg bg-slate-50 px-3 py-2">
+                    <span className="font-medium text-slate-700">Review Queue</span>
+                    <Tag color={pendingVerifications > 0 ? 'warning' : 'success'}>
+                      {pendingVerifications} pending
+                    </Tag>
+                  </div>
+                </div>
               )}
             </div>
           </Card>

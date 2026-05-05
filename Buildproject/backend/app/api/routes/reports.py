@@ -16,13 +16,16 @@ from app.schemas.reports import (
     ReportResponse
 )
 from app.schemas.common import IncidentStatus
-from app.core.config import settings
 from app.repositories.report_repository import ReportRepository
 from app.services.cloudant_service import cloudant_service
 from app.services.orchestration_log_service import persist_pipeline_trace
-from app.services.orchestrator_engine import OrchestratorEngine
+from app.services.orchestration_execution_service import OrchestrationExecutionService
 from app.dependencies.auth import get_current_active_user, get_optional_user
 from app.models.user import User
+from app.utils.http_errors import (
+    database_unavailable_exception,
+    is_database_unavailable_error,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -110,18 +113,20 @@ async def create_report(
 
         processing_status = "PROCESSED_WITH_REVIEW"
         try:
-            orchestrator = OrchestratorEngine()
-            trace = orchestrator.run(
+            orchestration = OrchestrationExecutionService().execute(
                 {
                     "report": report,
                     "db": db,
                     "cloudant_enabled": cloudant_service.enabled,
                     "source": "api",
                     "user_context": _build_safe_user_context(current_user),
-                }
+                },
+                db=db,
+                report=report,
             )
+            trace = orchestration.trace
             persist_pipeline_trace(db=db, report_id=report.id, trace=trace)
-            processing_status = _determine_processing_status(trace)
+            processing_status = orchestration.processing_status
 
             try:
                 db.refresh(report)
@@ -134,7 +139,7 @@ async def create_report(
                     report = latest_report
 
         except Exception as e:
-            logger.error("Local orchestration failed for report %s: %s", report.id, e)
+            logger.error("Orchestration failed for report %s: %s", report.id, e)
             if cloudant_service.enabled:
                 try:
                     cloudant_service.store_audit_event(
@@ -143,7 +148,7 @@ async def create_report(
                         entity_type="report",
                         action="orchestration_failed",
                         details={
-                            "reason": "local_orchestration_failed",
+                            "reason": "orchestration_failed",
                             "processing_status": processing_status,
                         },
                     )
@@ -164,6 +169,8 @@ async def create_report(
 
     except Exception as e:
         logger.error(f"Failed to create report: {e}")
+        if is_database_unavailable_error(e):
+            raise database_unavailable_exception()
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Failed to create report. Please try again."
@@ -186,31 +193,6 @@ def _build_safe_user_context(current_user: Optional[User]) -> dict:
     }
 
 
-def _determine_processing_status(trace) -> str:
-    context = trace.context or {}
-    confidence = context.get("confidence")
-    try:
-        normalized_confidence = float(confidence)
-    except (TypeError, ValueError):
-        normalized_confidence = 0.0
-
-    failed_or_partial = trace.status != "SUCCESS" or any(
-        step.status == "FAILED" for step in trace.steps
-    )
-    skipped_critical_step = any(
-        step.status == "SKIPPED"
-        and step.agent_name in {"verification_agent", "clustering_agent", "priority_agent"}
-        for step in trace.steps
-    )
-    review_required = bool(context.get("admin_review_required"))
-    low_confidence = normalized_confidence < settings.AGENT_CONFIDENCE_THRESHOLD
-
-    if failed_or_partial or skipped_critical_step or review_required or low_confidence:
-        return "PROCESSED_WITH_REVIEW"
-
-    return "PROCESSED"
-
-
 @router.get(
     "/me",
     response_model=List[ReportResponse],
@@ -231,6 +213,8 @@ async def get_my_reports(
         return [ReportResponse.model_validate(report) for report in reports]
     except Exception as e:
         logger.error(f"Failed to get user reports: {e}")
+        if is_database_unavailable_error(e):
+            raise database_unavailable_exception()
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Failed to retrieve reports"
@@ -275,6 +259,8 @@ async def list_reports(
         return [ReportResponse.model_validate(report) for report in reports]
     except Exception as e:
         logger.error(f"Failed to list reports: {e}")
+        if is_database_unavailable_error(e):
+            raise database_unavailable_exception()
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Failed to retrieve reports"

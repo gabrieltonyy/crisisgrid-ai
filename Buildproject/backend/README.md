@@ -83,15 +83,27 @@ cd Buildproject/backend
 python scripts/seed_data.py
 ```
 
-All seeded users use password `Password123!`.
+The canonical seed implementation is `Buildproject/backend/scripts/seed_data.py`.
+For a fully clean local database, prefer the project-level helper:
+
+```bash
+cd Buildproject
+python scripts/reset_seed_local_db.py
+```
+
+This helper starts the local PostgreSQL container, waits for readiness,
+destructively resets backend tables, and seeds 50 demo users plus 300 reports.
+It prints safe counts and demo account names only.
+
+All seeded users use the documented local demo password `Password123!`.
 
 Demo accounts:
 
-| Role | Email |
-| --- | --- |
-| Citizen | `citizen.demo01@demo.crisisgrid.ai` |
-| Authority | `authority.demo01@demo.crisisgrid.ai` |
-| Admin | `admin.demo01@demo.crisisgrid.ai` |
+| Role | Email | Expected redirect |
+| --- | --- | --- |
+| Citizen | `citizen.demo01@demo.crisisgrid.ai` | `/citizen` |
+| Authority | `authority.demo01@demo.crisisgrid.ai` | `/admin/dashboard` |
+| Admin | `admin.demo01@demo.crisisgrid.ai` | `/admin/dashboard` |
 
 ## Project Structure
 
@@ -129,6 +141,20 @@ backend/
 - `WATSONX_ENABLED` - Enable watsonx.ai (default: false)
 - `WATSONX_API_KEY` - watsonx.ai API key
 - `WATSONX_PROJECT_ID` - watsonx.ai project ID
+- `ORCHESTRATE_ENABLED` - Enable orchestration execution (default: true)
+- `ORCHESTRATE_MODE` - `local`, `remote`, or `hybrid`; invalid values fall back to local
+- `ORCHESTRATE_API_URL` - watsonx Orchestrate execution endpoint when remote execution is configured
+- `ORCHESTRATE_API_KEY` - watsonx Orchestrate API key used only to request an in-memory IAM token
+- `ORCHESTRATE_IAM_URL` - IBM IAM token endpoint
+- `ORCHESTRATE_PIPELINE_ID` - local pipeline ID and remote workflow identifier
+- `ORCHESTRATE_PIPELINE_CONFIG` - local pipeline YAML path for local/hybrid fallback
+- `ORCHESTRATE_TIMEOUT_SECONDS` - remote request timeout
+- `ORCHESTRATE_FALLBACK_TO_LOCAL` - allow hybrid mode to use local fallback when remote execution fails
+
+Remote watsonx Orchestrate execution is contract-driven. If the remote response
+does not match the CrisisGrid output contract, hybrid mode treats it as a safe
+remote failure and falls back to the local pipeline when fallback is enabled.
+Do not place secrets in logs, screenshots, test output, or documentation.
 
 ### Optional (External Services)
 - `WEATHER_ENABLED` - Enable weather API (default: false)
@@ -178,6 +204,18 @@ echo $DATABASE_URL
 # Test connection manually
 psql $DATABASE_URL
 ```
+
+If local auth or report APIs return a database unavailable message, run:
+
+```bash
+cd Buildproject
+python scripts/reset_seed_local_db.py
+```
+
+If `python-dotenv` reports parse warnings, fix the malformed line syntax in the
+local `.env` file without printing or committing secret values. Typical safe
+format is `KEY=value` with no shell prompts, unmatched quotes, or pasted command
+output.
 
 ### Import Errors
 

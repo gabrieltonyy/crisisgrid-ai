@@ -335,6 +335,19 @@ export interface HealthResponse {
   timestamp: string;
   version?: string;
   services?: Record<string, string>;
+  orchestrate?: {
+    enabled: boolean;
+    mode: string;
+    status: string;
+    pipeline_id?: string;
+    pipeline_valid?: boolean;
+    registered_agent_count?: number;
+    remote_configured?: boolean;
+    remote_reachable?: boolean | null;
+    last_probe_status?: string;
+    current_execution_mode?: string;
+    fallback_to_local?: boolean;
+  };
 }
 
 // Filter types
